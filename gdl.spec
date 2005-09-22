@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.8.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -12,9 +12,17 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
-BuildRequires:  netcdf-devel, hdf5-devel, hdf-devel, libjpeg-devel
+BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
-#Requires:       
+%ifnarch ppc ppc64
+BuildRequires:  hdf-devel
+%define hdfinclude "-I/usr/include/hdf"
+%define hdflib "-L%{_libdir}/hdf"
+%else
+%define hdfinclude %{nil}
+%define hdflib %{nil}
+%endif
+
 
 %description
 A free IDL (Interactive Data Language) compatible incremental compiler
@@ -29,8 +37,8 @@ Systems Inc.
 
 %build
 %configure --disable-static \
-           INCLUDES="-I/usr/include/netcdf-3 -I/usr/include/hdf" \
-           LIBS="-L%{_libdir}/netcdf-3 -L%{_libdir}/hdf -L/usr/X11R6/%{_lib}"
+           INCLUDES="-I/usr/include/netcdf-3 %{hdfinclude}" \
+           LIBS="-L%{_libdir}/netcdf-3 %{hdflib} -L/usr/X11R6/%{_lib}"
 make %{?_smp_mflags}
 
 
@@ -50,5 +58,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Sep 22 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-2
+- Don't include hdf support on ppc
+
 * Fri Aug 19 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-1
 - Initial Fedora Extras version
