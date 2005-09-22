@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.8.10
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -16,9 +16,11 @@ BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
 %ifnarch ppc ppc64
 BuildRequires:  hdf-devel
+%define hdfconfig %{nil}
 %define hdfinclude "-I/usr/include/hdf"
 %define hdflib "-L%{_libdir}/hdf"
 %else
+%define hdfconfig "--with-hdf=no"
 %define hdfinclude %{nil}
 %define hdflib %{nil}
 %endif
@@ -58,6 +60,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Sep 22 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-3
+- Disable hdf with configure on ppc
+
 * Thu Sep 22 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-2
 - Don't include hdf support on ppc
 
