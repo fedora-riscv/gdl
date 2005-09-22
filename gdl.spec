@@ -38,7 +38,7 @@ Systems Inc.
 
 
 %build
-%configure --disable-static \
+%configure --disable-static %{hdfconfig} \
            INCLUDES="-I/usr/include/netcdf-3 %{hdfinclude}" \
            LIBS="-L%{_libdir}/netcdf-3 %{hdflib} -L/usr/X11R6/%{_lib}"
 make %{?_smp_mflags}
