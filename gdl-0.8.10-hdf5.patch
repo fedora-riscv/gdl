@@ -1,0 +1,20 @@
+--- gdl-0.8.10/src/hdf5_fun.cpp.orig	2005-08-05 16:50:37.000000000 -0600
++++ gdl-0.8.10/src/hdf5_fun.cpp	2005-08-05 16:50:56.000000000 -0600
+@@ -128,7 +128,7 @@
+ 
+     // define hyperslab in dataset
+ 
+-    hssize_t offset[MAXRANK];
++    hsize_t offset[MAXRANK];
+     hsize_t count[MAXRANK];
+  
+     for(int i=0; i<rank;i++) offset[i]=0;
+@@ -140,7 +140,7 @@
+     hid_t memspace = H5Screate_simple(rank, count, NULL); 
+    
+     // define memory hyperslab
+-    hssize_t offset_out[MAXRANK];
++    hsize_t offset_out[MAXRANK];
+     hsize_t count_out[MAXRANK];
+     for(int i=0; i<rank; i++) offset_out[i] = 0;
+     for(int i=0; i<rank; i++) count_out[i] = dims_out[i];
