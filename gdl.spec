@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.8.10
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -60,6 +60,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Nov 16 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-4
+- Update for new ImageMagick version
+
 * Thu Sep 22 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-3
 - Disable hdf with configure on ppc
 
