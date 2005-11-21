@@ -1,19 +1,19 @@
 Name:           gdl
-Version:        0.8.10
-Release:        4%{?dist}
+Version:        0.8.11
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPL
 URL:            http://gnudatalanguage.sourceforge.net/
 Source0:        http://dl.sf.net/gnudata/%{name}-%{version}.tar.gz
-Patch0:         gdl-0.8.10-hdf5.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
+BuildRequires:  fftw3-devel
 %ifnarch ppc ppc64
 BuildRequires:  hdf-devel
 %define hdfconfig %{nil}
@@ -34,13 +34,12 @@ Systems Inc.
 
 %prep
 %setup -q
-%patch -p1 -b .orig
 
 
 %build
 %configure --disable-static %{hdfconfig} \
            INCLUDES="-I/usr/include/netcdf-3 %{hdfinclude}" \
-           LIBS="-L%{_libdir}/netcdf-3 %{hdflib} -L/usr/X11R6/%{_lib}"
+           LIBS="-L%{_libdir}/netcdf-3 %{hdflib}"
 make %{?_smp_mflags}
 
 
@@ -60,6 +59,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Nov 21 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-1
+- Upstream 0.8.11
+- Remove hdf patch fixed upstream
+- Remove X11R6 lib path - not needed with modular X
+
 * Wed Nov 16 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-4
 - Update for new ImageMagick version
 
