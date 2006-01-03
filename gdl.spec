@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.8.11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -59,6 +59,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jan  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-2
+- Rebuild
+
 * Mon Nov 21 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-1
 - Upstream 0.8.11
 - Remove hdf patch fixed upstream
