@@ -13,7 +13,7 @@ BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
-BuildRequires:  fftw3-devel, hdf-devel
+BuildRequires:  fftw-devel, hdf-devel
 
 
 %description
@@ -51,6 +51,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Thu Feb  2 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-3
 - Enable hdf for ppc
+- Change fftw3 to fftw
 
 * Tue Jan  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-2
 - Rebuild
