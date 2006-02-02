@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.8.11
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -13,17 +13,7 @@ BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
-BuildRequires:  fftw3-devel
-%ifnarch ppc ppc64
-BuildRequires:  hdf-devel
-%define hdfconfig %{nil}
-%define hdfinclude "-I/usr/include/hdf"
-%define hdflib "-L%{_libdir}/hdf"
-%else
-%define hdfconfig "--with-hdf=no"
-%define hdfinclude %{nil}
-%define hdflib %{nil}
-%endif
+BuildRequires:  fftw3-devel, hdf-devel
 
 
 %description
@@ -37,9 +27,9 @@ Systems Inc.
 
 
 %build
-%configure --disable-static %{hdfconfig} \
-           INCLUDES="-I/usr/include/netcdf-3 %{hdfinclude}" \
-           LIBS="-L%{_libdir}/netcdf-3 %{hdflib}"
+%configure --disable-static \
+           INCLUDES="-I/usr/include/netcdf-3 -I/usr/include/hdf" \
+           LIBS="-L%{_libdir}/netcdf-3 -L%{_libdir}/hdf"
 make %{?_smp_mflags}
 
 
@@ -59,6 +49,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Feb  2 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-3
+- Enable hdf for ppc
+
 * Tue Jan  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-2
 - Rebuild
 
