@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.8.11
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -27,7 +27,7 @@ Systems Inc.
 
 
 %build
-%configure --disable-static \
+%configure --disable-static --with-fftw \
            INCLUDES="-I/usr/include/netcdf-3 -I/usr/include/hdf" \
            LIBS="-L%{_libdir}/netcdf-3 -L%{_libdir}/hdf"
 make %{?_smp_mflags}
@@ -49,6 +49,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Feb 24 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-4
+- Add --with-fftw to configure
+
 * Thu Feb  2 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-3
 - Enable hdf for ppc
 - Change fftw3 to fftw
