@@ -1,12 +1,12 @@
 Name:           gdl
-Version:        0.8.11
-Release:        4%{?dist}
+Version:        0.9
+Release:        0.pre%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPL
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://dl.sf.net/gnudata/%{name}-%{version}.tar.gz
+Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -23,11 +23,11 @@ Systems Inc.
 
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}pre
 
 
 %build
-%configure --disable-static --with-fftw \
+%configure --disable-dependency-tracking --disable-static --with-fftw \
            INCLUDES="-I/usr/include/netcdf-3 -I/usr/include/hdf" \
            LIBS="-L%{_libdir}/netcdf-3 -L%{_libdir}/hdf"
 make %{?_smp_mflags}
@@ -49,6 +49,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Apr  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre
+- Update to 0.9pre
+
 * Fri Feb 24 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-4
 - Add --with-fftw to configure
 
