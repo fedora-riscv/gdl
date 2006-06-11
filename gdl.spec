@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre%{?dist}
+Release:        0.pre.1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -49,6 +49,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Jun 11 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre.1
+- Rebuild for ImageMagick so bump
+
 * Mon Apr  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre
 - Update to 0.9pre
 
