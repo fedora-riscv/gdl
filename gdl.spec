@@ -6,7 +6,7 @@ Summary:        GNU Data Language
 Group:          Applications/Engineering
 License:        GPL
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre.tar.gz
+Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre2.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -23,7 +23,7 @@ Systems Inc.
 
 
 %prep
-%setup -q -n %{name}-%{version}pre
+%setup -q -n %{name}-%{version}pre2
 
 
 %build
