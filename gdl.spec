@@ -7,6 +7,7 @@ Group:          Applications/Engineering
 License:        GPL
 URL:            http://gnudatalanguage.sourceforge.net/
 Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre2.tar.gz
+Patch0:         gdl-0.9pre2-specialization.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -24,6 +25,7 @@ Systems Inc.
 
 %prep
 %setup -q -n %{name}-%{version}pre2
+%patch -p1
 
 
 %build
@@ -51,6 +53,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Mon Sep 19 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3
 - Rebuild for FC6
+- Add patch for specialization error caught by gcc 4.1.1
 
 * Thu Jun 29 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre2
 - Update to 0.9pre2
