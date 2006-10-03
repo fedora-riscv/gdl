@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre3%{?dist}
+Release:        0.pre3.1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -25,7 +25,7 @@ Systems Inc.
 
 %prep
 %setup -q -n %{name}-%{version}pre2
-%patch -p1
+#%patch -p1
 
 
 %build
@@ -51,6 +51,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Oct  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.1
+- rebuilt for unwind info generation, broken in gcc-4.1.1-21
+
 * Mon Sep 19 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3
 - Rebuild for FC6
 - Add patch for specialization error caught by gcc 4.1.1
