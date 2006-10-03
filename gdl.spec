@@ -25,7 +25,7 @@ Systems Inc.
 
 %prep
 %setup -q -n %{name}-%{version}pre2
-#%patch -p1
+%patch -p1
 
 
 %build
