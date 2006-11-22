@@ -1,13 +1,13 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre3.1%{?dist}
+Release:        0.pre3.2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPL
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre2.tar.gz
-Patch0:         gdl-0.9pre2-specialization.patch
+Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre3.tar.gz
+Patch0:         gdl-0.9pre3-const.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -24,8 +24,8 @@ Systems Inc.
 
 
 %prep
-%setup -q -n %{name}-%{version}pre2
-%patch -p1
+%setup -q -n %{name}-%{version}pre3
+%patch -p1 -b .const
 
 
 %build
@@ -51,6 +51,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Nov 22 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.2
+- Update to 0.9pre3
+
 * Wed Oct  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.1
 - rebuilt for unwind info generation, broken in gcc-4.1.1-21
 
