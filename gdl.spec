@@ -7,6 +7,7 @@ Group:          Applications/Engineering
 License:        GPL
 URL:            http://gnudatalanguage.sourceforge.net/
 Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre3.tar.gz
+Patch0:         gdl-0.9pre3-const.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -24,6 +25,7 @@ Systems Inc.
 
 %prep
 %setup -q -n %{name}-%{version}pre3
+%patch -p1 -b .const
 
 
 %build
