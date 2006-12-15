@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre3.2%{?dist}
+Release:        0.pre3.3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -51,6 +51,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Dec 14 2006 - Jef Spaleta <jspaleta@gmail.com> - 0.9-0.pre3.3
+- Bump and build for python 2.5
+
 * Wed Nov 22 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.2
 - Update to 0.9pre3
 
