@@ -1,13 +1,12 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre3.4%{?dist}
+Release:        0.pre4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPL
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre3.tar.gz
-Patch0:         gdl-0.9pre3-const.patch
+Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre4.tar.gz
 Patch1:         gdl-0.9pre3-python25.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -25,8 +24,7 @@ Systems Inc.
 
 
 %prep
-%setup -q -n %{name}-%{version}pre3
-%patch -p1 -b .const
+%setup -q -n %{name}-%{version}pre4
 %patch1 -p1 -b .python25
 
 
@@ -53,6 +51,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jan  5 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4
+- Update to 0.9pre4
+
 * Mon Dec 18 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.4
 - Add patch for configure to handle python 2.5
 
