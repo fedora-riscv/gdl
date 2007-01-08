@@ -1,20 +1,19 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre3.2%{?dist}
+Release:        0.pre4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPL
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre3.tar.gz
-Patch0:         gdl-0.9pre3-const.patch
+Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre4.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
-BuildRequires:  fftw-devel, hdf-devel
+BuildRequires:  fftw-devel, hdf-devel, proj-devel
 
 
 %description
@@ -24,8 +23,7 @@ Systems Inc.
 
 
 %prep
-%setup -q -n %{name}-%{version}pre3
-%patch -p1 -b .const
+%setup -q -n %{name}-%{version}pre4
 
 
 %build
@@ -51,6 +49,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jan  8 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4
+- Update to 0.9pre4
+- Add proj-devel BR
+
 * Wed Nov 22 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.2
 - Update to 0.9pre3
 
