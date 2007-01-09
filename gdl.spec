@@ -1,12 +1,14 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre4%{?dist}
+Release:        0.pre4.1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPL
 URL:            http://gnudatalanguage.sourceforge.net/
 Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre4.tar.gz
+Source1:        gdl.csh
+Source2:        gdl.sh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -38,6 +40,16 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 rm -r $RPM_BUILD_ROOT/%{_libdir}
 
+# Install the library
+install -d -m 0755 $RPM_BUILD_ROOT/%{_datadir}
+cp -r src/pro $RPM_BUILD_ROOT/%{_datadir}/gdl
+
+# Install the profile file to set GDL_PATH
+install -d -m 0755 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
+install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
+install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
+
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -45,10 +57,15 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING HACKING NEWS PYTHON.txt README TODO
+%config(noreplace) %{_sysconfdir}/profile.d/gdl.*sh
 %{_bindir}/gdl
+%{_datadir}/gdl/
 
 
 %changelog
+* Tue Jan  9 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4.1
+- Package the library routines and point to them by default
+
 * Mon Jan  8 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4
 - Update to 0.9pre4
 - Add proj-devel BR
