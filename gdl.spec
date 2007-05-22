@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre4.1%{?dist}
+Release:        0.pre4.2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -65,6 +65,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue May 22 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4.2
+- Rebuild for netcdf 3.6.2 with shared libraries
+
 * Tue Jan  9 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4.1
 - Package the library routines and point to them by default
 
