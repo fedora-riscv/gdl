@@ -1,10 +1,10 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre5%{?dist}
+Release:        0.pre5%{?dist}.1
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
-License:        GPL
+License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
 Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre5.tar.gz
 Source1:        gdl.csh
@@ -63,6 +63,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Aug 21 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre5.1
+- Update license tag to GPLv2+
+- Rebuild for BuildID
+
 * Mon Jul  9 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre5
 - Update to 0.9pre5
 
