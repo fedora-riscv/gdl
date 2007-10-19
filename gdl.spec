@@ -6,7 +6,7 @@ Summary:        GNU Data Language
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://dl.sf.net/gnudata/%{name}-%{version}pre5.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}pre5.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Patch0:		gdl-0.9pre5-ppc64.patch
