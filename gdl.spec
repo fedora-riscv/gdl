@@ -1,12 +1,12 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre5%{?dist}.2
+Release:        0.pre6%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}pre5.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}pre6.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Patch0:		gdl-0.9pre5-ppc64.patch
@@ -26,7 +26,7 @@ Systems Inc.
 
 
 %prep
-%setup -q -n %{name}-%{version}pre5
+%setup -q -n %{name}-%{version}pre6
 %patch -p1 -b .ppc64
 
 
@@ -65,6 +65,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Nov  1 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6
+- Update to 0.9pre6
+
 * Tue Aug 21 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre5.2
 - Add patch to fix build on ppc64
 
