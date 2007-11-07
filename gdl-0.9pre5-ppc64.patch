@@ -1,0 +1,11 @@
+--- gdl-0.9pre5/configure.ppc64	2007-08-21 22:25:25.000000000 -0600
++++ gdl-0.9pre5/configure	2007-08-21 22:25:37.000000000 -0600
+@@ -21152,7 +21152,7 @@
+     DARWIN="yes"
+         ;;
+ 
+-  powerpc-*-linux* )
++  powerpc*-*-linux* )
+     LDFLAGS="$LDFLAGS -rdynamic"
+     ;;
+ 
