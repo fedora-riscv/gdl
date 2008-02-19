@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre6%{?dist}
+Release:        1.pre6%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -65,6 +65,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 0.9-1.pre6
+- Autorebuild for GCC 4.3
+
 * Fri Nov  1 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6
 - Update to 0.9pre6
 
