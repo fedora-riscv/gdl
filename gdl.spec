@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        1.pre6%{?dist}
+Release:        0.pre6.1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -9,7 +9,10 @@ URL:            http://gnudatalanguage.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}pre6.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
-Patch0:		gdl-0.9pre5-ppc64.patch
+Patch0:		gdl-0.9pre6-cvs.patch
+Patch1:		gdl-0.9pre5-ppc64.patch
+Patch2:		gdl-0.9pre6-gcc43.patch
+Patch3:		gdl-0.9pre6-plplot.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -27,10 +30,15 @@ Systems Inc.
 
 %prep
 %setup -q -n %{name}-%{version}pre6
-%patch -p1 -b .ppc64
+%patch0 -p1 -b .cvs
+%patch1 -p1 -b .ppc64
+%patch2 -p1 -b .gcc43
+%patch3 -p1 -b .plplot
+find -name \*.cvs | xargs chmod 644
 
 
 %build
+export CPPFLAGS="-DH5_USE_16_API"
 %configure --disable-dependency-tracking --disable-static --with-fftw \
            INCLUDES="-I/usr/include/netcdf-3 -I/usr/include/hdf" \
            LIBS="-L%{_libdir}/netcdf-3 -L%{_libdir}/hdf"
@@ -65,8 +73,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Tue Feb 19 2008 Fedora Release Engineering <rel-eng@fedoraproject.org> - 0.9-1.pre6
-- Autorebuild for GCC 4.3
+* Tue Mar 4 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6.1
+- Rebuild for gcc 4.3, and add patch for gcc 4.3 support
+- Add patch to build against plplot 5.9.0
+- Add cvs patch to update to latest cvs
 
 * Fri Nov  1 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6
 - Update to 0.9pre6
