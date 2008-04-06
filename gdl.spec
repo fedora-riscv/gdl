@@ -9,6 +9,7 @@ URL:            http://gnudatalanguage.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc1.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
+Patch0:         gdl-0.9rc1-automake.patch
 Patch1:		gdl-0.9pre5-ppc64.patch
 Patch2:		gdl-0.9pre6-gcc43.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -28,6 +29,7 @@ Systems Inc.
 
 %prep
 %setup -q -n %{name}-%{version}rc1
+%patch0 -p0 -b .automake
 %patch1 -p1 -b .ppc64
 %patch2 -p1 -b .gcc43
 
