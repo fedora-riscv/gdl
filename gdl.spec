@@ -1,18 +1,16 @@
 Name:           gdl
 Version:        0.9
-Release:        0.pre6.1%{?dist}
+Release:        0.rc1.1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}pre6.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc1.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
-Patch0:		gdl-0.9pre6-cvs.patch
 Patch1:		gdl-0.9pre5-ppc64.patch
 Patch2:		gdl-0.9pre6-gcc43.patch
-Patch3:		gdl-0.9pre6-plplot.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -29,12 +27,9 @@ Systems Inc.
 
 
 %prep
-%setup -q -n %{name}-%{version}pre6
-%patch0 -p1 -b .cvs
+%setup -q -n %{name}-%{version}rc1
 %patch1 -p1 -b .ppc64
 %patch2 -p1 -b .gcc43
-%patch3 -p1 -b .plplot
-find -name \*.cvs | xargs chmod 644
 
 
 %build
@@ -73,6 +68,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Apr  5 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.1
+- Update to 0.9rc1
+
+* Mon Mar 17 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6.2
+- Update cvs patch to latest cvs
+
 * Tue Mar 4 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6.1
 - Rebuild for gcc 4.3, and add patch for gcc 4.3 support
 - Add patch to build against plplot 5.9.0

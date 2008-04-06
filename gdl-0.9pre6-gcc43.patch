@@ -39,20 +39,3 @@
  #include <memory>
  #include <set>
  
---- gdl-0.9pre6/src/gdlgstream.cpp.gcc43	2007-10-29 17:10:47.000000000 -0600
-+++ gdl-0.9pre6/src/gdlgstream.cpp	2008-02-13 11:36:14.000000000 -0700
-@@ -25,12 +25,12 @@
- 
- using namespace std;
- 
--void PLPlotAbortHandler(char *c)
-+void PLPlotAbortHandler(const char *c)
- {
-   cout << "PLPlot abort handler: " << c << endl;
- }
- 
--int PLPlotExitHandler(char *c)
-+int PLPlotExitHandler(const char *c)
- {
-   cout << "PLPlot exit handler: " << c << endl;
-   return 0;
