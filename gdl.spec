@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        0.rc1.1%{?dist}
+Release:        0.rc1.2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -10,8 +10,8 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Patch0:         gdl-0.9rc1-automake.patch
-Patch1:		gdl-0.9pre5-ppc64.patch
-Patch2:		gdl-0.9pre6-gcc43.patch
+Patch1:         gdl-0.9pre5-ppc64.patch
+Patch2:         gdl-0.9pre6-gcc43.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -70,6 +70,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Apr 28 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.2
+- Rebuild for new ImageMagick
+
 * Sat Apr  5 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.1
 - Update to 0.9rc1
 
