@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        0.rc1.2%{?dist}
+Release:        0.rc1.3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -9,9 +9,10 @@ URL:            http://gnudatalanguage.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc1.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
-Patch0:         gdl-0.9rc1-automake.patch
+Patch0:         gdl-0.9rc1-cvs.patch
 Patch1:         gdl-0.9pre5-ppc64.patch
 Patch2:         gdl-0.9pre6-gcc43.patch
+Patch3:         gdl-0.9rc1-magick.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -29,16 +30,17 @@ Systems Inc.
 
 %prep
 %setup -q -n %{name}-%{version}rc1
-%patch0 -p0 -b .automake
+%patch0 -p1 -b .cvs
 %patch1 -p1 -b .ppc64
 %patch2 -p1 -b .gcc43
+%patch3 -p1 -b .magick
 
 
 %build
 export CPPFLAGS="-DH5_USE_16_API"
 %configure --disable-dependency-tracking --disable-static --with-fftw \
-           INCLUDES="-I/usr/include/netcdf-3 -I/usr/include/hdf" \
-           LIBS="-L%{_libdir}/netcdf-3 -L%{_libdir}/hdf"
+           INCLUDES="-I/usr/include/netcdf -I/usr/include/hdf" \
+           LIBS="-L%{_libdir}/hdf"
 make %{?_smp_mflags}
 
 
@@ -70,6 +72,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri May 16 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.3
+- Update to latest cvs
+- Add patch to handle new ImageMagick
+- Update netcdf locations
+
 * Mon Apr 28 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.2
 - Rebuild for new ImageMagick
 
