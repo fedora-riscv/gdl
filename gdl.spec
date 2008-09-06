@@ -11,7 +11,7 @@ Source1:        gdl.csh
 Source2:        gdl.sh
 Patch0:         gdl-0.9rc1-cvs.patch
 Patch1:         gdl-0.9pre5-ppc64.patch
-Patch2:         gdl-0.9pre6-gcc43.patch
+Patch2:         gdl-0.9rc1-gcc43.patch
 Patch3:         gdl-0.9rc1-magick.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
