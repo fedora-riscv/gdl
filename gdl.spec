@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        0.rc1.3%{?dist}
+Release:        0.rc1.4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -20,6 +20,9 @@ BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
 BuildRequires:  fftw-devel, hdf-devel, proj-devel
+
+# Needed to pull in drivers
+Requires:       plplot
 
 
 %description
@@ -72,6 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Sep  5 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.4
+- Add a requires on plplot to pull in drivers (bug#458277)
+
 * Fri May 16 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.3
 - Update to latest cvs
 - Add patch to handle new ImageMagick
