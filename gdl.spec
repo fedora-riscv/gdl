@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9
-Release:        0.rc1.4%{?dist}
+Release:        0.rc1.4%{?dist}.1
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -75,6 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Nov 30 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.9-0.rc1.4.1
+- Rebuild for Python 2.6
+
 * Fri Sep  5 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.4
 - Add a requires on plplot to pull in drivers (bug#458277)
 
