@@ -1,15 +1,15 @@
 Name:           gdl
 Version:        0.9
-Release:        0.rc1.4%{?dist}.1
+Release:        0.rc2.1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc1.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
-Patch0:         gdl-0.9rc1-cvs.patch
+Patch0:         gdl-0.9rc2-cvs.patch
 Patch1:         gdl-0.9pre5-ppc64.patch
 Patch2:         gdl-0.9rc1-gcc43.patch
 Patch3:         gdl-0.9rc1-magick.patch
@@ -32,7 +32,7 @@ Systems Inc.
 
 
 %prep
-%setup -q -n %{name}-%{version}rc1
+%setup -q -n %{name}-%{version}rc2
 %patch0 -p1 -b .cvs
 %patch1 -p1 -b .ppc64
 %patch2 -p1 -b .gcc43
@@ -75,6 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jan 23 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc2.1
+- Update to 0.9rc2 based cvs
+
 * Sun Nov 30 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.9-0.rc1.4.1
 - Rebuild for Python 2.6
 

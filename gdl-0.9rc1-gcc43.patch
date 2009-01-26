@@ -8,17 +8,6 @@
  #include <iostream>
  #include <stdio.h>
  
---- gdl-0.9rc1/src/antlr/CharScanner.hpp.gcc43	2008-09-05 22:06:20.000000000 -0600
-+++ gdl-0.9rc1/src/antlr/CharScanner.hpp	2008-09-05 22:06:20.000000000 -0600
-@@ -14,6 +14,8 @@
- #include <cstring>
- #include <cstdlib>
- 
-+#include <cstdlib>
-+#include <cstring>
- #include <map>
- 
- #ifdef HAS_NOT_CCTYPE_H
 --- gdl-0.9rc1/src/antlr/Parser.cpp.gcc43	2008-04-03 16:09:26.000000000 -0600
 +++ gdl-0.9rc1/src/antlr/Parser.cpp	2008-09-05 22:06:20.000000000 -0600
 @@ -11,6 +11,7 @@
