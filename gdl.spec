@@ -1,18 +1,19 @@
 Name:           gdl
 Version:        0.9
-Release:        0.rc2.1%{?dist}
+Release:        0.2.rc2.20090224%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2.tar.gz
+#Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2.tar.bz2
+# cvs -z3 -d :pserver:anonymous@gnudatalanguage.cvs.sourceforge.net:/cvsroot/gnudatalanguage export -D 20090224 -d gdl-0.9rc2-20090224 gdl
+# tar cjf gdl-0.9rc2-20090224.tar.bz2 gdl-0.9rc2-20090224
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2-20090224.tar.bz2
 Source1:        gdl.csh
 Source2:        gdl.sh
-Patch0:         gdl-0.9rc2-cvs.patch
 Patch1:         gdl-0.9pre5-ppc64.patch
 Patch2:         gdl-0.9rc1-gcc43.patch
-Patch3:         gdl-0.9rc1-magick.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  readline-devel, ncurses-devel
@@ -20,7 +21,6 @@ BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
 BuildRequires:  fftw-devel, hdf-devel, proj-devel
-
 # Needed to pull in drivers
 Requires:       plplot
 
@@ -32,11 +32,9 @@ Systems Inc.
 
 
 %prep
-%setup -q -n %{name}-%{version}rc2
-%patch0 -p1 -b .cvs
+%setup -q -n %{name}-%{version}rc2-20090224
 %patch1 -p1 -b .ppc64
 %patch2 -p1 -b .gcc43
-%patch3 -p1 -b .magick
 
 
 %build
@@ -75,6 +73,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Feb 24 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.2.rc2.20090224
+- Update to 0.9rc2 cvs 20090224
+- Fix release tag
+- Drop ImageMagick patch fixed upstream
+
 * Fri Jan 23 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc2.1
 - Update to 0.9rc2 based cvs
 
