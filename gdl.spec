@@ -14,8 +14,10 @@ Source1:        gdl.csh
 Source2:        gdl.sh
 Patch1:         gdl-0.9pre5-ppc64.patch
 Patch2:         gdl-0.9rc1-gcc43.patch
+Patch3:         gdl-0.9rc2-20090224-antlr.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+BuildRequires:  antlr
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
@@ -35,6 +37,8 @@ Systems Inc.
 %setup -q -n %{name}-%{version}rc2-20090224
 %patch1 -p1 -b .ppc64
 %patch2 -p1 -b .gcc43
+%patch3 -p1 -b .antlr
+rm -rf src/antlr
 
 
 %build
@@ -77,6 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 - Update to 0.9rc2 cvs 20090224
 - Fix release tag
 - Drop ImageMagick patch fixed upstream
+- Don't build included copy of antlr, use system version
 
 * Fri Jan 23 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc2.1
 - Update to 0.9rc2 based cvs
