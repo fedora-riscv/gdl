@@ -15,6 +15,9 @@ Source2:        gdl.sh
 Patch1:         gdl-0.9pre5-ppc64.patch
 Patch2:         gdl-0.9rc1-gcc43.patch
 Patch3:         gdl-0.9rc2-20090224-antlr.patch
+# gcc 4.4.0 catches more class issues - add needed friend
+# https://sourceforge.net/tracker/index.php?func=detail&aid=2634356&group_id=97659&atid=618683
+Patch4:         gdl-0.9rc2-20090224-friend.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  antlr
@@ -38,6 +41,7 @@ Systems Inc.
 %patch1 -p1 -b .ppc64
 %patch2 -p1 -b .gcc43
 %patch3 -p1 -b .antlr
+%patch4 -p1 -b .friend
 rm -rf src/antlr
 
 
@@ -81,6 +85,7 @@ rm -rf $RPM_BUILD_ROOT
 - Update to 0.9rc2 cvs 20090224
 - Fix release tag
 - Drop ImageMagick patch fixed upstream
+- Add patch to compile with gcc 4.4.0 - needs new friend statement
 - Don't build included copy of antlr, use system version
 
 * Fri Jan 23 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc2.1
