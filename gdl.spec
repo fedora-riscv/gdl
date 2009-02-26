@@ -1,6 +1,8 @@
+%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+
 Name:           gdl
 Version:        0.9
-Release:        0.2.rc2.20090224%{?dist}
+Release:        0.3.rc2.20090224%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -28,12 +30,34 @@ BuildRequires:  python-devel, python-numarray, python-matplotlib
 BuildRequires:  fftw-devel, hdf-devel, proj-devel
 # Needed to pull in drivers
 Requires:       plplot
+Requires:       %{name}-common = %{version}-%{release}
+Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %description
 A free IDL (Interactive Data Language) compatible incremental compiler
 (ie. runs IDL programs). IDL is a registered trademark of Research
 Systems Inc.
+
+
+%package        common
+Summary:        Common files for GDL
+Group:          Applications/Engineering
+Requires:       %{name}-runtime = %{version}-%{release}
+BuildArch:      noarch
+
+%description    common
+Common files for GDL
+
+
+%package        python
+Summary:        GDL Python Module
+Group:          Applications/Engineering
+Requires:       %{name}-common = %{version}-%{release}
+Provides:       %{name}-runtime = %{version}-%{release}
+
+%description    python
+The %{name}-python package contains GDL built as a Python module.
 
 
 %prep
@@ -47,16 +71,34 @@ rm -rf src/antlr
 
 %build
 export CPPFLAGS="-DH5_USE_16_API"
+%global _configure ../configure
+mkdir standalone python
+pushd standalone
 %configure --disable-dependency-tracking --disable-static --with-fftw \
            INCLUDES="-I/usr/include/netcdf -I/usr/include/hdf" \
            LIBS="-L%{_libdir}/hdf"
 make %{?_smp_mflags}
+popd
+pushd python
+%configure --disable-dependency-tracking --disable-static --with-fftw \
+           --enable-python_module \
+           INCLUDES="-I/usr/include/netcdf -I/usr/include/hdf" \
+           LIBS="-L%{_libdir}/hdf"
+make %{?_smp_mflags}
+popd
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
+pushd standalone
 make install DESTDIR=$RPM_BUILD_ROOT
-rm -r $RPM_BUILD_ROOT/%{_libdir}
+rm -r $RPM_BUILD_ROOT%{_libdir}
+popd
+
+pushd python
+mkdir -p $RPM_BUILD_ROOT%{python_sitearch}
+cp -a src/.libs/libgdl.so.0.0.0 $RPM_BUILD_ROOT%{python_sitearch}/GDL.so
+popd
 
 # Install the library
 install -d -m 0755 $RPM_BUILD_ROOT/%{_datadir}
@@ -74,13 +116,25 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS ChangeLog COPYING HACKING NEWS PYTHON.txt README TODO
+%doc AUTHORS ChangeLog COPYING HACKING NEWS README TODO
 %config(noreplace) %{_sysconfdir}/profile.d/gdl.*sh
 %{_bindir}/gdl
+
+%files common
+%defattr(-,root,root,-)
 %{_datadir}/gdl/
+
+%files python
+%defattr(-,root,root,-)
+%doc AUTHORS ChangeLog COPYING NEWS PYTHON.txt README TODO
+%{python_sitearch}/GDL.so
 
 
 %changelog
+* Thu Feb 26 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.3.rc2.20090224
+- Build python module
+- Move common code to noarch common sub-package
+
 * Tue Feb 24 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.2.rc2.20090224
 - Update to 0.9rc2 cvs 20090224
 - Fix release tag
