@@ -76,12 +76,14 @@ export CPPFLAGS="-DH5_USE_16_API"
 %global _configure ../configure
 mkdir standalone python
 pushd standalone
+ln -s ../configure .
 %configure --disable-dependency-tracking --disable-static --with-fftw \
            INCLUDES="-I/usr/include/netcdf -I/usr/include/hdf" \
            LIBS="-L%{_libdir}/hdf"
 make %{?_smp_mflags}
 popd
 pushd python
+ln -s ../configure .
 %configure --disable-dependency-tracking --disable-static --with-fftw \
            --enable-python_module \
            INCLUDES="-I/usr/include/netcdf -I/usr/include/hdf" \
