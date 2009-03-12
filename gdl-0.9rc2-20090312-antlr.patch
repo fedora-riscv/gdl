@@ -1,6 +1,6 @@
---- gdl-0.9rc2-20090224/configure.antlr	2009-02-24 09:46:08.000000000 -0700
-+++ gdl-0.9rc2-20090224/configure	2009-02-24 09:47:32.000000000 -0700
-@@ -22313,7 +22313,7 @@
+--- gdl-0.9rc2-20090312/configure.antlr	2009-03-12 08:41:10.000000000 -0600
++++ gdl-0.9rc2-20090312/configure	2009-03-12 08:42:04.000000000 -0600
+@@ -22102,7 +22102,7 @@
  
  
  
@@ -9,16 +9,16 @@
  
  
  cat >confcache <<\_ACEOF
-@@ -22950,7 +22950,6 @@
+@@ -22707,7 +22707,6 @@
      "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
      "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
      "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
 -    "src/antlr/Makefile") CONFIG_FILES="$CONFIG_FILES src/antlr/Makefile" ;;
  
-   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
- $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
---- gdl-0.9rc2-20090224/src/Makefile.in.antlr	2009-02-23 11:24:00.000000000 -0700
-+++ gdl-0.9rc2-20090224/src/Makefile.in	2009-02-24 09:53:18.000000000 -0700
+   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
+ echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
+--- gdl-0.9rc2-20090312/src/Makefile.in.antlr	2009-02-23 11:24:00.000000000 -0700
++++ gdl-0.9rc2-20090312/src/Makefile.in	2009-02-26 09:00:54.000000000 -0700
 @@ -55,7 +55,7 @@
  libLTLIBRARIES_INSTALL = $(INSTALL)
  LTLIBRARIES = $(lib_LTLIBRARIES)

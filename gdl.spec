@@ -2,21 +2,23 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.3.rc2.20090224%{?dist}
+Release:        0.4.rc2.20090312%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
 #Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2.tar.bz2
-# cvs -z3 -d :pserver:anonymous@gnudatalanguage.cvs.sourceforge.net:/cvsroot/gnudatalanguage export -D 20090224 -d gdl-0.9rc2-20090224 gdl
-# tar cjf gdl-0.9rc2-20090224.tar.bz2 gdl-0.9rc2-20090224
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2-20090224.tar.bz2
+# cvs -z3 -d :pserver:anonymous@gnudatalanguage.cvs.sourceforge.net:/cvsroot/gnudatalanguage export -D 20090312 -d gdl-0.9rc2-20090312 gdl
+# tar cjf gdl-0.9rc2-20090312.tar.bz2 gdl-0.9rc2-20090312
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2-20090312.tar.bz2
 Source1:        gdl.csh
 Source2:        gdl.sh
 Patch1:         gdl-0.9pre5-ppc64.patch
 Patch2:         gdl-0.9rc1-gcc43.patch
-Patch3:         gdl-0.9rc2-20090224-antlr.patch
+# Build with system antlr library.  Request for upstream change here:
+# https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
+Patch3:         gdl-0.9rc2-20090312-antlr.patch
 # gcc 4.4.0 catches more class issues - add needed friend
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2634356&group_id=97659&atid=618683
 Patch4:         gdl-0.9rc2-20090224-friend.patch
@@ -61,7 +63,7 @@ The %{name}-python package contains GDL built as a Python module.
 
 
 %prep
-%setup -q -n %{name}-%{version}rc2-20090224
+%setup -q -n %{name}-%{version}rc2-20090312
 %patch1 -p1 -b .ppc64
 %patch2 -p1 -b .gcc43
 %patch3 -p1 -b .antlr
@@ -131,6 +133,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Mar 12 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.4.rc2.20090312
+- Update to 0.9rc2 cvs 20090312
+- Rebase antlr patch
+- Rebuild for new ImageMagick
+
 * Thu Feb 26 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.3.rc2.20090224
 - Build python module
 - Move common code to noarch common sub-package
