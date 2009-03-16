@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.4.rc2.20090312%{?dist}
+Release:        0.5.rc2.20090312%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -52,16 +52,6 @@ BuildArch:      noarch
 Common files for GDL
 
 
-%package        python
-Summary:        GDL Python Module
-Group:          Applications/Engineering
-Requires:       %{name}-common = %{version}-%{release}
-Provides:       %{name}-runtime = %{version}-%{release}
-
-%description    python
-The %{name}-python package contains GDL built as a Python module.
-
-
 %prep
 %setup -q -n %{name}-%{version}rc2-20090312
 %patch1 -p1 -b .ppc64
@@ -74,35 +64,16 @@ rm -rf src/antlr
 %build
 export CPPFLAGS="-DH5_USE_16_API"
 %global _configure ../configure
-mkdir standalone python
-pushd standalone
-ln -s ../configure .
 %configure --disable-dependency-tracking --disable-static --with-fftw \
            INCLUDES="-I/usr/include/netcdf -I/usr/include/hdf" \
            LIBS="-L%{_libdir}/hdf"
 make %{?_smp_mflags}
-popd
-pushd python
-ln -s ../configure .
-%configure --disable-dependency-tracking --disable-static --with-fftw \
-           --enable-python_module \
-           INCLUDES="-I/usr/include/netcdf -I/usr/include/hdf" \
-           LIBS="-L%{_libdir}/hdf"
-make %{?_smp_mflags}
-popd
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
-pushd standalone
 make install DESTDIR=$RPM_BUILD_ROOT
 rm -r $RPM_BUILD_ROOT%{_libdir}
-popd
-
-pushd python
-mkdir -p $RPM_BUILD_ROOT%{python_sitearch}
-cp -a src/.libs/libgdl.so.0.0.0 $RPM_BUILD_ROOT%{python_sitearch}/GDL.so
-popd
 
 # Install the library
 install -d -m 0755 $RPM_BUILD_ROOT/%{_datadir}
@@ -128,13 +99,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{_datadir}/gdl/
 
-%files python
-%defattr(-,root,root,-)
-%doc AUTHORS ChangeLog COPYING NEWS PYTHON.txt README TODO
-%{python_sitearch}/GDL.so
-
 
 %changelog
+* Mon Mar 16 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.5.rc2.20090312
+- Back off building python module until configure macro is updated
+
 * Thu Mar 12 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.4.rc2.20090312
 - Update to 0.9rc2 cvs 20090312
 - Rebase antlr patch
