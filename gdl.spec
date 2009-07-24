@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.5.rc2.20090312%{?dist}
+Release:        0.6.rc2.20090312%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -101,6 +101,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9-0.6.rc2.20090312
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
+
 * Mon Mar 16 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.5.rc2.20090312
 - Back off building python module until configure macro is updated
 
