@@ -1,0 +1,37 @@
+--- gdl-0.9rc2-20090504/configure.in.antlr-auto	2009-04-30 16:07:55.000000000 -0600
++++ gdl-0.9rc2-20090504/configure.in	2009-05-04 16:17:25.000000000 -0600
+@@ -842,7 +842,7 @@
+ dnl perform program name transformation
+ dnl AC_ARG_PROGRAM
+ 
+-AC_CONFIG_FILES(Makefile src/Makefile src/antlr/Makefile)
++AC_CONFIG_FILES(Makefile src/Makefile)
+ 
+ AC_OUTPUT
+ 
+--- gdl-0.9rc2-20090504/src/Makefile.am.antlr-auto	2009-03-03 16:32:14.000000000 -0700
++++ gdl-0.9rc2-20090504/src/Makefile.am	2009-05-04 16:17:18.000000000 -0600
+@@ -1,6 +1,5 @@
+ # set the include path found by configure
+ INCLUDES = $(EXT_INCLUDES) $(all_includes)
+-SUBDIRS = antlr
+ noinst_HEADERS = gdlwidget.hpp prognode.hpp prognodeexpr.hpp
+ 
+ cpp_hpp_files = accessdesc.hpp arrayindex.hpp assocdata.cpp assocdata.hpp \
+@@ -53,7 +52,7 @@
+ gdl_CXXFLAGS = $(AM_CXXFLAGS)
+ # the library search path.
+ gdl_LDFLAGS = $(all_libraries)
+-gdl_LDADD = $(top_builddir)/src/antlr/libantlr.a -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11
++gdl_LDADD = -lantlr -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11
+ endif
+ 
+ # build as library (for python module)
+@@ -69,6 +68,6 @@
+ libgdl_la_LDFLAGS = $(all_libraries) -Wl,-z,muldefs
+ endif 
+ 
+-libgdl_la_LIBADD = $(top_builddir)/src/antlr/libantlr.la -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11
++libgdl_la_LIBADD = -lantlr -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11
+ endif
+ 
