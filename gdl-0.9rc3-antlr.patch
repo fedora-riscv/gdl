@@ -1,6 +1,6 @@
---- gdl-0.9rc2-20090312/configure.antlr	2009-03-12 08:41:10.000000000 -0600
-+++ gdl-0.9rc2-20090312/configure	2009-03-12 08:42:04.000000000 -0600
-@@ -22102,7 +22102,7 @@
+--- gdl-0.9rc3/configure.antlr	2009-09-11 10:04:09.000000000 -0600
++++ gdl-0.9rc3/configure	2009-10-15 11:11:06.707875846 -0600
+@@ -23525,7 +23525,7 @@
  
  
  
@@ -9,7 +9,7 @@
  
  
  cat >confcache <<\_ACEOF
-@@ -22707,7 +22707,6 @@
+@@ -24130,7 +24130,6 @@
      "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
      "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
      "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
@@ -17,8 +17,8 @@
  
    *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
  echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
---- gdl-0.9rc2-20090312/src/Makefile.in.antlr	2009-02-23 11:24:00.000000000 -0700
-+++ gdl-0.9rc2-20090312/src/Makefile.in	2009-02-26 09:00:54.000000000 -0700
+--- gdl-0.9rc3/src/Makefile.in.antlr	2009-09-11 10:04:09.000000000 -0600
++++ gdl-0.9rc3/src/Makefile.in	2009-10-15 11:10:12.689817337 -0600
 @@ -55,7 +55,7 @@
  libLTLIBRARIES_INSTALL = $(INSTALL)
  LTLIBRARIES = $(lib_LTLIBRARIES)
@@ -28,7 +28,7 @@
  am__libgdl_la_SOURCES_DIST = accessdesc.hpp arrayindex.hpp \
  	assocdata.cpp assocdata.hpp basegdl.hpp basic_fun_cl.cpp \
  	basic_fun_cl.hpp basic_fun.cpp basic_fun.hpp basic_fun_jmg.cpp \
-@@ -233,7 +233,7 @@
+@@ -236,7 +236,7 @@
  @BUILDASLIBRARY_FALSE@	gdl-gdl.$(OBJEXT)
  gdl_OBJECTS = $(am_gdl_OBJECTS)
  @BUILDASLIBRARY_FALSE@gdl_DEPENDENCIES =  \
@@ -37,7 +37,7 @@
  gdl_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
  	--mode=link $(CXXLD) $(gdl_CXXFLAGS) $(CXXFLAGS) \
  	$(gdl_LDFLAGS) $(LDFLAGS) -o $@
-@@ -391,7 +391,6 @@
+@@ -395,7 +395,6 @@
  
  # set the include path found by configure
  INCLUDES = $(EXT_INCLUDES) $(all_includes)
@@ -45,7 +45,7 @@
  noinst_HEADERS = gdlwidget.hpp prognode.hpp prognodeexpr.hpp
  cpp_hpp_files = accessdesc.hpp arrayindex.hpp assocdata.cpp assocdata.hpp \
  		basegdl.hpp basic_fun_cl.cpp basic_fun_cl.hpp basic_fun.cpp basic_fun.hpp \
-@@ -438,7 +437,7 @@
+@@ -442,7 +441,7 @@
  @BUILDASLIBRARY_FALSE@gdl_CXXFLAGS = $(AM_CXXFLAGS)
  # the library search path.
  @BUILDASLIBRARY_FALSE@gdl_LDFLAGS = $(all_libraries)
@@ -54,7 +54,7 @@
  
  # build as library (for python module)
  @BUILDASLIBRARY_TRUE@lib_LTLIBRARIES = libgdl.la
-@@ -448,7 +447,7 @@
+@@ -452,7 +451,7 @@
  # netCDF and HDF define some same symbols
  # hence -z muldefs has to be passed to the linker
  @BUILDASLIBRARY_TRUE@@DARWIN_TRUE@libgdl_la_LDFLAGS = $(all_libraries) -Wl,-m

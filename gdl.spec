@@ -2,34 +2,38 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.6.rc2.20090312%{?dist}
+Release:        0.7.rc3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-#Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2.tar.bz2
-# cvs -z3 -d :pserver:anonymous@gnudatalanguage.cvs.sourceforge.net:/cvsroot/gnudatalanguage export -D 20090312 -d gdl-0.9rc2-20090312 gdl
-# tar cjf gdl-0.9rc2-20090312.tar.bz2 gdl-0.9rc2-20090312
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2-20090312.tar.bz2
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc3.tar.gz
+# Made with makecvstarball
+#Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2-20090603.tar.bz2
 Source1:        gdl.csh
 Source2:        gdl.sh
-Patch1:         gdl-0.9pre5-ppc64.patch
+Source3:        makecvstarball
 Patch2:         gdl-0.9rc1-gcc43.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch3:         gdl-0.9rc2-20090312-antlr.patch
-# gcc 4.4.0 catches more class issues - add needed friend
-# https://sourceforge.net/tracker/index.php?func=detail&aid=2634356&group_id=97659&atid=618683
-Patch4:         gdl-0.9rc2-20090224-friend.patch
+Patch3:         gdl-0.9rc3-antlr.patch
+Patch4:         gdl-0.9rc2-20090504-antlr-auto.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+#RHEL doesn't have the needed antlr version/headers, old plplot
+%if !0%{?rhel}
 BuildRequires:  antlr
+%define plplot_config %{nil}
+%else
+%define plplot_config --enable-oldplplot
+%endif
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
 BuildRequires:  fftw-devel, hdf-devel, proj-devel
+BuildRequires:  autoconf, automake, libtool
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
@@ -46,25 +50,32 @@ Systems Inc.
 Summary:        Common files for GDL
 Group:          Applications/Engineering
 Requires:       %{name}-runtime = %{version}-%{release}
+%if !0%{?rhel}
 BuildArch:      noarch
+%endif
 
 %description    common
 Common files for GDL
 
 
 %prep
-%setup -q -n %{name}-%{version}rc2-20090312
-%patch1 -p1 -b .ppc64
+%setup -q -n %{name}-%{version}rc3
 %patch2 -p1 -b .gcc43
+%if !0%{?rhel}
 %patch3 -p1 -b .antlr
-%patch4 -p1 -b .friend
+%patch4 -p1 -b .antlr-auto
+%endif
+%if !0%{?rhel}
 rm -rf src/antlr
+%endif
+rm ltmain.sh
+autoreconf --install
 
 
 %build
 export CPPFLAGS="-DH5_USE_16_API"
-%global _configure ../configure
 %configure --disable-dependency-tracking --disable-static --with-fftw \
+           %{plplot_config} \
            INCLUDES="-I/usr/include/netcdf -I/usr/include/hdf" \
            LIBS="-L%{_libdir}/hdf"
 make %{?_smp_mflags}
@@ -85,6 +96,11 @@ install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 
+%check
+cd testsuite
+echo ".r test_suite" | ../src/gdl
+
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -101,6 +117,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Oct 15 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.7.rc3
+- Update to 0.9rc3
+- Drop ppc64, friend patches fixed upstream
+- Add source for makecvstarball
+- Rebase antlr patch, add automake source version
+- Add conditionals for EPEL builds
+- Add %%check section
+
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9-0.6.rc2.20090312
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
