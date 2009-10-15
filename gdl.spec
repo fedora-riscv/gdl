@@ -14,7 +14,6 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-Patch2:         gdl-0.9rc1-gcc43.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch3:         gdl-0.9rc3-antlr.patch
@@ -60,7 +59,6 @@ Common files for GDL
 
 %prep
 %setup -q -n %{name}-%{version}rc3
-%patch2 -p1 -b .gcc43
 %if !0%{?rhel}
 %patch3 -p1 -b .antlr
 %patch4 -p1 -b .antlr-auto
@@ -119,7 +117,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Thu Oct 15 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.7.rc3
 - Update to 0.9rc3
-- Drop ppc64, friend patches fixed upstream
+- Drop gcc43, ppc64, friend patches fixed upstream
 - Add source for makecvstarball
 - Rebase antlr patch, add automake source version
 - Add conditionals for EPEL builds
