@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.7.rc3%{?dist}
+Release:        0.8.rc3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -115,6 +115,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Nov 11 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.8.rc3
+- Rebuild for netcdf-4.1.0
+
 * Thu Oct 15 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.7.rc3
 - Update to 0.9rc3
 - Drop gcc43, ppc64, friend patches fixed upstream
