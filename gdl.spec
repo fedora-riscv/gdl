@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.8.rc3%{?dist}
+Release:        0.9.rc3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -31,7 +31,7 @@ BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
-BuildRequires:  fftw-devel, hdf-devel, proj-devel
+BuildRequires:  fftw-devel, hdf-static, hdf-devel, proj-devel
 BuildRequires:  autoconf, automake, libtool
 # Needed to pull in drivers
 Requires:       plplot
@@ -115,6 +115,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Dec  8 2009 Michael Schwendt <mschwendt@fedoraproject.org> - 0.9-0.9.rc3
+- Explicitly BR hdf-static in accordance with the Packaging
+  Guidelines (hdf-devel is still static-only).
+
 * Wed Nov 11 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.8.rc3
 - Rebuild for netcdf-4.1.0
 
