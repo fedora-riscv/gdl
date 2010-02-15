@@ -1,0 +1,28 @@
+--- gdl-0.9rc4/src/pythongdl.cpp.python	2010-02-02 11:13:51.000000000 -0700
++++ gdl-0.9rc4/src/pythongdl.cpp	2010-02-04 09:29:30.855905623 -0700
+@@ -176,7 +176,7 @@
+   if( kwDict != NULL)
+     {
+       PyObject *key, *value;
+-      int dictPos = 0;
++      Py_ssize_t dictPos = 0;
+       
+       int nKW = PyDict_Size( kwDict);
+ 
+@@ -242,7 +242,7 @@
+   if( kwDict != NULL)
+     {
+       PyObject *key, *value;
+-      int dictPos = 0;
++      Py_ssize_t dictPos = 0;
+ 
+       int nKW = PyDict_Size( kwDict);
+       for( SizeT k=0; k<nKW; ++k)
+@@ -263,7 +263,6 @@
+ int (*oldInputHook)();
+ int GDLEventHandlerPy()
+ {
+-  GDLEventHandler();
+   if( oldInputHook != NULL)
+     (*oldInputHook)();
+ }

@@ -1,0 +1,11 @@
+--- gdl-0.9rc4/src/basic_pro.cpp.wx	2010-02-02 11:13:51.000000000 -0700
++++ gdl-0.9rc4/src/basic_pro.cpp	2010-02-04 10:54:58.336905605 -0700
+@@ -689,7 +689,7 @@
+   {
+ 
+ #ifdef HAVE_LIBWXWIDGETS
+-    wxTheApp->OnExit(); // Defined in GDLApp::OnExit() in gdlwidget.cpp
++    if (wxTheApp) wxTheApp->OnExit(); // Defined in GDLApp::OnExit() in gdlwidget.cpp
+     wxUninitialize();
+ #endif
+ 
