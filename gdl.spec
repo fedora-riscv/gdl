@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.10.rc4%{?dist}
+Release:        0.11.rc4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -167,6 +167,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Mar 8 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.11.rc4
+- Rebuild for new ImageMagick
+
 * Wed Feb 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.10.rc4
 - Update to 0.9rc4
 - Enable grib, udunits2, and wxWidgets support
