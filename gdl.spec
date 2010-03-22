@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.11.rc4%{?dist}
+Release:        0.12.rc4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -33,7 +33,7 @@ BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, python-numarray, python-matplotlib
-BuildRequires:  fftw-devel, hdf-static, proj-devel
+BuildRequires:  fftw-devel, hdf-static
 BuildRequires:  grib_api-static
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
@@ -167,6 +167,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Mar 22 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.12.rc4
+- Drop unused BR on proj-devel (bug #572616)
+
 * Mon Mar 8 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.11.rc4
 - Rebuild for new ImageMagick
 
