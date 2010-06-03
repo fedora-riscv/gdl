@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.12.rc4%{?dist}
+Release:        0.13.rc4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -12,19 +12,22 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-Patch0:         gdl-0.9rc4-wx-config.patch
-Patch1:         gdl-0.9rc4-GDLLexer.patch
-Patch2:         gdl-0.9rc4-python.patch
+Patch0:         gdl-0.9rc4-cvs.patch
+Patch1:         gdl-0.9rc4-wx-config.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch3:         gdl-0.9rc3-antlr.patch
-Patch4:         gdl-0.9rc4-antlr-auto.patch
-Patch5:         gdl-0.9rc4-wx.patch
+Patch4:         gdl-0.9rc3-antlr.patch
+Patch5:         gdl-0.9rc4-antlr-auto.patch
+Patch6:         gdl-0.9rc4-wx.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
-%if !0%{?rhel}
+%if 0%{?fedora}
+ %if 0%{?fedora} >= 14
+BuildRequires:  antlr-C++
+ %else
 BuildRequires:  antlr
+ %endif
 %global plplot_config %{nil}
 %else
 %global plplot_config --enable-oldplplot
@@ -78,14 +81,13 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %prep
 %setup -q -n %{name}-%{version}rc4
-%patch0 -p1 -b .wx-config
-%patch1 -p1 -b .GDLLexer
-%patch2 -p1 -b .python
+%patch0 -p1 -b .cvs
+%patch1 -p1 -b .wx-config
 %if !0%{?rhel}
-#patch3 -p1 -b .antlr
-%patch4 -p1 -b .antlr-auto
+#patch4 -p1 -b .antlr
+%patch5 -p1 -b .antlr-auto
 %endif
-%patch5 -p1 -b .wx
+#patch6 -p1 -b .wx
 %if !0%{?rhel}
 rm -rf src/antlr
 %endif
@@ -167,6 +169,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jun 3 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.13.rc4
+- Update to today's cvs
+- Drop GLDLexer and python patches
+- BR antlr-C++ on Fedora 14+
+
 * Mon Mar 22 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.12.rc4
 - Drop unused BR on proj-devel (bug #572616)
 
