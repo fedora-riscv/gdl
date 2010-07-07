@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.13.rc4%{?dist}
+Release:        0.14.rc4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -13,7 +13,6 @@ Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
 Patch0:         gdl-0.9rc4-cvs.patch
-Patch1:         gdl-0.9rc4-wx-config.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch4:         gdl-0.9rc3-antlr.patch
@@ -82,12 +81,11 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %prep
 %setup -q -n %{name}-%{version}rc4
 %patch0 -p1 -b .cvs
-%patch1 -p1 -b .wx-config
 %if !0%{?rhel}
 #patch4 -p1 -b .antlr
 %patch5 -p1 -b .antlr-auto
 %endif
-#patch6 -p1 -b .wx
+%patch6 -p1 -b .wx
 %if !0%{?rhel}
 rm -rf src/antlr
 %endif
@@ -169,6 +167,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jul 7 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.14.rc4
+- Update to today's cvs
+- Drop wx-config patch
+- Re-instate wx patch to avoid segfault on test exit
+
 * Thu Jun 3 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.13.rc4
 - Update to today's cvs
 - Drop GLDLexer and python patches
