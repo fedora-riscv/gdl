@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.15.rc4%{?dist}
+Release:        0.16.rc4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -167,6 +167,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.9-0.16.rc4
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Wed Jul 14 2010 Dan Horák <dan@danny.cz> - 0.9-0.15.rc4
 - rebuilt against wxGTK-2.8.11-2
 
