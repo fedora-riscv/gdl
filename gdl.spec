@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.16.rc4%{?dist}
+Release:        0.17.rc4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -13,6 +13,7 @@ Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
 Patch0:         gdl-0.9rc4-cvs.patch
+Patch1:         gdl-0.9rc4-numpy.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch4:         gdl-0.9rc3-antlr.patch
@@ -34,7 +35,7 @@ BuildRequires:  antlr
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
-BuildRequires:  python-devel, python-numarray, python-matplotlib
+BuildRequires:  python-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
 BuildRequires:  grib_api-static
 #TODO - Build with mpi support
@@ -81,6 +82,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %prep
 %setup -q -n %{name}-%{version}rc4
 %patch0 -p1 -b .cvs
+%patch1 -p1 -b .numpy
 %if !0%{?rhel}
 #patch4 -p1 -b .antlr
 %patch5 -p1 -b .antlr-auto
@@ -110,6 +112,9 @@ autoreconf --install
 
 %build
 export CPPFLAGS="-DH5_USE_16_API"
+# Build convenience .a libraries with -fPIC
+export CFLAGS="$RPM_OPT_FLAGS -fPIC"
+export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
 mkdir build build-python
 #Build the standalone executable
 pushd build
@@ -167,6 +172,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Aug 26 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.17.rc4
+- Add initial patch to build the python module with numpy rather than
+  numarray.  Doesn't work yet, but the python module is mostly dead anyway
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.9-0.16.rc4
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
