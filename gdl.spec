@@ -2,17 +2,16 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.17.rc4%{?dist}
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc4.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-Patch0:         gdl-0.9rc4-cvs.patch
 Patch1:         gdl-0.9rc4-numpy.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
@@ -51,7 +50,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %description
 A free IDL (Interactive Data Language) compatible incremental compiler
-(ie. runs IDL programs). IDL is a registered trademark of Research
+(i.e. runs IDL programs). IDL is a registered trademark of Research
 Systems Inc.
 
 
@@ -80,8 +79,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n %{name}-%{version}rc4
-%patch0 -p1 -b .cvs
+%setup -q -n %{name}-%{version}
 %patch1 -p1 -b .numpy
 %if !0%{?rhel}
 #patch4 -p1 -b .antlr
@@ -172,6 +170,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Aug 30 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-1
+- Update to 0.9 final
+
 * Thu Aug 26 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.17.rc4
 - Add initial patch to build the python module with numpy rather than
   numarray.  Doesn't work yet, but the python module is mostly dead anyway
