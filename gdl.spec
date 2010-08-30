@@ -50,7 +50,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %description
 A free IDL (Interactive Data Language) compatible incremental compiler
-(ie. runs IDL programs). IDL is a registered trademark of Research
+(i.e. runs IDL programs). IDL is a registered trademark of Research
 Systems Inc.
 
 
