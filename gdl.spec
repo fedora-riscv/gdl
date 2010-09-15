@@ -164,7 +164,7 @@ rm -rf $RPM_BUILD_ROOT
 * Wed Sep 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-1
 - Update to 0.9 final
 - Drop wx-config, GLDLexer, and python patches
-- Fix GDL_PATH in profile scripts (bug #634251)
+- Fix GDL_PATH in profile scripts (bug #634351)
 
 
 * Wed Feb 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.10.rc4
