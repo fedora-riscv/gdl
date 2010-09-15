@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -170,6 +170,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Sep 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-2
+- Rebuild for new ImageMagick
+
 * Mon Aug 30 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-1
 - Update to 0.9 final
 
