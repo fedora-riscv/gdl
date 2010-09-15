@@ -2,19 +2,16 @@
 
 Name:           gdl
 Version:        0.9
-Release:        0.10.rc4%{?dist}
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc4.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-Patch0:         gdl-0.9rc4-wx-config.patch
-Patch1:         gdl-0.9rc4-GDLLexer.patch
-Patch2:         gdl-0.9rc4-python.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch3:         gdl-0.9rc3-antlr.patch
@@ -48,7 +45,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %description
 A free IDL (Interactive Data Language) compatible incremental compiler
-(ie. runs IDL programs). IDL is a registered trademark of Research
+(i.e. runs IDL programs). IDL is a registered trademark of Research
 Systems Inc.
 
 
@@ -77,10 +74,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n %{name}-%{version}rc4
-%patch0 -p1 -b .wx-config
-%patch1 -p1 -b .GDLLexer
-%patch2 -p1 -b .python
+%setup -q -n %{name}-%{version}
 %if !0%{?rhel}
 #patch3 -p1 -b .antlr
 %patch4 -p1 -b .antlr-auto
@@ -167,6 +161,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Sep 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-1
+- Update to 0.9 final
+- Drop wx-config, GLDLexer, and python patches
+- Fix GDL_PATH in profile scripts (bug #634251)
+
+
 * Wed Feb 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.10.rc4
 - Update to 0.9rc4
 - Enable grib, udunits2, and wxWidgets support
