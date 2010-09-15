@@ -171,7 +171,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Wed Sep 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-2
-- Fix GDL_PATH in profile scripts (bug #634251)
+- Fix GDL_PATH in profile scripts (bug #634351)
 
 * Mon Aug 30 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-1
 - Update to 0.9 final
