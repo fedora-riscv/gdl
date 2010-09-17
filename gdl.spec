@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -170,6 +170,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Sep 17 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-3
+- Rebuild for new ImageMagick
+
 * Wed Sep 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-2
 - Fix GDL_PATH in profile scripts (bug #634351)
 
