@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        3%{?dist}.1
+Release:        3%{?dist}.2
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -170,6 +170,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Sep 29 2010 jkeating - 0.9-3.2
+- Rebuilt for gcc bug 634757
+
 * Fri Sep 17 2010 Rex Dieter <rdieter@fedoraproject.org> - 0.9-3.1
 - rebuild (ImageMagick)
 
