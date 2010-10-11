@@ -170,7 +170,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Wed Oct 11 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-4
+* Wed Oct 11 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-5
 - Rebuild for plplot 5.9.7
 
 * Wed Sep 29 2010 jkeating - 0.9-4
