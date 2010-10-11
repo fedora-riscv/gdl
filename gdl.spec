@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -170,6 +170,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Oct 11 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-4
+- Rebuild for plplot 5.9.7
+
 * Wed Sep 29 2010 jkeating - 0.9-4
 - Rebuilt for gcc bug 634757
 
