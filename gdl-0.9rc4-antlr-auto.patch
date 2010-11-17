@@ -1,0 +1,40 @@
+diff -up gdl-0.9rc4/configure.in.antlr-auto gdl-0.9rc4/configure.in
+--- gdl-0.9rc4/configure.in.antlr-auto	2010-02-03 15:33:19.000000000 -0700
++++ gdl-0.9rc4/configure.in	2010-02-03 15:34:22.271329291 -0700
+@@ -988,7 +988,7 @@ dnl AC_CHECK_FUNCS(strdup strtod strtol 
+ dnl perform program name transformation
+ dnl AC_ARG_PROGRAM
+ 
+-AC_CONFIG_FILES(Makefile src/Makefile src/antlr/Makefile src/pro/Makefile src/pro/dicom/Makefile testsuite/Makefile doc/Makefile)
++AC_CONFIG_FILES(Makefile src/Makefile src/pro/Makefile src/pro/dicom/Makefile testsuite/Makefile doc/Makefile)
+ AC_OUTPUT
+ 
+ dnl == summary table =======================================
+diff -up gdl-0.9rc4/src/Makefile.am.antlr-auto gdl-0.9rc4/src/Makefile.am
+--- gdl-0.9rc4/src/Makefile.am.antlr-auto	2010-02-02 11:13:51.000000000 -0700
++++ gdl-0.9rc4/src/Makefile.am	2010-02-03 15:34:48.470350773 -0700
+@@ -1,6 +1,6 @@
+ # set the include path found by configure
+ INCLUDES = $(EXT_INCLUDES) $(all_includes)
+-SUBDIRS = antlr pro
++SUBDIRS = pro
+ noinst_HEADERS = gdlwidget.hpp prognode.hpp prognodeexpr.hpp
+ 
+ cpp_hpp_files = accessdesc.hpp arrayindex.hpp assocdata.cpp assocdata.hpp \
+@@ -56,7 +56,7 @@ gdl_SOURCES = $(cpp_hpp_files) gdl.cpp
+ gdl_CXXFLAGS = $(AM_CXXFLAGS)
+ # the library search path.
+ gdl_LDFLAGS = $(all_libraries)
+-gdl_LDADD = $(top_builddir)/src/antlr/libantlr.a -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11
++gdl_LDADD = -lantlr -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11
+ endif
+ 
+ # build as library (for python module)
+@@ -72,6 +72,6 @@ else
+ libgdl_la_LDFLAGS = $(all_libraries) -Wl,-z,muldefs
+ endif 
+ 
+-libgdl_la_LIBADD = $(top_builddir)/src/antlr/libantlr.la -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11
++libgdl_la_LIBADD = -lantlr -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11
+ endif
+ 

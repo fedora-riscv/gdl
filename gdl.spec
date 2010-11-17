@@ -1,37 +1,46 @@
-%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
 Version:        0.9
-Release:        0.7.rc3%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc3.tar.gz
-# Made with makecvstarball
-#Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}rc2-20090603.tar.bz2
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
+Patch1:         gdl-0.9rc4-numpy.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch3:         gdl-0.9rc3-antlr.patch
-Patch4:         gdl-0.9rc2-20090504-antlr-auto.patch
+Patch4:         gdl-0.9rc3-antlr.patch
+Patch5:         gdl-0.9rc4-antlr-auto.patch
+Patch6:         gdl-0.9rc4-wx.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-#RHEL doesn't have the needed antlr version/headers, old plplot
-%if !0%{?rhel}
+#RHEL doesn't have the needed antlr version/headers, has old plplot
+%if 0%{?fedora}
+ %if 0%{?fedora} >= 14
+BuildRequires:  antlr-C++
+ %else
 BuildRequires:  antlr
-%define plplot_config %{nil}
+ %endif
+%global plplot_config %{nil}
 %else
-%define plplot_config --enable-oldplplot
+%global plplot_config --enable-oldplplot
 %endif
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
-BuildRequires:  python-devel, python-numarray, python-matplotlib
-BuildRequires:  fftw-devel, hdf-devel, proj-devel
+BuildRequires:  python-devel, numpy, python-matplotlib
+BuildRequires:  fftw-devel, hdf-static
+BuildRequires:  grib_api-static
+#TODO - Build with mpi support
+#BuildRequires:  mpich2-devel
+BuildRequires:  udunits2-devel
+BuildRequires:  wxGTK-devel
 BuildRequires:  autoconf, automake, libtool
 # Needed to pull in drivers
 Requires:       plplot
@@ -41,7 +50,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %description
 A free IDL (Interactive Data Language) compatible incremental compiler
-(ie. runs IDL programs). IDL is a registered trademark of Research
+(i.e. runs IDL programs). IDL is a registered trademark of Research
 Systems Inc.
 
 
@@ -57,12 +66,26 @@ BuildArch:      noarch
 Common files for GDL
 
 
+%package        python
+Summary:        GDL python module
+Group:          Applications/Engineering
+# Needed to pull in drivers
+Requires:       plplot
+Requires:       %{name}-common = %{version}-%{release}
+Provides:       %{name}-runtime = %{version}-%{release}
+
+%description    python
+%{summary}.
+
+
 %prep
-%setup -q -n %{name}-%{version}rc3
+%setup -q -n %{name}-%{version}
+%patch1 -p1 -b .numpy
 %if !0%{?rhel}
-%patch3 -p1 -b .antlr
-%patch4 -p1 -b .antlr-auto
+#patch4 -p1 -b .antlr
+%patch5 -p1 -b .antlr-auto
 %endif
+%patch6 -p1 -b .wx
 %if !0%{?rhel}
 rm -rf src/antlr
 %endif
@@ -70,23 +93,50 @@ rm ltmain.sh
 autoreconf --install
 
 
+%global _configure ../configure
+%global configure_opts \\\
+   --disable-dependency-tracking --disable-static \\\
+   --with-fftw \\\
+   --with-udunits \\\
+   --with-grib \\\
+   --with-wxWidgets \\\
+   %{plplot_config} \\\
+   INCLUDES="-I%{_includedir}/udunits2" \\\
+   LIBS="-L%{_libdir}/hdf -ldl" \\\
+%{nil}
+# TODO - build an mpi version
+#           INCLUDES="-I/usr/include/mpich2" \
+#           --with-mpich=%{_libdir}/mpich2 \
+
 %build
 export CPPFLAGS="-DH5_USE_16_API"
-%configure --disable-dependency-tracking --disable-static --with-fftw \
-           %{plplot_config} \
-           INCLUDES="-I/usr/include/netcdf -I/usr/include/hdf" \
-           LIBS="-L%{_libdir}/hdf"
+# Build convenience .a libraries with -fPIC
+export CFLAGS="$RPM_OPT_FLAGS -fPIC"
+export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
+mkdir build build-python
+#Build the standalone executable
+pushd build
+%configure %{configure_opts}
 make %{?_smp_mflags}
+popd
+#Build the python module
+pushd build-python
+%configure %{configure_opts} --enable-python_module
+make %{?_smp_mflags}
+popd
 
 
 %install
 rm -rf $RPM_BUILD_ROOT
+pushd build
 make install DESTDIR=$RPM_BUILD_ROOT
 rm -r $RPM_BUILD_ROOT%{_libdir}
+popd
 
-# Install the library
-install -d -m 0755 $RPM_BUILD_ROOT/%{_datadir}
-cp -r src/pro $RPM_BUILD_ROOT/%{_datadir}/gdl
+# Install the python module
+install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
+install -m 0755 build-python/src/.libs/libgdl.so.0.0.0 \
+                $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
 
 # Install the profile file to set GDL_PATH
 install -d -m 0755 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
@@ -96,7 +146,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 %check
 cd testsuite
-echo ".r test_suite" | ../src/gdl
+echo ".r test_suite" | ../build/src/gdl
 
 
 %clean
@@ -108,13 +158,72 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS ChangeLog COPYING HACKING NEWS README TODO
 %config(noreplace) %{_sysconfdir}/profile.d/gdl.*sh
 %{_bindir}/gdl
+%{_mandir}/man1/gdl.1*
 
 %files common
 %defattr(-,root,root,-)
-%{_datadir}/gdl/
+%{_datadir}/gnudatalanguage/
+
+%files python
+%defattr(-,root,root,-)
+%{python_sitearch}/GDL.so
 
 
 %changelog
+* Wed Oct 11 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-5
+- Rebuild for plplot 5.9.7
+
+* Wed Sep 29 2010 jkeating - 0.9-4
+- Rebuilt for gcc bug 634757
+
+* Wed Sep 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-3
+- Fix GDL_PATH in profile scripts (bug #634351)
+
+* Wed Sep 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-2
+- Rebuild for new ImageMagick
+
+* Mon Aug 30 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-1
+- Update to 0.9 final
+
+* Thu Aug 26 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.17.rc4
+- Add initial patch to build the python module with numpy rather than
+  numarray.  Doesn't work yet, but the python module is mostly dead anyway
+
+* Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.9-0.16.rc4
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
+* Wed Jul 14 2010 Dan Horák <dan@danny.cz> - 0.9-0.15.rc4
+- rebuilt against wxGTK-2.8.11-2
+
+* Wed Jul 7 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.14.rc4
+- Update to today's cvs
+- Drop wx-config patch
+- Re-instate wx patch to avoid segfault on test exit
+
+* Thu Jun 3 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.13.rc4
+- Update to today's cvs
+- Drop GLDLexer and python patches
+- BR antlr-C++ on Fedora 14+
+
+* Mon Mar 22 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.12.rc4
+- Drop unused BR on proj-devel (bug #572616)
+
+* Mon Mar 8 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.11.rc4
+- Rebuild for new ImageMagick
+
+* Wed Feb 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.10.rc4
+- Update to 0.9rc4
+- Enable grib, udunits2, and wxWidgets support
+- Build python module and add sub-package for it
+- Use %%global instead of %%define
+
+* Tue Dec  8 2009 Michael Schwendt <mschwendt@fedoraproject.org> - 0.9-0.9.rc3
+- Explicitly BR hdf-static in accordance with the Packaging
+  Guidelines (hdf-devel is still static-only).
+
+* Wed Nov 11 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.8.rc3
+- Rebuild for netcdf-4.1.0
+
 * Thu Oct 15 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.7.rc3
 - Update to 0.9rc3
 - Drop gcc43, ppc64, friend patches fixed upstream
