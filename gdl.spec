@@ -36,7 +36,9 @@ BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
+%if 0%{?fedora}
 BuildRequires:  grib_api-static
+%endif
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  udunits2-devel
