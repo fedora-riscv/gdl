@@ -118,11 +118,13 @@ export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
 mkdir build build-python
 #Build the standalone executable
 pushd build
+ln -s ../configure .
 %configure %{configure_opts}
 make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
+ln -s ../configure .
 %configure %{configure_opts} --enable-python_module
 make %{?_smp_mflags}
 popd
