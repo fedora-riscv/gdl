@@ -103,7 +103,8 @@ autoreconf --install
    --with-grib \\\
    --with-wxWidgets \\\
    %{plplot_config} \\\
-   INCLUDES="-I%{_includedir}/udunits2 -I%{python_sitearch}/numpy/core/include" \\\
+   INCLUDES="-I%{_includedir}/udunits2" \\\
+   PYTHON_INCLUDES="-I%{python_sitearch}/numpy/core/include" \\\
    LIBS="-L%{_libdir}/hdf -ldl" \\\
 %{nil}
 # TODO - build an mpi version
