@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -103,7 +103,7 @@ autoreconf --install
    --with-grib \\\
    --with-wxWidgets \\\
    %{plplot_config} \\\
-   INCLUDES="-I%{_includedir}/udunits2" \\\
+   INCLUDES="-I%{_includedir}/udunits2 -I%{python_sitearch}/numpy/core/include" \\\
    LIBS="-L%{_libdir}/hdf -ldl" \\\
 %{nil}
 # TODO - build an mpi version
@@ -174,6 +174,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Dec 6 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-6
+- Add include path to numpy (needed on EL6)
+
 * Wed Oct 11 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-5
 - Rebuild for plplot 5.9.7
 
