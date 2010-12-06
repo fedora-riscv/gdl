@@ -104,7 +104,6 @@ autoreconf --install
    --with-wxWidgets \\\
    %{plplot_config} \\\
    INCLUDES="-I%{_includedir}/udunits2" \\\
-   PYTHON_INCLUDES="-I%{python_sitearch}/numpy/core/include" \\\
    LIBS="-L%{_libdir}/hdf -ldl" \\\
 %{nil}
 # TODO - build an mpi version
@@ -115,7 +114,8 @@ autoreconf --install
 export CPPFLAGS="-DH5_USE_16_API"
 # Build convenience .a libraries with -fPIC
 export CFLAGS="$RPM_OPT_FLAGS -fPIC"
-export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
+# Need to find numpy include files as well
+export CXXFLAGS="$RPM_OPT_FLAGS -fPIC -I%{python_sitearch}/numpy/core/include"
 mkdir build build-python
 #Build the standalone executable
 pushd build
