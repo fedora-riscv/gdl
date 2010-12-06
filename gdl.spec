@@ -120,8 +120,7 @@ mkdir build build-python
 #Build the standalone executable
 pushd build
 ln -s ../configure .
-%configure %{configure_opts}
-cat config.log
+%configure %{configure_opts} || cat config.log && exit 1
 make %{?_smp_mflags}
 popd
 #Build the python module
