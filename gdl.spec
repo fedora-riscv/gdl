@@ -121,6 +121,7 @@ mkdir build build-python
 pushd build
 ln -s ../configure .
 %configure %{configure_opts}
+cat config.log
 make %{?_smp_mflags}
 popd
 #Build the python module
