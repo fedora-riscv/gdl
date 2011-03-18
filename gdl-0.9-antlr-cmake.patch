@@ -1,0 +1,13 @@
+--- gdl-0.9-cvs/src/CMakeLists.txt.antlr	2010-08-30 07:41:44.000000000 -0600
++++ gdl-0.9-cvs/src/CMakeLists.txt	2011-03-18 15:49:30.139451129 -0600
+@@ -203,9 +203,7 @@
+ widget.cpp
+ )
+ 
+-add_subdirectory(antlr)
+-
+-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/antlr)
++include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
+ link_directories(${LINK_DIRECTORIES})
+ 
+ if(PYTHON_MODULE) #libgdl

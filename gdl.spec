@@ -8,16 +8,19 @@ Summary:        GNU Data Language
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}-cvs.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-Patch1:         gdl-0.9rc4-numpy.patch
+#NETCDF_INCLUDE_DIRS can be empty
+Patch10:        gdl-0.9-netcdf.patch
+#Missing quotes on HDF_LIBRARIES
+Patch11:        gdl-0.9-hdf.patch
+#Change to numpy
+Patch12:        gdl-0.9-numpy.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch4:         gdl-0.9rc3-antlr.patch
-Patch5:         gdl-0.9rc4-antlr-auto.patch
-Patch6:         gdl-0.9rc4-wx.patch
+Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
@@ -41,7 +44,7 @@ BuildRequires:  grib_api-static
 #BuildRequires:  mpich2-devel
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
-BuildRequires:  autoconf, automake, libtool
+BuildRequires:  cmake
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
@@ -79,31 +82,21 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n %{name}-%{version}
-%patch1 -p1 -b .numpy
-%if !0%{?rhel}
-#patch4 -p1 -b .antlr
-%patch5 -p1 -b .antlr-auto
-%endif
-%patch6 -p1 -b .wx
-%if !0%{?rhel}
+%setup -q -n %{name}-%{version}-cvs
 rm -rf src/antlr
-%endif
-rm ltmain.sh
-autoreconf --install
+%patch10 -p1 -b .netcdf
+%patch11 -p1 -b .hdf
+%patch12 -p1 -b .numpy
+%patch13 -p1 -b .antlr
+rm CMakeModules/FindPythonLibs.cmake
 
-
-%global _configure ../configure
-%global configure_opts \\\
-   --disable-dependency-tracking --disable-static \\\
-   --with-fftw \\\
-   --with-udunits \\\
-   --with-grib \\\
-   --with-wxWidgets \\\
-   %{plplot_config} \\\
-   INCLUDES="-I%{_includedir}/udunits2" \\\
-   LIBS="-L%{_libdir}/hdf -ldl" \\\
+%global cmake_opts \\\
+   -DWXWIDGETS=ON \\\
+   -DUDUNITS=ON \\\
+   -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
+   -DGRIB=ON \\\
 %{nil}
+
 # TODO - build an mpi version
 #           INCLUDES="-I/usr/include/mpich2" \
 #           --with-mpich=%{_libdir}/mpich2 \
@@ -116,12 +109,12 @@ export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
 mkdir build build-python
 #Build the standalone executable
 pushd build
-%configure %{configure_opts}
+%{cmake} %{cmake_opts} ..
 make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%configure %{configure_opts} --enable-python_module
+%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON ..
 make %{?_smp_mflags}
 popd
 
@@ -145,6 +138,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 
 %check
+ctest
 cd testsuite
 echo ".r test_suite" | ../build/src/gdl
 

@@ -1,0 +1,65 @@
+diff -up gdl-0.9-cvs/CMakeLists.txt.numpy gdl-0.9-cvs/CMakeLists.txt
+--- gdl-0.9-cvs/CMakeLists.txt.numpy	2011-03-18 15:21:11.671038922 -0600
++++ gdl-0.9-cvs/CMakeLists.txt	2011-03-18 15:47:42.945991515 -0600
+@@ -451,15 +451,13 @@ if(PYTHON OR PYTHON_MODULE)
+ 	endif(PYTHONVERSION)
+ 	set(USE_PYTHON ${PYTHONLIBS_FOUND})
+ 	if(PYTHONLIBS_FOUND)
+-		set(CMAKE_REQUIRED_INCLUDES ${PYTHON_INCLUDE_DIRS})
+-		check_include_file(numarray/libnumarray.h HAVE_LIBNUMARRAY_H)
+-		if(NOT HAVE_LIBNUMARRAY_H)
+-			message(FATAL_ERROR "Python numarray package was not found.\n"
++		find_package(Numpy QUIET)
++		if(NOT PYTHON_NUMPY_FOUND)
++			message(FATAL_ERROR "Python numpy package was not found.\n"
+ 			"${PYTHONMSG} ${PYTHON_MODULEMSG}")
+-		endif(NOT HAVE_LIBNUMARRAY_H)
++		endif(NOT PYTHON_NUMPY_FOUND)
+ 		set(LIBRARIES ${LIBRARIES} ${PYTHON_LIBRARIES})
+ 		include_directories(${PYTHON_INCLUDE_DIRS})	
+-		set(CMAKE_REQUIRED_INCLUDES)
+ 	else(PYTHONLIBS_FOUND)
+ 		message(FATAL_ERROR "Python is required but was not found.\n"
+ 		"Use -DPYTHONDIR=DIR to specify the Python directory tree.\n"
+diff -up gdl-0.9-cvs/CMakeModules/FindNumpy.cmake.numpy gdl-0.9-cvs/CMakeModules/FindNumpy.cmake
+--- gdl-0.9-cvs/CMakeModules/FindNumpy.cmake.numpy	2011-03-18 15:45:02.180795376 -0600
++++ gdl-0.9-cvs/CMakeModules/FindNumpy.cmake	2011-03-18 15:45:31.934316415 -0600
+@@ -0,0 +1,38 @@
++# - Find numpy
++# Find the native numpy includes
++# This module defines
++#  PYTHON_NUMPY_INCLUDE_DIR, where to find numpy/arrayobject.h, etc.
++#  PYTHON_NUMPY_FOUND, If false, do not try to use numpy headers.
++
++if (PYTHON_NUMPY_INCLUDE_DIR)
++  # in cache already
++  set (PYTHON_NUMPY_FIND_QUIETLY TRUE)
++endif (PYTHON_NUMPY_INCLUDE_DIR)
++
++INCLUDE(FindPythonInterp)
++
++IF(PYTHON_EXECUTABLE)
++    EXEC_PROGRAM ("${PYTHON_EXECUTABLE}"
++      ARGS "-c 'import numpy; print numpy.get_include()'"
++      OUTPUT_VARIABLE PYTHON_NUMPY_INCLUDE_DIR
++      RETURN_VALUE PYTHON_NUMPY_NOT_FOUND)
++
++    if (PYTHON_NUMPY_INCLUDE_DIR)
++      set (PYTHON_NUMPY_FOUND TRUE)
++      set (PYTHON_NUMPY_INCLUDE_DIR ${PYTHON_NUMPY_INCLUDE_DIR} CACHE STRING "Numpy include path")
++    else (PYTHON_NUMPY_INCLUDE_DIR)
++      set(PYTHON_NUMPY_FOUND FALSE)
++    endif (PYTHON_NUMPY_INCLUDE_DIR)
++ENDIF(PYTHON_EXECUTABLE)
++
++if (PYTHON_NUMPY_FOUND)
++  if (NOT PYTHON_NUMPY_FIND_QUIETLY)
++    message (STATUS "Numpy headers found")
++  endif (NOT PYTHON_NUMPY_FIND_QUIETLY)
++else (PYTHON_NUMPY_FOUND)
++  if (PYTHON_NUMPY_FIND_REQUIRED)
++    message (FATAL_ERROR "Numpy headers missing")
++  endif (PYTHON_NUMPY_FIND_REQUIRED)
++endif (PYTHON_NUMPY_FOUND)
++
++MARK_AS_ADVANCED (PYTHON_NUMPY_INCLUDE_DIR)
