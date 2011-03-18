@@ -21,6 +21,7 @@ Patch12:        gdl-0.9-numpy.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch13:        gdl-0.9-antlr-cmake.patch
+Patch14:        gdl-0.9-config.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
@@ -88,6 +89,7 @@ rm -rf src/antlr
 %patch11 -p1 -b .hdf
 %patch12 -p1 -b .numpy
 %patch13 -p1 -b .antlr
+%patch14 -p1 -b .config
 rm CMakeModules/FindPythonLibs.cmake
 
 %global cmake_opts \\\
@@ -123,13 +125,15 @@ popd
 rm -rf $RPM_BUILD_ROOT
 pushd build
 make install DESTDIR=$RPM_BUILD_ROOT
-rm -r $RPM_BUILD_ROOT%{_libdir}
 popd
-
+pushd build-python
+make install DESTDIR=$RPM_BUILD_ROOT
 # Install the python module
 install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
-install -m 0755 build-python/src/.libs/libgdl.so.0.0.0 \
+mv $RPM_BUILD_ROOT/%{_prefix}/lib/libgdl.so \
                 $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
+rm -r $RPM_BUILD_ROOT/%{_prefix}/lib
+popd
 
 # Install the profile file to set GDL_PATH
 install -d -m 0755 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
