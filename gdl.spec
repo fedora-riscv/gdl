@@ -12,10 +12,8 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-#NETCDF_INCLUDE_DIRS can be empty
+# Find netcdf on EL5 (/usr/include/netcdf-3)
 Patch10:        gdl-0.9-netcdf.patch
-#Missing quotes on HDF_LIBRARIES
-Patch11:        gdl-0.9-hdf.patch
 #Change to numpy
 Patch12:        gdl-0.9-numpy.patch
 # Build with system antlr library.  Request for upstream change here:
@@ -86,7 +84,6 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %setup -q -n %{name}-%{version}-cvs
 rm -rf src/antlr
 %patch10 -p1 -b .netcdf
-%patch11 -p1 -b .hdf
 %patch12 -p1 -b .numpy
 %patch13 -p1 -b .antlr
 %patch14 -p1 -b .config
@@ -132,6 +129,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
 mv $RPM_BUILD_ROOT/%{_prefix}/lib/libgdl.so \
                 $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
+ls -l $RPM_BUILD_ROOT/%{_prefix}/lib/libgdl.so \
+                $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
 rm -r $RPM_BUILD_ROOT/%{_prefix}/lib
 popd
 
@@ -142,9 +141,10 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 
 %check
-ctest
 cd testsuite
 echo ".r test_suite" | ../build/src/gdl
+cd build
+ctest
 
 
 %clean

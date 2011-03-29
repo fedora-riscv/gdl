@@ -1,11 +1,24 @@
---- gdl-0.9-cvs/CMakeModules/FindNetCDF.cmake.netcdf	2010-07-16 07:26:09.000000000 -0600
-+++ gdl-0.9-cvs/CMakeModules/FindNetCDF.cmake	2011-03-18 14:27:47.993962330 -0600
-@@ -6,7 +6,7 @@
+--- gdl-0.9-cvs/CMakeModules/FindNetCDF.cmake.netcdf	2011-03-28 09:07:53.000000000 -0600
++++ gdl-0.9-cvs/CMakeModules/FindNetCDF.cmake	2011-03-29 14:35:09.611273399 -0600
+@@ -5,18 +5,17 @@
+ 	include(FindPkgConfig)
  	pkg_check_modules(NETCDF netcdf)
  	if(NETCDF_FOUND)
- 		set(NETCDF_INCLUDE_DIR ${NETCDF_INCLUDE_DIRS})
--		find_package_handle_standard_args(NETCDF DEFAULT_MSG NETCDF_LIBRARIES NETCDF_INCLUDE_DIR)
-+		find_package_handle_standard_args(NETCDF DEFAULT_MSG NETCDF_LIBRARIES)
+-		set(NETCDF_INCLUDE_DIR ${NETCDF_INCLUDE_DIRS})
+ 		find_package_handle_standard_args(NETCDF DEFAULT_MSG NETCDF_LIBRARIES)
  	endif(NETCDF_FOUND)
  else(NETCDFPKG) # no netcdf.pc file
  	find_library(NETCDF_LIBRARIES NAMES netcdf)
+-	find_path(NETCDF_INCLUDE_DIR NAMES netcdfcpp.h)	
+-	find_package_handle_standard_args(NETCDF DEFAULT_MSG NETCDF_LIBRARIES NETCDF_INCLUDE_DIR)
++	find_path(NETCDF_INCLUDE_DIRS NAMES netcdfcpp.h PATH_SUFFIXES netcdf-3)	
++	find_package_handle_standard_args(NETCDF DEFAULT_MSG NETCDF_LIBRARIES NETCDF_INCLUDE_DIRS)
+ endif(NETCDFPKG)
+ 
+ mark_as_advanced(
+ NETCDFPKG
+ NETCDF
+-NETCDF_INCLUDE_DIR
++NETCDF_INCLUDE_DIRS
+ NETCDF_LIBRARIES
+ )
