@@ -1,8 +1,8 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9
-Release:        5%{?dist}
+Version:        0.9.1
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -12,12 +12,10 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-Patch1:         gdl-0.9rc4-numpy.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch4:         gdl-0.9rc3-antlr.patch
 Patch5:         gdl-0.9rc4-antlr-auto.patch
-Patch6:         gdl-0.9rc4-wx.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
@@ -80,12 +78,10 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %prep
 %setup -q -n %{name}-%{version}
-%patch1 -p1 -b .numpy
 %if !0%{?rhel}
 #patch4 -p1 -b .antlr
 %patch5 -p1 -b .antlr-auto
 %endif
-%patch6 -p1 -b .wx
 %if !0%{?rhel}
 rm -rf src/antlr
 %endif
@@ -170,6 +166,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Mar 29 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-1
+- Update to 0.9.1
+- Drop numpy and wx patches fixed upstream
+
 * Wed Oct 11 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-5
 - Rebuild for plplot 5.9.7
 
