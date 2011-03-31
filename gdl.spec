@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -166,6 +166,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Mar 31 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-2
+- Rebuild for netcdf 4.1.2
+
 * Tue Mar 29 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-1
 - Update to 0.9.1
 - Drop numpy and wx patches fixed upstream
