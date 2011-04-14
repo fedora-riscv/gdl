@@ -18,8 +18,8 @@ Patch4:         gdl-0.9rc3-antlr.patch
 Patch5:         gdl-0.9rc4-antlr-auto.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-#RHEL doesn't have the needed antlr version/headers, has old plplot
-%if 0%{?fedora}
+#RHEL5 doesn't have the needed antlr version/headers, has old plplot
+%if 0%{?fedora} || 0%{?rhel} >= 6
  %if 0%{?fedora} >= 14
 BuildRequires:  antlr-C++
  %else
@@ -58,7 +58,7 @@ Systems Inc.
 Summary:        Common files for GDL
 Group:          Applications/Engineering
 Requires:       %{name}-runtime = %{version}-%{release}
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?rhel} >= 6
 BuildArch:      noarch
 %endif
 
@@ -80,11 +80,11 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %prep
 %setup -q -n %{name}-%{version}
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?rhel} >= 6
 #patch4 -p1 -b .antlr
 %patch5 -p1 -b .antlr-auto
 %endif
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?rhel} >= 6
 rm -rf src/antlr
 %endif
 rm ltmain.sh
@@ -116,13 +116,13 @@ mkdir build build-python
 #Build the standalone executable
 pushd build
 ln -s ../configure .
-%configure %{configure_opts} || cat config.log && exit 1
+%configure --srcdir=.. %{configure_opts}
 make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
 ln -s ../configure .
-%configure %{configure_opts} --enable-python_module
+%configure --srcdir=.. %{configure_opts} --enable-python_module
 make %{?_smp_mflags}
 popd
 
