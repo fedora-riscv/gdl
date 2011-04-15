@@ -1,8 +1,8 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9
-Release:        5%{?dist}
+Version:        0.9.1
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -12,14 +12,9 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-# Find netcdf on EL5 (/usr/include/netcdf-3)
-Patch10:        gdl-0.9-netcdf.patch
-#Change to numpy
-Patch12:        gdl-0.9-numpy.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch13:        gdl-0.9-antlr-cmake.patch
-Patch14:        gdl-0.9-config.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
@@ -83,10 +78,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %prep
 %setup -q -n %{name}-%{version}-cvs
 rm -rf src/antlr
-%patch10 -p1 -b .netcdf
-%patch12 -p1 -b .numpy
 %patch13 -p1 -b .antlr
-%patch14 -p1 -b .config
 rm CMakeModules/FindPythonLibs.cmake
 
 %global cmake_opts \\\
@@ -129,8 +121,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
 mv $RPM_BUILD_ROOT/%{_prefix}/lib/libgdl.so \
                 $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
-ls -l $RPM_BUILD_ROOT/%{_prefix}/lib/libgdl.so \
-                $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
 rm -r $RPM_BUILD_ROOT/%{_prefix}/lib
 popd
 
@@ -141,11 +131,10 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 
 %check
-cd testsuite
-echo ".r test_suite" | ../build/src/gdl
+#cd testsuite
+#echo ".r test_suite" | ../build/src/gdl
 cd build
-ctest
-
+make check VERBOSE=1
 
 %clean
 rm -rf $RPM_BUILD_ROOT

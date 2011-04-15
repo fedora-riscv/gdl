@@ -1,13 +1,22 @@
---- gdl-0.9-cvs/src/CMakeLists.txt.antlr	2010-08-30 07:41:44.000000000 -0600
-+++ gdl-0.9-cvs/src/CMakeLists.txt	2011-03-18 15:49:30.139451129 -0600
-@@ -203,9 +203,7 @@
+diff -up gdl-0.9.1-cvs/src/CMakeLists.txt.antlr gdl-0.9.1-cvs/src/CMakeLists.txt
+--- gdl-0.9.1-cvs/src/CMakeLists.txt.antlr	2011-04-14 15:28:06.000000000 -0600
++++ gdl-0.9.1-cvs/src/CMakeLists.txt	2011-04-14 15:36:59.592471228 -0600
+@@ -217,9 +217,7 @@ typetraits.hpp
  widget.cpp
  )
  
 -add_subdirectory(antlr)
 -
--include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/antlr)
-+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
+-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/antlr ${CMAKE_BINARY_DIR})
++include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
  link_directories(${LINK_DIRECTORIES})
  
  if(PYTHON_MODULE) #libgdl
+@@ -230,7 +228,6 @@ else(PYTHON_MODULE) #gdl
+ 	add_executable(gdl ${SOURCES})
+ endif(PYTHON_MODULE)
+ 
+-add_dependencies(gdl antlr) # be sure that antlr is built before gdl
+ target_link_libraries(gdl antlr) # link antlr against gdl
+ target_link_libraries(gdl ${LIBRARIES})
+ add_definitions(-DHAVE_CONFIG_H)
