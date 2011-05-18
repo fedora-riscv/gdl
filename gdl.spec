@@ -79,7 +79,6 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %setup -q -n %{name}-%{version}-cvs
 rm -rf src/antlr
 %patch13 -p1 -b .antlr
-rm CMakeModules/FindPythonLibs.cmake
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
@@ -119,8 +118,8 @@ pushd build-python
 make install DESTDIR=$RPM_BUILD_ROOT
 # Install the python module
 install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
-mv $RPM_BUILD_ROOT/%{_prefix}/lib/libgdl.so \
-                $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
+cp -p src/libgdl.so \
+      $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
 rm -r $RPM_BUILD_ROOT/%{_prefix}/lib
 popd
 
