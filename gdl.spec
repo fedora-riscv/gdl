@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -14,8 +14,10 @@ Source2:        gdl.sh
 Source3:        makecvstarball
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch4:         gdl-0.9rc3-antlr.patch
-Patch5:         gdl-0.9rc4-antlr-auto.patch
+Patch0:         gdl-0.9rc3-antlr.patch
+Patch1:         gdl-0.9rc4-antlr-auto.patch
+# Upstream patch to fix strsplit
+Patch2:         gdl-strsplit.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
@@ -79,9 +81,10 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %prep
 %setup -q -n %{name}-%{version}
 %if !0%{?rhel}
-#patch4 -p1 -b .antlr
-%patch5 -p1 -b .antlr-auto
+#patch0 -p1 -b .antlr
+%patch1 -p1 -b .antlr-auto
 %endif
+%patch2 -p1 -b .strsplit
 %if !0%{?rhel}
 rm -rf src/antlr
 %endif
@@ -166,6 +169,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Aug 18 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-4
+- Rebuild for plplot 5.9.8
+- Add upstream patch to fix strsplit and str_sep
+
 * Tue May 17 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-3
 - Rebuild for hdf5 1.8.7
 
