@@ -18,8 +18,8 @@ Patch0:         gdl-0.9rc3-antlr.patch
 Patch1:         gdl-0.9rc4-antlr-auto.patch
 # Upstream patch to fix strsplit
 Patch2:         gdl-strsplit.patch
-# Add missing includes
-Patch3:         gdl-includes.patch
+# Use std::string and add a missing #include <string>
+Patch3:         gdl-string.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
@@ -87,7 +87,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %patch1 -p1 -b .antlr-auto
 %endif
 %patch2 -p1 -b .strsplit
-%patch3 -p1 -b .includes
+%patch3 -p1 -b .string
 %if !0%{?rhel}
 rm -rf src/antlr
 %endif
@@ -175,7 +175,7 @@ rm -rf $RPM_BUILD_ROOT
 * Thu Aug 18 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-4
 - Rebuild for plplot 5.9.8
 - Add upstream patch to fix strsplit and str_sep
-- Add patch to add missing includes
+- Add patch to fix compile issues with string
 
 * Tue May 17 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-3
 - Rebuild for hdf5 1.8.7
