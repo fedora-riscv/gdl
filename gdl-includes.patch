@@ -1,0 +1,10 @@
+--- gdl-0.9.1/src/gdlgstream.cpp.includes	2010-11-17 00:24:55.000000000 -0700
++++ gdl-0.9.1/src/gdlgstream.cpp	2011-08-18 11:15:37.685113160 -0600
+@@ -21,6 +21,7 @@
+ #include "includefirst.hpp"
+ 
+ #include <iostream>
++#include <string>
+ 
+ #include "graphics.hpp"
+ #include "gdlgstream.hpp"
