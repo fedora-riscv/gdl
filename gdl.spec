@@ -20,6 +20,8 @@ Patch1:         gdl-0.9rc4-antlr-auto.patch
 Patch2:         gdl-strsplit.patch
 # Use std::string and add a missing #include <string>
 Patch3:         gdl-string.patch
+# Use plplot setopt instead of SetOpt
+Patch4:         gdl-setopt.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
@@ -88,6 +90,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %endif
 %patch2 -p1 -b .strsplit
 %patch3 -p1 -b .string
+%patch4 -p1 -b .setopt
 %if !0%{?rhel}
 rm -rf src/antlr
 %endif
@@ -176,6 +179,7 @@ rm -rf $RPM_BUILD_ROOT
 - Rebuild for plplot 5.9.8
 - Add upstream patch to fix strsplit and str_sep
 - Add patch to fix compile issues with string
+- Add patch to change plplot SetOpt to setopt
 
 * Tue May 17 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-3
 - Rebuild for hdf5 1.8.7
