@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -175,6 +175,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Oct 26 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.1-5
+- Rebuilt for glibc bug#747377
+
 * Thu Aug 18 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-4
 - Rebuild for plplot 5.9.8
 - Add upstream patch to fix strsplit and str_sep
