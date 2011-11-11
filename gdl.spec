@@ -1,8 +1,8 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9.1
-Release:        5%{?dist}
+Version:        0.9.2
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -14,14 +14,9 @@ Source2:        gdl.sh
 Source3:        makecvstarball
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch0:         gdl-0.9rc3-antlr.patch
-Patch1:         gdl-0.9rc4-antlr-auto.patch
-# Upstream patch to fix strsplit
-Patch2:         gdl-strsplit.patch
-# Use std::string and add a missing #include <string>
-Patch3:         gdl-string.patch
-# Use plplot setopt instead of SetOpt
-Patch4:         gdl-setopt.patch
+Patch1:         gdl-antlr-auto.patch
+# Force build of libgdl.so
+Patch2:         gdl-shared.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
@@ -85,12 +80,9 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %prep
 %setup -q -n %{name}-%{version}
 %if !0%{?rhel}
-#patch0 -p1 -b .antlr
 %patch1 -p1 -b .antlr-auto
 %endif
-%patch2 -p1 -b .strsplit
-%patch3 -p1 -b .string
-%patch4 -p1 -b .setopt
+%patch2 -p1 -b .shared
 %if !0%{?rhel}
 rm -rf src/antlr
 %endif
@@ -104,6 +96,7 @@ autoreconf --install
    --with-fftw \\\
    --with-udunits \\\
    --with-grib \\\
+   --with-pslib=no \\\
    --with-wxWidgets \\\
    %{plplot_config} \\\
    INCLUDES="-I%{_includedir}/udunits2" \\\
@@ -126,7 +119,7 @@ make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%configure %{configure_opts} --enable-python_module
+%configure %{configure_opts} --enable-python_module --with-hdf=no
 make %{?_smp_mflags}
 popd
 
@@ -135,7 +128,7 @@ popd
 rm -rf $RPM_BUILD_ROOT
 pushd build
 make install DESTDIR=$RPM_BUILD_ROOT
-rm -r $RPM_BUILD_ROOT%{_libdir}
+#rm -r $RPM_BUILD_ROOT%{_libdir}
 popd
 
 # Install the python module
@@ -175,6 +168,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Nov 11 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-1
+- Update to 0.9.2
+- Drop upstreamed patches
+- Drop hdf support from python module, add patch to force building of python
+  shared library
+
 * Wed Oct 26 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.1-5
 - Rebuilt for glibc bug#747377
 
