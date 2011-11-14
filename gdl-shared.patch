@@ -1,0 +1,11 @@
+--- gdl-0.9.2/src/Makefile.am.shared	2011-11-09 12:49:19.552936409 -0700
++++ gdl-0.9.2/src/Makefile.am	2011-11-11 16:09:57.795281527 -0700
+@@ -75,7 +75,7 @@
+ if DARWIN
+ libgdl_la_LDFLAGS = $(all_libraries) -Wl,-m
+ else
+-libgdl_la_LDFLAGS = $(all_libraries) -Wl,-z,muldefs
++libgdl_la_LDFLAGS = -rpath $(libdir) $(all_libraries) -Wl,-z,muldefs
+ endif 
+ 
+ libgdl_la_LIBADD = -lantlr -L/usr/X11R6/lib64 -L/usr/X11R6/lib -lX11

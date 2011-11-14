@@ -1,7 +1,7 @@
-diff -up gdl-0.9rc4/configure.in.antlr-auto gdl-0.9rc4/configure.in
---- gdl-0.9rc4/configure.in.antlr-auto	2010-02-03 15:33:19.000000000 -0700
-+++ gdl-0.9rc4/configure.in	2010-02-03 15:34:22.271329291 -0700
-@@ -988,7 +988,7 @@ dnl AC_CHECK_FUNCS(strdup strtod strtol 
+diff -up gdl-0.9.1/configure.in.antlr-auto gdl-0.9.1/configure.in
+--- gdl-0.9.1/configure.in.antlr-auto	2011-10-25 16:29:31.908423227 -0600
++++ gdl-0.9.1/configure.in	2011-10-25 16:29:32.705394481 -0600
+@@ -1108,7 +1108,7 @@ dnl AC_CHECK_FUNCS(strdup strtod strtol
  dnl perform program name transformation
  dnl AC_ARG_PROGRAM
  
@@ -10,18 +10,18 @@ diff -up gdl-0.9rc4/configure.in.antlr-auto gdl-0.9rc4/configure.in
  AC_OUTPUT
  
  dnl == summary table =======================================
-diff -up gdl-0.9rc4/src/Makefile.am.antlr-auto gdl-0.9rc4/src/Makefile.am
---- gdl-0.9rc4/src/Makefile.am.antlr-auto	2010-02-02 11:13:51.000000000 -0700
-+++ gdl-0.9rc4/src/Makefile.am	2010-02-03 15:34:48.470350773 -0700
+diff -up gdl-0.9.1/src/Makefile.am.antlr-auto gdl-0.9.1/src/Makefile.am
+--- gdl-0.9.1/src/Makefile.am.antlr-auto	2011-10-25 16:29:32.521401116 -0600
++++ gdl-0.9.1/src/Makefile.am	2011-10-25 16:29:59.176439745 -0600
 @@ -1,6 +1,6 @@
  # set the include path found by configure
  INCLUDES = $(EXT_INCLUDES) $(all_includes)
 -SUBDIRS = antlr pro
 +SUBDIRS = pro
- noinst_HEADERS = gdlwidget.hpp prognode.hpp prognodeexpr.hpp
  
- cpp_hpp_files = accessdesc.hpp arrayindex.hpp assocdata.cpp assocdata.hpp \
-@@ -56,7 +56,7 @@ gdl_SOURCES = $(cpp_hpp_files) gdl.cpp
+ cpp_hpp_files = allix.hpp allix.cpp prognode.hpp prognodeexpr.hpp \
+ 		accessdesc.hpp arrayindex.hpp assocdata.cpp assocdata.hpp \
+@@ -61,7 +61,7 @@ gdl_SOURCES = $(cpp_hpp_files) gdl.cpp l
  gdl_CXXFLAGS = $(AM_CXXFLAGS)
  # the library search path.
  gdl_LDFLAGS = $(all_libraries)
@@ -30,7 +30,7 @@ diff -up gdl-0.9rc4/src/Makefile.am.antlr-auto gdl-0.9rc4/src/Makefile.am
  endif
  
  # build as library (for python module)
-@@ -72,6 +72,6 @@ else
+@@ -77,6 +77,6 @@ else
  libgdl_la_LDFLAGS = $(all_libraries) -Wl,-z,muldefs
  endif 
  
