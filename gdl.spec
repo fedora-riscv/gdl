@@ -45,6 +45,8 @@ BuildRequires:  autoconf, automake, libtool
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
 Provides:       %{name}-runtime = %{version}-%{release}
+# Need to match hdf5 compile time version
+Requires:       hdf5 = %{_hdf5_version}
 
 
 %description
