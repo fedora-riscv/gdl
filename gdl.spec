@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -98,7 +98,6 @@ autoreconf --install
    --with-fftw \\\
    --with-udunits \\\
    --with-grib \\\
-   --with-pslib=no \\\
    --with-wxWidgets \\\
    %{plplot_config} \\\
    INCLUDES="-I%{_includedir}/udunits2" \\\
@@ -170,6 +169,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jan 7 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-3
+- Build with pslib
+
 * Wed Nov 16 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-2
 - Rebuild for hdf5 1.8.8
 
