@@ -38,6 +38,7 @@ BuildRequires:  fftw-devel, hdf-static
 BuildRequires:  grib_api-static
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
+BuildRequires:  pslib-devel
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
 BuildRequires:  autoconf, automake, libtool
