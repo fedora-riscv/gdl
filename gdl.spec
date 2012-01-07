@@ -178,9 +178,6 @@ rm -rf $RPM_BUILD_ROOT
 * Sat Jan 7 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-3
 - Build with pslib
 
-* Wed Nov 16 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-2
-- Rebuild for hdf5 1.8.8
-
 * Fri Nov 11 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-1
 - Update to 0.9.2
 - Drop upstreamed patches
