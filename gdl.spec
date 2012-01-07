@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -38,6 +38,7 @@ BuildRequires:  fftw-devel, hdf-static
 BuildRequires:  grib_api-static
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
+BuildRequires:  pslib-devel
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
 BuildRequires:  autoconf, automake, libtool
@@ -45,6 +46,8 @@ BuildRequires:  autoconf, automake, libtool
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
 Provides:       %{name}-runtime = %{version}-%{release}
+# Need to match hdf5 compile time version
+Requires:       hdf5 = %{_hdf5_version}
 
 
 %description
@@ -96,7 +99,6 @@ autoreconf --install
    --with-fftw \\\
    --with-udunits \\\
    --with-grib \\\
-   --with-pslib=no \\\
    --with-wxWidgets \\\
    %{plplot_config} \\\
    INCLUDES="-I%{_includedir}/udunits2" \\\
@@ -168,6 +170,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jan 7 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-3
+- Build with pslib
+
+* Wed Nov 16 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-2
+- Rebuild for hdf5 1.8.8
+
 * Fri Nov 11 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-1
 - Update to 0.9.2
 - Drop upstreamed patches
