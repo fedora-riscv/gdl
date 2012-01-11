@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        1%{?dist}
+Release:        1%{?dist}.1
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -173,6 +173,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jan 11 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-1.1
+- Rebuild with proper hdf5
+
 * Fri Nov 11 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-1
 - Update to 0.9.2
 - Drop upstreamed patches
