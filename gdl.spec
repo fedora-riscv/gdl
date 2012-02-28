@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -170,6 +170,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-4
+- Rebuilt for c++ ABI breakage
+
 * Sat Jan 7 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-3
 - Build with pslib
 
