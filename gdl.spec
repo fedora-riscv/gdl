@@ -22,6 +22,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 #RHEL doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?fedora}
 BuildRequires:  antlr-C++
+BuildRequires:  antlr-tool
 %global plplot_config %{nil}
 %else
 %global plplot_config --enable-oldplplot
