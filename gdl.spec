@@ -29,7 +29,7 @@ BuildRequires:  antlr-tool
 %endif
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
-BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
+BuildRequires:  netcdf-cxx-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
 BuildRequires:  grib_api-static
