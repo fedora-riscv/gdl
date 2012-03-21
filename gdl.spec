@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -21,11 +21,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?fedora}
- %if 0%{?fedora} >= 14
 BuildRequires:  antlr-C++
- %else
-BuildRequires:  antlr
- %endif
 %global plplot_config %{nil}
 %else
 %global plplot_config --enable-oldplplot
@@ -82,13 +78,17 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %prep
 %setup -q -n %{name}-%{version}
-%if !0%{?rhel}
+%if 0%{?fedora}
 %patch1 -p1 -b .antlr-auto
+rm -rf src/antlr
+pushd src
+for f in *.g
+do
+  antlr $f
+done
+popd
 %endif
 %patch2 -p1 -b .shared
-%if !0%{?rhel}
-rm -rf src/antlr
-%endif
 rm ltmain.sh
 autoreconf --install
 
@@ -170,6 +170,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Mar 21 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-5
+- Rebuild antlr generated files
+- Rebuild for ImageMagick
+
 * Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-4
 - Rebuilt for c++ ABI breakage
 
