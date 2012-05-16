@@ -31,6 +31,7 @@ BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
  %else
 BuildRequires:  antlr
+BuildRequires:  java >= 1.6.0
  %endif
 %global plplot_config %{nil}
 %else
