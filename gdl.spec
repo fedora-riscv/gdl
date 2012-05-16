@@ -2,11 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-<<<<<<< HEAD
-Release:        3%{?dist}.1
-=======
 Release:        6.cvs20120515%{?dist}
->>>>>>> master
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
