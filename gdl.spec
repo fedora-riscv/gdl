@@ -26,9 +26,11 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?fedora} || 0%{?rhel} >= 6
-BuildRequires:  antlr-C++
  %if 0%{?fedora} >= 14
+BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
+ %else
+BuildRequires:  antlr
  %endif
 %global plplot_config %{nil}
 %else
