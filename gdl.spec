@@ -1,15 +1,14 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9.3
-Release:        0.1.cvs20120515%{?dist}
+Version:        0.9.2
+Release:        6.cvs20120515%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-#Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tar.gz
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-0.9.2.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
@@ -181,7 +180,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Tue May 15 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-0.1.cvs20120515
+* Tue May 15 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-6.cvs20120515
 - Update to current cvs
 - Add patch for testsuite make check to work in build directory
 - Add patch to fix pythongdl.c compile
