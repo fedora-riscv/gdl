@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -170,6 +170,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Jun 3 2012 Pavel Alexeev <Pahan@Hubbitus.info> - 0.9.2-4
+- Rebuild for ImageMagick update http://lists.fedoraproject.org/pipermail/devel/2012-May/167462.html
+
 * Sat Jan 7 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-3
 - Build with pslib
 
