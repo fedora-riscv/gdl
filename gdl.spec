@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        6.cvs20120515%{?dist}
+Release:        7.cvs20120716%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -180,6 +180,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul 16 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-7.cvs20120716
+- Update to current cvs
+
 * Tue May 15 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-6.cvs20120515
 - Update to current cvs
 - Add patch for testsuite make check to work in build directory
