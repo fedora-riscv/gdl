@@ -1,6 +1,6 @@
 diff -ruN --exclude CVS gdl-0.9.2/CMakeLists.txt gdl/CMakeLists.txt
 --- gdl-0.9.2/CMakeLists.txt	2011-11-06 15:39:45.000000000 -0700
-+++ gdl/CMakeLists.txt	2012-02-19 04:21:43.000000000 -0700
++++ gdl/CMakeLists.txt	2012-02-21 09:54:30.323132942 -0700
 @@ -8,13 +8,13 @@
  #
  
@@ -251,7 +251,7 @@ diff -ruN --exclude CVS gdl-0.9.2/CMakeLists.txt gdl/CMakeLists.txt
  
 diff -ruN --exclude CVS gdl-0.9.2/CMakeModules/FindNumpy.cmake gdl/CMakeModules/FindNumpy.cmake
 --- gdl-0.9.2/CMakeModules/FindNumpy.cmake	2011-08-19 04:18:51.000000000 -0600
-+++ gdl/CMakeModules/FindNumpy.cmake	2012-01-02 14:28:12.000000000 -0700
++++ gdl/CMakeModules/FindNumpy.cmake	2012-02-21 09:54:32.261062619 -0700
 @@ -19,7 +19,7 @@
    set (PYTHON_NUMPY_FIND_QUIETLY TRUE)
  endif (PYTHON_NUMPY_INCLUDE_DIR)
@@ -282,7 +282,7 @@ diff -ruN --exclude CVS gdl-0.9.2/CMakeModules/FindNumpy.cmake gdl/CMakeModules/
  if (PYTHON_NUMPY_FOUND)
 diff -ruN --exclude CVS gdl-0.9.2/config.h.cmake gdl/config.h.cmake
 --- gdl-0.9.2/config.h.cmake	2010-09-02 13:43:21.000000000 -0600
-+++ gdl/config.h.cmake	2011-12-31 02:08:24.000000000 -0700
++++ gdl/config.h.cmake	2012-02-21 09:54:31.747081269 -0700
 @@ -64,5 +64,6 @@
  #cmakedefine USE_NETCDF 1
  #cmakedefine USE_PYTHON 1
@@ -1406,7 +1406,7 @@ diff -ruN --exclude CVS gdl-0.9.2/config.log gdl/config.log
 -configure: exit 255
 diff -ruN --exclude CVS gdl-0.9.2/configure gdl/configure
 --- gdl-0.9.2/configure	2011-11-08 17:27:35.000000000 -0700
-+++ gdl/configure	2012-06-28 03:54:53.000000000 -0600
++++ gdl/configure	2012-07-17 09:30:30.450772785 -0600
 @@ -1,6 +1,6 @@
  #! /bin/sh
  # Guess values for system-dependent variables and create Makefiles.
@@ -23549,7 +23549,7 @@ diff -ruN --exclude CVS gdl-0.9.2/configure~ gdl/configure~
 -
 diff -ruN --exclude CVS gdl-0.9.2/configure.in gdl/configure.in
 --- gdl-0.9.2/configure.in	2011-11-08 16:44:26.000000000 -0700
-+++ gdl/configure.in	2012-05-10 03:21:15.000000000 -0600
++++ gdl/configure.in	2012-05-10 15:10:01.151623514 -0600
 @@ -1,4 +1,4 @@
 -AC_INIT(gdl, 0.9.2)
 +AC_INIT(gdl, 0.9.2 CVS)
@@ -23755,7 +23755,7 @@ diff -ruN --exclude CVS gdl-0.9.2/configure.in gdl/configure.in
  dnl == EOF =================================================
 diff -ruN --exclude CVS gdl-0.9.2/doc/gdl.1 gdl/doc/gdl.1
 --- gdl-0.9.2/doc/gdl.1	2011-10-12 17:44:01.000000000 -0600
-+++ gdl/doc/gdl.1	2012-01-02 14:22:15.000000000 -0700
++++ gdl/doc/gdl.1	2012-02-21 09:54:32.287061675 -0700
 @@ -1,4 +1,4 @@
 -.TH GDL 1 "2011-10-01" "The GDL Team"
 +.TH GDL 1 "2011-12-27" "The GDL Team"
@@ -23782,7 +23782,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/gdl.1 gdl/doc/gdl.1
  .TP
 diff -ruN --exclude CVS gdl-0.9.2/doc/Makefile.in gdl/doc/Makefile.in
 --- gdl-0.9.2/doc/Makefile.in	2011-11-01 17:46:37.000000000 -0600
-+++ gdl/doc/Makefile.in	2012-06-28 03:54:54.000000000 -0600
++++ gdl/doc/Makefile.in	2012-07-17 09:30:30.487772785 -0600
 @@ -104,6 +104,7 @@
  FGREP = @FGREP@
  GDLDATADIR = @GDLDATADIR@
@@ -23793,7 +23793,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/Makefile.in gdl/doc/Makefile.in
  INSTALL_DATA = @INSTALL_DATA@
 diff -ruN --exclude CVS gdl-0.9.2/doc/udg/chapters/credits.tex gdl/doc/udg/chapters/credits.tex
 --- gdl-0.9.2/doc/udg/chapters/credits.tex	2011-08-24 06:20:40.000000000 -0600
-+++ gdl/doc/udg/chapters/credits.tex	2012-01-03 03:09:18.000000000 -0700
++++ gdl/doc/udg/chapters/credits.tex	2012-02-21 09:54:32.364058881 -0700
 @@ -2,13 +2,15 @@
  
  GDL have been developed by a team of volunteers led by {\bf Marc~Schellens} --
@@ -23813,7 +23813,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/udg/chapters/credits.tex gdl/doc/udg/chapt
  Greg~Huey, % UNIT kw for SPAWN
 diff -ruN --exclude CVS gdl-0.9.2/doc/udg/diag/broken-references gdl/doc/udg/diag/broken-references
 --- gdl-0.9.2/doc/udg/diag/broken-references	2011-08-24 06:20:40.000000000 -0600
-+++ gdl/doc/udg/diag/broken-references	2012-01-03 03:09:19.000000000 -0700
++++ gdl/doc/udg/diag/broken-references	2012-02-21 09:54:32.409057247 -0700
 @@ -27,7 +27,9 @@
  LIB.READS.FUN
  LIB.IDL-VALIDANEM.FUN
@@ -24096,7 +24096,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/udg/examples/arguments-abbr/arguments-abbr
 +help, strpos('kayak', 'a', 2, /reverse_search, /reverse_offset)
 diff -ruN --exclude CVS gdl-0.9.2/doc/udg/examples/call_external_0/call_external_0.pro gdl/doc/udg/examples/call_external_0/call_external_0.pro
 --- gdl-0.9.2/doc/udg/examples/call_external_0/call_external_0.pro	2011-04-27 02:42:50.000000000 -0600
-+++ gdl/doc/udg/examples/call_external_0/call_external_0.pro	2012-01-03 03:09:23.000000000 -0700
++++ gdl/doc/udg/examples/call_external_0/call_external_0.pro	2012-02-21 09:54:32.533052749 -0700
 @@ -9,7 +9,7 @@
  $ make
  $ echo
@@ -24108,14 +24108,14 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/udg/examples/call_external_0/call_external
    call_external(img, 'c_nextafter', 1d308, 2d308, /d_value)
 diff -ruN --exclude CVS gdl-0.9.2/doc/udg/examples/file_lines_0/file_lines_0.out.txt gdl/doc/udg/examples/file_lines_0/file_lines_0.out.txt
 --- gdl-0.9.2/doc/udg/examples/file_lines_0/file_lines_0.out.txt	2011-07-03 16:44:28.000000000 -0600
-+++ gdl/doc/udg/examples/file_lines_0/file_lines_0.out.txt	2012-01-03 03:09:23.000000000 -0700
++++ gdl/doc/udg/examples/file_lines_0/file_lines_0.out.txt	2012-02-21 09:54:32.572051333 -0700
 @@ -1,2 +1,2 @@
  % Compiled module: FILE_LINES.
 -        5290
 +        6335
 diff -ruN --exclude CVS gdl-0.9.2/doc/udg/examples/h5_get_libversion_0/h5_get_libversion_0.out.txt gdl/doc/udg/examples/h5_get_libversion_0/h5_get_libversion_0.out.txt
 --- gdl-0.9.2/doc/udg/examples/h5_get_libversion_0/h5_get_libversion_0.out.txt	2011-04-09 15:19:14.000000000 -0600
-+++ gdl/doc/udg/examples/h5_get_libversion_0/h5_get_libversion_0.out.txt	2012-01-03 03:09:23.000000000 -0700
++++ gdl/doc/udg/examples/h5_get_libversion_0/h5_get_libversion_0.out.txt	2012-02-21 09:54:32.574051260 -0700
 @@ -1 +1 @@
 -<Expression>    STRING    = '1.8.6'
 +<Expression>    STRING    = '1.8.8'
@@ -24154,7 +24154,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/udg/examples/mathfunc_2/mathfunc_2.pro gdl
 +help, round(1d10), round(1d10, /l64)
 diff -ruN --exclude CVS gdl-0.9.2/doc/udg/examples/obj_class_1/obj_class_1.out.txt gdl/doc/udg/examples/obj_class_1/obj_class_1.out.txt
 --- gdl-0.9.2/doc/udg/examples/obj_class_1/obj_class_1.out.txt	2011-04-09 15:19:14.000000000 -0600
-+++ gdl/doc/udg/examples/obj_class_1/obj_class_1.out.txt	2012-01-03 03:09:24.000000000 -0700
++++ gdl/doc/udg/examples/obj_class_1/obj_class_1.out.txt	2012-02-21 09:54:32.611049918 -0700
 @@ -1,3 +1,3 @@
 -CLASSES         STRING    = Array[23]
 -!PLT !GNUDATALANGUAGE !AXIS !VERSION !MOUSE !ERROR_STATE !VALUES !MAP !CPU !WARN IDL_SIZE FSTAT64 FSTAT FILE_INFO IDL_MEMORY IDL_MEMORY64 MACHAR 
@@ -24164,7 +24164,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/udg/examples/obj_class_1/obj_class_1.out.t
 +IDL_MEMORY64 MACHAR DMACHAR WIDGET_BUTTON WIDGET_DROPLIST WIDGET_TEXT WIDGET_VERSION !DEVICE
 diff -ruN --exclude CVS gdl-0.9.2/doc/udg/gdl.tex gdl/doc/udg/gdl.tex
 --- gdl-0.9.2/doc/udg/gdl.tex	2011-08-24 06:20:39.000000000 -0600
-+++ gdl/doc/udg/gdl.tex	2012-01-03 03:09:17.000000000 -0700
++++ gdl/doc/udg/gdl.tex	2012-02-21 09:54:32.333060003 -0700
 @@ -112,7 +112,7 @@
    \Large a free/libre/open-source implementation of IDL/PV-WAVE\textsuperscript{*}\nnfoottext{
      \textsuperscript{*}
@@ -24176,7 +24176,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/udg/gdl.tex gdl/doc/udg/gdl.tex
  \author{
 diff -ruN --exclude CVS gdl-0.9.2/doc/udg/makeall gdl/doc/udg/makeall
 --- gdl-0.9.2/doc/udg/makeall	2011-09-19 06:06:11.000000000 -0600
-+++ gdl/doc/udg/makeall	2012-01-03 03:09:17.000000000 -0700
++++ gdl/doc/udg/makeall	2012-02-21 09:54:32.345059569 -0700
 @@ -19,7 +19,7 @@
  echo -n "--- Generating routinelist.tmp file (may take a while) ... "
  newest=`ls -1 -t ../../src/pro/*.pro ../../src/gdl ./gdl.pro ./routinelist.pro | head -1`
@@ -24226,7 +24226,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/udg/README.txt gdl/doc/udg/README.txt
 +Please report any broken link(s)
 diff -ruN --exclude CVS gdl-0.9.2/doc/udg/routines/appleman.pro.tex gdl/doc/udg/routines/appleman.pro.tex
 --- gdl-0.9.2/doc/udg/routines/appleman.pro.tex	2011-02-27 15:32:34.000000000 -0700
-+++ gdl/doc/udg/routines/appleman.pro.tex	2012-01-03 03:09:24.000000000 -0700
++++ gdl/doc/udg/routines/appleman.pro.tex	2012-02-21 09:54:32.931038320 -0700
 @@ -1 +1,12 @@
 -Mandelbrot set\index{Mandelbrot set}
 +Computes and optionally renders the Mandelbrot set\index{Mandelbrot set}.
@@ -24243,7 +24243,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/udg/routines/appleman.pro.tex gdl/doc/udg/
 +\gdlcodeexample{appleman_0}{}{}
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/contribute.html gdl/doc/www/contribute.html
 --- gdl-0.9.2/doc/www/contribute.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/contribute.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/contribute.html	2011-08-18 10:54:41.488160491 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -24256,7 +24256,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/contribute.html gdl/doc/www/contribute
 +</html>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/credits.html gdl/doc/www/credits.html
 --- gdl-0.9.2/doc/www/credits.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/credits.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/credits.html	2011-08-18 10:54:41.500160072 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -24426,7 +24426,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/documentation.php gdl/doc/www/document
 +<?php require('_footer.inc.php'); ?>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/download.html gdl/doc/www/download.html
 --- gdl-0.9.2/doc/www/download.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/download.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/download.html	2011-08-18 10:54:41.514159583 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -24560,7 +24560,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/faq.php gdl/doc/www/faq.php
 +<?php require('_footer.inc.php'); ?>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/feedback.html gdl/doc/www/feedback.html
 --- gdl-0.9.2/doc/www/feedback.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/feedback.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/feedback.html	2011-08-18 10:54:41.523159269 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -24636,7 +24636,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/_footer.inc.php gdl/doc/www/_footer.in
 +</html>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/_header.inc.php gdl/doc/www/_header.inc.php
 --- gdl-0.9.2/doc/www/_header.inc.php	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/_header.inc.php	2011-12-27 10:28:24.000000000 -0700
++++ gdl/doc/www/_header.inc.php	2012-02-21 09:54:33.056033769 -0700
 @@ -0,0 +1,68 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +
@@ -24708,7 +24708,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/_header.inc.php gdl/doc/www/_header.in
 +			<a name="TemplateInfo"></a>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/home.html gdl/doc/www/home.html
 --- gdl-0.9.2/doc/www/home.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/home.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/home.html	2011-08-18 10:54:41.532158954 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -24723,7 +24723,7 @@ Binary files gdl-0.9.2/doc/www/images/bg.jpg and gdl/doc/www/images/bg.jpg diffe
 Binary files gdl-0.9.2/doc/www/images/bullet.gif and gdl/doc/www/images/bullet.gif differ
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/images/Colourise.css gdl/doc/www/images/Colourise.css
 --- gdl-0.9.2/doc/www/images/Colourise.css	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/images/Colourise.css	2011-12-27 10:28:25.000000000 -0700
++++ gdl/doc/www/images/Colourise.css	2012-02-21 09:54:33.211028145 -0700
 @@ -0,0 +1,526 @@
 +/* ----------------------------------------------
 +	Template Name : Colourise
@@ -25255,7 +25255,7 @@ Binary files gdl-0.9.2/doc/www/images/footer-top.jpg and gdl/doc/www/images/foot
 Binary files gdl-0.9.2/doc/www/images/header-search.jpg and gdl/doc/www/images/header-search.jpg differ
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/index.html gdl/doc/www/index.html
 --- gdl-0.9.2/doc/www/index.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/index.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/index.html	2011-08-18 10:54:41.533158920 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html>
@@ -25363,7 +25363,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/index.php gdl/doc/www/index.php
 +<?php require('_footer.inc.php'); ?>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/menu.html gdl/doc/www/menu.html
 --- gdl-0.9.2/doc/www/menu.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/menu.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/menu.html	2011-08-18 10:54:41.543158570 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -25376,7 +25376,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/menu.html gdl/doc/www/menu.html
 +</html>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/_news.inc.php gdl/doc/www/_news.inc.php
 --- gdl-0.9.2/doc/www/_news.inc.php	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/_news.inc.php	2012-05-08 03:48:44.000000000 -0600
++++ gdl/doc/www/_news.inc.php	2012-05-10 15:10:03.581535806 -0600
 @@ -0,0 +1,37 @@
 +<h2>GDL 0.9.2 released</h2>
 +<p>
@@ -25417,7 +25417,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/_news.inc.php gdl/doc/www/_news.inc.ph
 +</p>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/require.html gdl/doc/www/require.html
 --- gdl-0.9.2/doc/www/require.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/require.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/require.html	2011-08-18 10:54:41.560157976 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -25430,7 +25430,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/require.html gdl/doc/www/require.html
 +</html>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/requirements.php gdl/doc/www/requirements.php
 --- gdl-0.9.2/doc/www/requirements.php	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/requirements.php	2011-09-19 06:06:11.000000000 -0600
++++ gdl/doc/www/requirements.php	2011-09-20 09:46:45.499501554 -0600
 @@ -0,0 +1,86 @@
 +<?php require('_header.inc.php'); ?>
 +			
@@ -25520,7 +25520,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/requirements.php gdl/doc/www/requireme
 +<?php require('_footer.inc.php'); ?>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/resources.html gdl/doc/www/resources.html
 --- gdl-0.9.2/doc/www/resources.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/resources.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/resources.html	2011-08-18 10:54:41.571157592 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -25533,7 +25533,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/resources.html gdl/doc/www/resources.h
 +</html>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/resources.php gdl/doc/www/resources.php
 --- gdl-0.9.2/doc/www/resources.php	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/resources.php	2012-04-30 02:20:38.000000000 -0600
++++ gdl/doc/www/resources.php	2012-05-10 15:10:03.665532774 -0600
 @@ -0,0 +1,117 @@
 +<?php require('_header.inc.php'); ?>
 +
@@ -25654,7 +25654,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/resources.php gdl/doc/www/resources.ph
 +<?php require('_footer.inc.php'); ?>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/screenshot.html gdl/doc/www/screenshot.html
 --- gdl-0.9.2/doc/www/screenshot.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/screenshot.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/screenshot.html	2011-08-18 10:54:41.579157313 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -25830,7 +25830,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/screenshots.php gdl/doc/www/screenshot
 +<?php require('_footer.inc.php'); ?>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/support.html gdl/doc/www/support.html
 --- gdl-0.9.2/doc/www/support.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/support.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/support.html	2011-08-18 10:54:41.600156580 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -25906,7 +25906,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/support.php gdl/doc/www/support.php
 +<?php require('_footer.inc.php'); ?>
 diff -ruN --exclude CVS gdl-0.9.2/doc/www/tdl.html gdl/doc/www/tdl.html
 --- gdl-0.9.2/doc/www/tdl.html	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/doc/www/tdl.html	2011-07-08 07:06:48.000000000 -0600
++++ gdl/doc/www/tdl.html	2011-08-18 10:54:41.608156300 -0600
 @@ -0,0 +1,9 @@
 +<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 +<html xmlns="http://www.w3.org/1999/xhtml">
@@ -25919,7 +25919,7 @@ diff -ruN --exclude CVS gdl-0.9.2/doc/www/tdl.html gdl/doc/www/tdl.html
 +</html>
 diff -ruN --exclude CVS gdl-0.9.2/INSTALL gdl/INSTALL
 --- gdl-0.9.2/INSTALL	2011-11-08 17:15:09.000000000 -0700
-+++ gdl/INSTALL	2012-04-13 15:50:27.000000000 -0600
++++ gdl/INSTALL	2012-05-10 15:10:01.087625823 -0600
 @@ -126,7 +126,7 @@
  initial values for variables by setting them in the environment.  Using
  a Bourne-compatible shell, you can do that on the command line like
@@ -25948,7 +25948,7 @@ diff -ruN --exclude CVS gdl-0.9.2/INSTALL gdl/INSTALL
 +> make
 diff -ruN --exclude CVS gdl-0.9.2/Makefile.in gdl/Makefile.in
 --- gdl-0.9.2/Makefile.in	2011-11-01 17:46:36.000000000 -0600
-+++ gdl/Makefile.in	2012-06-28 03:54:53.000000000 -0600
++++ gdl/Makefile.in	2012-07-17 09:30:30.305772510 -0600
 @@ -163,6 +163,7 @@
  FGREP = @FGREP@
  GDLDATADIR = @GDLDATADIR@
@@ -25959,7 +25959,7 @@ diff -ruN --exclude CVS gdl-0.9.2/Makefile.in gdl/Makefile.in
  INSTALL_DATA = @INSTALL_DATA@
 diff -ruN --exclude CVS gdl-0.9.2/NEWS gdl/NEWS
 --- gdl-0.9.2/NEWS	2011-11-08 16:27:32.000000000 -0700
-+++ gdl/NEWS	2012-07-13 16:39:45.000000000 -0600
++++ gdl/NEWS	2012-07-17 09:30:30.351772826 -0600
 @@ -535,5 +535,24 @@
             - memory leak fix (bug introduced in the previous version)
             - various testsuite & docs updates (incl. docs and examples for CALL_EXTERNAL)
@@ -25988,7 +25988,7 @@ diff -ruN --exclude CVS gdl-0.9.2/NEWS gdl/NEWS
 +           - keyword SIGN in FINITE
 diff -ruN --exclude CVS gdl-0.9.2/src/antlr/Makefile.in gdl/src/antlr/Makefile.in
 --- gdl-0.9.2/src/antlr/Makefile.in	2011-11-01 17:46:37.000000000 -0600
-+++ gdl/src/antlr/Makefile.in	2012-06-28 03:54:54.000000000 -0600
++++ gdl/src/antlr/Makefile.in	2012-07-17 09:30:31.196772751 -0600
 @@ -209,6 +209,7 @@
  FGREP = @FGREP@
  GDLDATADIR = @GDLDATADIR@
@@ -25999,7 +25999,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/antlr/Makefile.in gdl/src/antlr/Makefile.i
  INSTALL_DATA = @INSTALL_DATA@
 diff -ruN --exclude CVS gdl-0.9.2/src/arrayindex.cpp gdl/src/arrayindex.cpp
 --- gdl-0.9.2/src/arrayindex.cpp	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/arrayindex.cpp	2012-01-23 15:33:27.000000000 -0700
++++ gdl/src/arrayindex.cpp	2012-02-21 09:54:34.469982462 -0700
 @@ -67,13 +67,13 @@
    
    if( s < 0)
@@ -26106,7 +26106,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindex.cpp gdl/src/arrayindex.cpp
  }
 diff -ruN --exclude CVS gdl-0.9.2/src/arrayindex.hpp gdl/src/arrayindex.hpp
 --- gdl-0.9.2/src/arrayindex.hpp	2011-11-06 20:10:46.000000000 -0700
-+++ gdl/src/arrayindex.hpp	2012-07-14 08:05:47.000000000 -0600
++++ gdl/src/arrayindex.hpp	2012-07-17 09:30:30.739772770 -0600
 @@ -241,6 +241,7 @@
    void Init() 
    {
@@ -26193,7 +26193,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindex.hpp gdl/src/arrayindex.hpp
        }
 diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayindexlistnoassoct.hpp
 --- gdl-0.9.2/src/arrayindexlistnoassoct.hpp	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/arrayindexlistnoassoct.hpp	2012-07-10 11:47:17.000000000 -0600
++++ gdl/src/arrayindexlistnoassoct.hpp	2012-07-17 09:30:30.757772771 -0600
 @@ -121,15 +121,8 @@
  //   bool ToAssocIndex( SizeT& lastIx)
    bool ToAssocIndex( SizeT& lastIx)
@@ -26222,6 +26222,15 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
      assert( allIx == NULL);
  //     if( allIx != NULL)
  // 		return allIx;
+@@ -262,7 +258,7 @@
+   BaseGDL* Index( BaseGDL* var, IxExprListT& ix_)
+   {
+     Init( ix_, NULL);
+-    if( ix->NIter( var->Size()) == 1)// && var->Type() != STRUCT) 
++    if( ix->Scalar()) // ix->NIter( var->Size()) == 1)// && var->Type() != STRUCT) 
+ //     if( !var->IsAssoc() && ix->NIter( var->Size()) == 1)// && var->Type() != STRUCT) 
+       {
+ 	return var->NewIx( ix->GetIx0());
 @@ -683,10 +679,10 @@
  	if( sInit < 0)
  	  s = sInit + var->Size();
@@ -26455,7 +26464,13 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
      if( var->EqType( right))
        {
  	var->AssignAt( right, this); // assigns inplace (not only scalar)
-@@ -989,8 +949,8 @@
+@@ -984,13 +944,13 @@
+       }
+   }
+ 
+-  // optimized for one dimensional access
++  
+   BaseGDL* Index( BaseGDL* var, IxExprListT& ix)
    {
      //    Init();
      // SetVariable( var);
@@ -26736,7 +26751,18 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
      assert( allIx == NULL);
  
      if( accessType == ALLINDEXED) //  nIterLimitGt1 is not properly set
-@@ -1775,7 +1892,7 @@
+@@ -1726,7 +1843,9 @@
+     SetVariable( var);
+     if( nIx == 1)// && !var->IsAssoc())
+     {
+-      return var->NewIx( baseIx);
++      BaseGDL* res = var->NewIx( baseIx);
++      res->MakeArrayFromScalar();
++      return res;
+     }
+     return var->Index( this);
+   }
+@@ -1775,7 +1894,7 @@
    {
      ixList = *ix;
      allIx = NULL;
@@ -26745,7 +26771,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
  	  
      assert( ix->size() != 0); // must be, from compiler
  
-@@ -1886,7 +2003,7 @@
+@@ -1886,7 +2005,7 @@
  	//     varDim.Stride( varStride,acRank); // copy variables stride into varStride
  	
  	nIterLimit[0]=ixList[0]->NIter( (0<varRank)?varDim[0]:1);
@@ -26754,7 +26780,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
  	stride[0]=1;
  
  	nIterLimitGt1 = (nIterLimit[0] > 1)? 1 : 0;
-@@ -1897,7 +2014,7 @@
+@@ -1897,7 +2016,7 @@
  	for( SizeT i=1; i<acRank; ++i)
        {
  		nIterLimit[i]=ixList[i]->NIter( (i<varRank)?varDim[i]:1);
@@ -26763,7 +26789,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
  		stride[i]=stride[i-1]*nIterLimit[i-1]; // index stride
  		
  		if( nIterLimit[i] > 1)
-@@ -1907,12 +2024,16 @@
+@@ -1907,12 +2026,16 @@
  		}
  		baseIx += ixList[i]->GetS()  * varStride[i];
        }
@@ -26781,7 +26807,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
  	assert( allIx == NULL);  
  // 	if( allIx != NULL)
  // 		return allIx;
-@@ -1990,6 +2111,110 @@
+@@ -1990,6 +2113,110 @@
  
  
  
@@ -26892,7 +26918,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
  
  
  
-@@ -2011,7 +2236,7 @@
+@@ -2011,7 +2238,7 @@
    {
      ixList = *ix;
      allIx = NULL;
@@ -26901,7 +26927,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
  
      assert( ix->size() != 0); // must be, from compiler
  
-@@ -2022,7 +2247,6 @@
+@@ -2022,7 +2249,6 @@
      for( SizeT i=0; i<ix->size(); ++i)
  	nParam += (*ix)[i]->NParam();
  
@@ -26909,7 +26935,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
      accessTypeInit = ALLINDEXED; // might be ALLONE as well
    }
    
-@@ -2111,7 +2335,9 @@
+@@ -2111,7 +2337,9 @@
  
  		// in this case, having more index dimensions does not matter
  		// indices are used only upto variables rank
@@ -26922,7 +26948,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistnoassoct.hpp gdl/src/arrayin
  		return;
 diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistt.hpp gdl/src/arrayindexlistt.hpp
 --- gdl-0.9.2/src/arrayindexlistt.hpp	2011-11-06 20:10:46.000000000 -0700
-+++ gdl/src/arrayindexlistt.hpp	2012-02-19 22:06:07.000000000 -0700
++++ gdl/src/arrayindexlistt.hpp	2012-07-17 09:30:30.767772771 -0600
 @@ -43,10 +43,18 @@
  
    virtual ArrayIndexListT* Clone() { assert( 0); return NULL;}
@@ -26963,6 +26989,15 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistt.hpp gdl/src/arrayindexlist
      assert( allIx == NULL);
  //     if( allIx != NULL)
  // 		return allIx;
+@@ -314,7 +325,7 @@
+   BaseGDL* Index( BaseGDL* var, IxExprListT& ix_)
+   {
+     Init( ix_, NULL);
+-    if( !var->IsAssoc() && ix->NIter( var->Size()) == 1)// && var->Type() != STRUCT) 
++    if( !var->IsAssoc() && ix->Scalar()) //ix->NIter( var->Size()) == 1)// && var->Type() != STRUCT) 
+       {
+ 	return var->NewIx( ix->GetIx0());
+       }
 @@ -1555,6 +1566,9 @@
    // returns 1-dim index for all elements
    AllIxBaseT* BuildIx() // ArrayIndexListMultiT
@@ -26973,7 +27008,18 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistt.hpp gdl/src/arrayindexlist
      assert( allIx == NULL);
  
      if( accessType == ALLINDEXED) //  nIterLimitGt1 is not properly set
-@@ -1981,6 +1995,9 @@
+@@ -1794,7 +1808,9 @@
+     SetVariable( var);
+     if( nIx == 1 && !var->IsAssoc())
+     {
+-      return var->NewIx( baseIx);
++      BaseGDL* res = var->NewIx( baseIx);
++      res->MakeArrayFromScalar();
++      return res;
+     }
+     return var->Index( this);
+   }
+@@ -1981,6 +1997,9 @@
    // returns 1-dim index for all elements
    AllIxBaseT* BuildIx()
    {
@@ -26985,7 +27031,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/arrayindexlistt.hpp gdl/src/arrayindexlist
  // 		return allIx;
 diff -ruN --exclude CVS gdl-0.9.2/src/basegdl.cpp gdl/src/basegdl.cpp
 --- gdl-0.9.2/src/basegdl.cpp	2011-11-05 10:56:43.000000000 -0600
-+++ gdl/src/basegdl.cpp	2011-12-08 00:03:09.000000000 -0700
++++ gdl/src/basegdl.cpp	2012-02-21 09:54:34.726973137 -0700
 @@ -72,11 +72,11 @@
    throw GDLException("BaseGDL::Equal(SizeT,SizeT) called.");
  }
@@ -27020,7 +27066,16 @@ diff -ruN --exclude CVS gdl-0.9.2/src/basegdl.cpp gdl/src/basegdl.cpp
  }
 diff -ruN --exclude CVS gdl-0.9.2/src/basegdl.hpp gdl/src/basegdl.hpp
 --- gdl-0.9.2/src/basegdl.hpp	2011-11-05 10:56:43.000000000 -0600
-+++ gdl/src/basegdl.hpp	2011-12-08 00:03:09.000000000 -0700
++++ gdl/src/basegdl.hpp	2012-07-17 09:30:30.774772770 -0600
+@@ -367,7 +367,7 @@
+   inline void     Purge()                    { dim.Purge();}
+   inline SizeT    Rank()          const      { return dim.Rank();}
+   inline void     SetDim(const dimension& d) { dim=d;}
+-
++  inline void     MakeArrayFromScalar()      { dim.MakeArrayFromScalar();} 
+ 
+   friend std::istream& operator>>(std::istream& i, BaseGDL& data_)
+   {
 @@ -416,8 +416,8 @@
    virtual bool Greater(SizeT i1, SizeT i2) const; // comp 2 elements
    virtual bool Equal(SizeT i1, SizeT i2) const; // comp 2 elements
@@ -27046,7 +27101,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/basegdl.hpp gdl/src/basegdl.hpp
    // used in r_expr
 diff -ruN --exclude CVS gdl-0.9.2/src/basic_fun.cpp gdl/src/basic_fun.cpp
 --- gdl-0.9.2/src/basic_fun.cpp	2011-11-06 16:43:21.000000000 -0700
-+++ gdl/src/basic_fun.cpp	2012-06-28 03:54:54.000000000 -0600
++++ gdl/src/basic_fun.cpp	2012-07-17 09:30:30.806772769 -0600
 @@ -828,18 +828,23 @@
        }
   */ }
@@ -27502,7 +27557,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/basic_fun.cpp gdl/src/basic_fun.cpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/basic_fun.hpp gdl/src/basic_fun.hpp
 --- gdl-0.9.2/src/basic_fun.hpp	2009-09-10 07:07:44.000000000 -0600
-+++ gdl/src/basic_fun.hpp	2011-11-24 04:31:27.000000000 -0700
++++ gdl/src/basic_fun.hpp	2012-02-21 09:54:34.876967693 -0700
 @@ -83,14 +83,14 @@
  
    BaseGDL* gdl_logical_and( EnvT* e);
@@ -27524,7 +27579,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/basic_fun.hpp gdl/src/basic_fun.hpp
    BaseGDL* strtrim( EnvT* e);
 diff -ruN --exclude CVS gdl-0.9.2/src/basic_fun_jmg.cpp gdl/src/basic_fun_jmg.cpp
 --- gdl-0.9.2/src/basic_fun_jmg.cpp	2011-10-11 01:37:36.000000000 -0600
-+++ gdl/src/basic_fun_jmg.cpp	2012-06-28 03:54:54.000000000 -0600
++++ gdl/src/basic_fun_jmg.cpp	2012-07-17 09:30:30.819772769 -0600
 @@ -120,10 +120,10 @@
        }
  
@@ -27577,7 +27632,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/basic_fun_jmg.cpp gdl/src/basic_fun_jmg.cp
  	      if (p == NULL) {
 diff -ruN --exclude CVS gdl-0.9.2/src/basic_pro.cpp gdl/src/basic_pro.cpp
 --- gdl-0.9.2/src/basic_pro.cpp	2011-11-06 20:07:18.000000000 -0700
-+++ gdl/src/basic_pro.cpp	2011-12-03 06:10:46.000000000 -0700
++++ gdl/src/basic_pro.cpp	2012-02-21 09:54:35.030962106 -0700
 @@ -817,8 +817,6 @@
    
    void call_procedure( EnvT* e)
@@ -27610,7 +27665,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/basic_pro.cpp gdl/src/basic_pro.cpp
  	e->PushNewEnvUD( proList[ proIx], 1);
 diff -ruN --exclude CVS gdl-0.9.2/src/CMakeLists.txt gdl/src/CMakeLists.txt
 --- gdl-0.9.2/src/CMakeLists.txt	2011-11-06 20:07:18.000000000 -0700
-+++ gdl/src/CMakeLists.txt	2012-06-28 03:54:54.000000000 -0600
++++ gdl/src/CMakeLists.txt	2012-07-17 09:30:30.630772776 -0600
 @@ -130,6 +130,8 @@
  gshhs.hpp
  gsl_fun.cpp
@@ -27630,7 +27685,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/CMakeLists.txt gdl/src/CMakeLists.txt
  plotting_convert_coord.cpp
 diff -ruN --exclude CVS gdl-0.9.2/src/convert2.cpp gdl/src/convert2.cpp
 --- gdl-0.9.2/src/convert2.cpp	2011-10-17 04:01:43.000000000 -0600
-+++ gdl/src/convert2.cpp	2012-07-10 11:47:17.000000000 -0600
++++ gdl/src/convert2.cpp	2012-07-17 09:30:30.838772768 -0600
 @@ -234,13 +234,13 @@
  	if( mode == BaseGDL::COPY_BYTE_AS_INT)
  	  {
@@ -27671,7 +27726,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/convert2.cpp gdl/src/convert2.cpp
        }
 diff -ruN --exclude CVS gdl-0.9.2/src/datatypes.cpp gdl/src/datatypes.cpp
 --- gdl-0.9.2/src/datatypes.cpp	2011-11-05 10:56:43.000000000 -0600
-+++ gdl/src/datatypes.cpp	2012-07-10 11:47:17.000000000 -0600
++++ gdl/src/datatypes.cpp	2012-07-17 09:30:30.852772768 -0600
 @@ -55,6 +55,9 @@
  // this (ugly) including of other sourcefiles has to be done, because
  // on Mac OS X a template instantiation request (see bottom of file)
@@ -28163,7 +28218,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/datatypes.cpp gdl/src/datatypes.cpp
      }
 diff -ruN --exclude CVS gdl-0.9.2/src/datatypes.hpp gdl/src/datatypes.hpp
 --- gdl-0.9.2/src/datatypes.hpp	2011-11-05 10:56:43.000000000 -0600
-+++ gdl/src/datatypes.hpp	2011-12-08 00:03:09.000000000 -0700
++++ gdl/src/datatypes.hpp	2012-02-21 09:54:35.160957387 -0700
 @@ -113,8 +113,8 @@
    bool Greater(SizeT i1, SizeT i2) const; // comp 2 elements
    bool Equal(SizeT i1, SizeT i2) const; // comp 2 elements
@@ -28196,9 +28251,24 @@ diff -ruN --exclude CVS gdl-0.9.2/src/datatypes.hpp gdl/src/datatypes.hpp
  
    // operators
    BaseGDL* UMinus(); // UMinus for SpDString returns float
+diff -ruN --exclude CVS gdl-0.9.2/src/dcompiler.cpp gdl/src/dcompiler.cpp
+--- gdl-0.9.2/src/dcompiler.cpp	2010-08-05 06:22:46.000000000 -0600
++++ gdl/src/dcompiler.cpp	2012-07-17 09:30:30.886772765 -0600
+@@ -420,8 +420,10 @@
+   t=n->getType();
+ 
+   // only var, common block var and deref ptr are passed by reference
++  // note: trinary op is REF_CHECK 
+   // *** see AssignReplace(...)
+-  if( !assignReplace && t != VAR && t != VARPTR && t != DEREF) return null; 
++  if( !assignReplace && t != VAR && t != VARPTR && t != DEREF) // && t != QUESTION) 
++    return null; 
+ 
+ // #ifdef GDL_DEBUG
+ //   cout << "ByReference: out:" << endl;
 diff -ruN --exclude CVS gdl-0.9.2/src/deviceps.hpp gdl/src/deviceps.hpp
 --- gdl-0.9.2/src/deviceps.hpp	2011-10-31 03:08:38.000000000 -0600
-+++ gdl/src/deviceps.hpp	2012-01-03 03:31:38.000000000 -0700
++++ gdl/src/deviceps.hpp	2012-02-21 09:54:35.186956446 -0700
 @@ -19,6 +19,7 @@
  #  define DEVICEPS_HPP_
  
@@ -28343,7 +28413,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/deviceps.hpp gdl/src/deviceps.hpp
  #endif
 diff -ruN --exclude CVS gdl-0.9.2/src/devicex.hpp gdl/src/devicex.hpp
 --- gdl-0.9.2/src/devicex.hpp	2011-11-06 15:28:57.000000000 -0700
-+++ gdl/src/devicex.hpp	2012-03-16 19:50:04.000000000 -0600
++++ gdl/src/devicex.hpp	2012-05-10 15:10:04.731494297 -0600
 @@ -201,8 +201,8 @@
  	}
  
@@ -28651,7 +28721,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/devicex.hpp gdl/src/devicex.hpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/devicez.hpp gdl/src/devicez.hpp
 --- gdl-0.9.2/src/devicez.hpp	2011-08-22 14:41:46.000000000 -0600
-+++ gdl/src/devicez.hpp	2011-12-28 16:14:09.000000000 -0700
++++ gdl/src/devicez.hpp	2012-02-21 09:54:35.255953942 -0700
 @@ -277,7 +277,7 @@
      //    Graphics* actDevice = Graphics::GetDevice();
      SizeT nParam=e->NParam( 1); 
@@ -28661,9 +28731,27 @@ diff -ruN --exclude CVS gdl-0.9.2/src/devicez.hpp gdl/src/devicez.hpp
  
      //    actStream->NextPlot( false); // JMG
  
+diff -ruN --exclude CVS gdl-0.9.2/src/dimension.hpp gdl/src/dimension.hpp
+--- gdl-0.9.2/src/dimension.hpp	2011-10-18 19:42:01.000000000 -0600
++++ gdl/src/dimension.hpp	2012-07-17 09:30:30.912772762 -0600
+@@ -390,6 +390,14 @@
+     stride[0] = 0;
+   }
+ 
++  void MakeArrayFromScalar()
++  {
++    assert( rank == 0);
++    assert( stride[0] == 0);
++    dim[0]=1;
++    rank=1;
++  }
++
+ /*  // multidim index to one dim index
+   SizeT LongIndex(const dimension& ix) const
+   {
 diff -ruN --exclude CVS gdl-0.9.2/src/dinterpreter.cpp gdl/src/dinterpreter.cpp
 --- gdl-0.9.2/src/dinterpreter.cpp	2011-09-20 05:33:52.000000000 -0600
-+++ gdl/src/dinterpreter.cpp	2012-07-11 09:59:42.000000000 -0600
++++ gdl/src/dinterpreter.cpp	2012-07-17 09:30:30.917772764 -0600
 @@ -949,7 +949,7 @@
      {
  	  env->ResizeForLoops( nForLoopsIn);
@@ -28694,7 +28782,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/dinterpreter.cpp gdl/src/dinterpreter.cpp
  	if( ret == CC_STEP) return RC_OK;
 diff -ruN --exclude CVS gdl-0.9.2/src/dpro.cpp gdl/src/dpro.cpp
 --- gdl-0.9.2/src/dpro.cpp	2010-12-03 13:12:41.000000000 -0700
-+++ gdl/src/dpro.cpp	2011-11-17 19:50:19.000000000 -0700
++++ gdl/src/dpro.cpp	2012-02-21 09:54:35.399948717 -0700
 @@ -44,11 +44,12 @@
  // DLib ******************************************************
  DLib::DLib( const string& n, const string& o, const int nPar_, 
@@ -28786,7 +28874,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/dpro.cpp gdl/src/dpro.cpp
  // DSubUD ****************************************************
 diff -ruN --exclude CVS gdl-0.9.2/src/dpro.hpp gdl/src/dpro.hpp
 --- gdl-0.9.2/src/dpro.hpp	2010-05-04 11:32:32.000000000 -0600
-+++ gdl/src/dpro.hpp	2011-11-17 19:50:19.000000000 -0700
++++ gdl/src/dpro.hpp	2012-02-21 09:54:35.439947265 -0700
 @@ -117,6 +117,7 @@
    IDList              key;    // keyword names (IDList: typedefs.hpp)
                                // (KEYWORD_NAME=keyword_value)
@@ -28908,7 +28996,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/dpro.hpp gdl/src/dpro.hpp
  // User Defined
 diff -ruN --exclude CVS gdl-0.9.2/src/dstructgdl.cpp gdl/src/dstructgdl.cpp
 --- gdl-0.9.2/src/dstructgdl.cpp	2011-11-05 10:56:43.000000000 -0600
-+++ gdl/src/dstructgdl.cpp	2011-12-08 00:03:09.000000000 -0700
++++ gdl/src/dstructgdl.cpp	2012-02-21 09:54:35.467946249 -0700
 @@ -202,9 +202,10 @@
  }
  
@@ -28937,7 +29025,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/dstructgdl.cpp gdl/src/dstructgdl.cpp
    SizeT nEl = N_Elements();
 diff -ruN --exclude CVS gdl-0.9.2/src/dstructgdl.hpp gdl/src/dstructgdl.hpp
 --- gdl-0.9.2/src/dstructgdl.hpp	2011-11-05 10:56:43.000000000 -0600
-+++ gdl/src/dstructgdl.hpp	2011-12-08 00:03:09.000000000 -0700
++++ gdl/src/dstructgdl.hpp	2012-02-21 09:54:35.497945160 -0700
 @@ -217,8 +217,8 @@
     DStructGDL* SetBuffer( const void* b);
    void SetBufferSize( SizeT s);
@@ -28960,7 +29048,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/dstructgdl.hpp gdl/src/dstructgdl.hpp
    
 diff -ruN --exclude CVS gdl-0.9.2/src/envt.cpp gdl/src/envt.cpp
 --- gdl-0.9.2/src/envt.cpp	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/envt.cpp	2012-07-16 07:21:15.000000000 -0600
++++ gdl/src/envt.cpp	2012-07-17 09:30:30.931772762 -0600
 @@ -907,23 +907,28 @@
  }
  
@@ -29053,7 +29141,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/envt.cpp gdl/src/envt.cpp
  {
 diff -ruN --exclude CVS gdl-0.9.2/src/envt.hpp gdl/src/envt.hpp
 --- gdl-0.9.2/src/envt.hpp	2011-11-05 10:56:43.000000000 -0600
-+++ gdl/src/envt.hpp	2012-07-16 07:21:15.000000000 -0600
++++ gdl/src/envt.hpp	2012-07-17 09:30:30.954772760 -0600
 @@ -112,6 +112,7 @@
  
    // for CLEANUP calls due to reference counting
@@ -29163,7 +29251,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/envt.hpp gdl/src/envt.hpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/extrat.cpp gdl/src/extrat.cpp
 --- gdl-0.9.2/src/extrat.cpp	2009-11-08 16:36:07.000000000 -0700
-+++ gdl/src/extrat.cpp	2012-07-16 07:21:15.000000000 -0600
++++ gdl/src/extrat.cpp	2012-07-17 09:30:30.971772761 -0600
 @@ -23,7 +23,7 @@
  
  using namespace std;
@@ -29254,7 +29342,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/extrat.cpp gdl/src/extrat.cpp
  	  if( caller->pro->Extra() == DSub::REFEXTRA)
 diff -ruN --exclude CVS gdl-0.9.2/src/extrat.hpp gdl/src/extrat.hpp
 --- gdl-0.9.2/src/extrat.hpp	2005-09-24 09:18:18.000000000 -0600
-+++ gdl/src/extrat.hpp	2012-07-16 07:21:15.000000000 -0600
++++ gdl/src/extrat.hpp	2012-07-17 09:30:30.974772760 -0600
 @@ -114,7 +114,7 @@
    // 2. if pro has (_REF)_EXTRA:
    // combine additional keywords and the (remaining) _EXTRA data to pro's 
@@ -29266,7 +29354,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/extrat.hpp gdl/src/extrat.hpp
  #endif
 diff -ruN --exclude CVS gdl-0.9.2/src/fftw.cpp gdl/src/fftw.cpp
 --- gdl-0.9.2/src/fftw.cpp	2011-09-29 12:54:30.000000000 -0600
-+++ gdl/src/fftw.cpp	2012-06-28 03:54:54.000000000 -0600
++++ gdl/src/fftw.cpp	2012-07-17 09:30:30.992772761 -0600
 @@ -42,7 +42,7 @@
    T* fftw_template(BaseGDL* p0,
  		   SizeT nEl, SizeT dbl, SizeT overwrite, double direct)
@@ -29278,7 +29366,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/fftw.cpp gdl/src/fftw.cpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/gdlc.g gdl/src/gdlc.g
 --- gdl-0.9.2/src/gdlc.g	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/gdlc.g	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/gdlc.g	2012-02-21 09:54:35.573942402 -0700
 @@ -105,7 +105,8 @@
      FOREACH_INDEX_LOOP;
  	FCALL;
@@ -29291,7 +29379,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gdlc.g gdl/src/gdlc.g
  	KEYDECL;
 diff -ruN --exclude CVS gdl-0.9.2/src/gdlc.i.g gdl/src/gdlc.i.g
 --- gdl-0.9.2/src/gdlc.i.g	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/gdlc.i.g	2012-07-16 07:24:41.000000000 -0600
++++ gdl/src/gdlc.i.g	2012-07-17 09:30:31.005772760 -0600
 @@ -749,7 +749,8 @@
      }
  
@@ -29363,7 +29451,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gdlc.i.g gdl/src/gdlc.i.g
      catch( GDLException& e)
 diff -ruN --exclude CVS gdl-0.9.2/src/gdlc.tree.g gdl/src/gdlc.tree.g
 --- gdl-0.9.2/src/gdlc.tree.g	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/gdlc.tree.g	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/gdlc.tree.g	2012-07-17 09:30:31.014772760 -0600
 @@ -95,6 +95,7 @@
              lT == FCALL_LIB ||
  //            lT == FCALL_LIB_N_ELEMENTS ||
@@ -29384,7 +29472,26 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gdlc.tree.g gdl/src/gdlc.tree.g
  
                      #p->setType(PCALL_LIB);
                      #p->setText("pcall_lib");
-@@ -1316,13 +1320,21 @@
+@@ -713,8 +717,7 @@
+                 {
+                     int t = #k->getType();
+                     if( t == FCALL_LIB || t == MFCALL_LIB || //t == FCALL_LIB_N_ELEMENTS ||
+-
+-                        t == MFCALL_PARENT_LIB //||
++                        t == MFCALL_PARENT_LIB  || t == QUESTION //||
+ //                          t == FCALL_LIB_RETNEW || t == MFCALL_LIB_RETNEW || 
+ //                          t == MFCALL_PARENT_LIB_RETNEW //||
+ //                          t == ARRARYEXPR_MFCALL_LIB // MFCALL_LIB or VAR or DEREF 
+@@ -766,7 +769,7 @@
+                 int t = #e->getType();
+                 // Note: Right now there are no MFCALL_LIB or MFCALL_PARENT_LIB nodes
+                 if( t == FCALL_LIB || t == MFCALL_LIB || //t == FCALL_LIB_N_ELEMENTS ||
+-                    t == MFCALL_PARENT_LIB //||
++                    t == MFCALL_PARENT_LIB || t == QUESTION //||
+ //                      t == FCALL_LIB_RETNEW || t == MFCALL_LIB_RETNEW || 
+ //                      t == MFCALL_PARENT_LIB_RETNEW
+ //                      t == ARRARYEXPR_MFCALL_LIB // MFCALL_LIB or VAR or DEREF 
+@@ -1316,13 +1319,21 @@
                              nParam = #el->GetNParam();
  
                          int libParam = libFunList[i]->NPar();
@@ -29407,7 +29514,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gdlc.tree.g gdl/src/gdlc.tree.g
                                  #arrayexpr_fn =
                                  #( id, el);
  //                              #([/*FCALL_LIB_RETNEW,"fcall_lib_retnew"],*/ id, el);
-@@ -1460,12 +1472,19 @@
+@@ -1460,12 +1471,19 @@
                          nParam = #p->GetNParam();
  
                      int libParam = libFunList[i]->NPar();
@@ -29431,7 +29538,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gdlc.tree.g gdl/src/gdlc.tree.g
                          //                    #id->SetFunIx(i);
 diff -ruN --exclude CVS gdl-0.9.2/src/gdlgstream.hpp gdl/src/gdlgstream.hpp
 --- gdl-0.9.2/src/gdlgstream.hpp	2011-08-09 09:30:00.000000000 -0600
-+++ gdl/src/gdlgstream.hpp	2012-01-02 14:20:38.000000000 -0700
++++ gdl/src/gdlgstream.hpp	2012-02-21 09:54:35.651939572 -0700
 @@ -36,26 +36,19 @@
  {
    void init(); // prevent plstream::init from being called directly
@@ -29539,9 +29646,42 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gdlgstream.hpp gdl/src/gdlgstream.hpp
    }
  
    static void SetErrorHandlers();
+diff -ruN --exclude CVS gdl-0.9.2/src/gdlgstream.hpp.rej gdl/src/gdlgstream.hpp.rej
+--- gdl-0.9.2/src/gdlgstream.hpp.rej	1969-12-31 17:00:00.000000000 -0700
++++ gdl/src/gdlgstream.hpp.rej	2011-08-22 08:48:35.878147873 -0600
+@@ -0,0 +1,29 @@
++--- src/gdlgstream.hpp.includes	2010-06-11 09:09:51.000000000 -0600
+++++ src/gdlgstream.hpp	2011-08-18 13:10:41.285235153 -0600
++@@ -50,7 +50,7 @@
++   {
++ //   std::cerr << "GDLGStream()" << std::endl;
++     if (!checkPlplotDriver(driver))
++-      ThrowGDLException(string("PLplot installation lacks the requested driver: ") + driver);
+++      ThrowGDLException(std::string("PLplot installation lacks the requested driver: ") + driver);
++   }
++ 
++   virtual ~GDLGStream()
++@@ -103,7 +103,7 @@
++ 
++ //     devNames = new std::vector<std::string>( numdevs_plus_one - 1);
++     for( int i = 0; i < numdevs_plus_one - 1; ++i)
++-		devNames.push_back(string(devnames[ i]));
+++		devNames.push_back(std::string(devnames[ i]));
++     
++     free(devnames);
++ }
++@@ -111,7 +111,7 @@
++ // for debug
++ std::vector<std::string> devnamesDbg = devNames;
++ 
++-return std::find( devNames.begin(), devNames.end(), string( driver)) != devNames.end();
+++return std::find( devNames.begin(), devNames.end(), std::string( driver)) != devNames.end();
++ 
++ //     checking if a given driver is in the list
++ //     bool supported = false;
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLInterpreter.cpp gdl/src/GDLInterpreter.cpp
 --- gdl-0.9.2/src/GDLInterpreter.cpp	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLInterpreter.cpp	2012-07-16 07:21:15.000000000 -0600
++++ gdl/src/GDLInterpreter.cpp	2012-07-17 09:30:30.654772775 -0600
 @@ -2277,6 +2277,7 @@
  	aD->Root(structR); 
  	}
@@ -29621,7 +29761,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLInterpreter.cpp gdl/src/GDLInterpreter.
  // NSTRUC NSTRUC_REF POSTDEC POSTINC STRUC SYSVAR VAR VARPTR DEC INC DOT 
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLInterpreter.hpp gdl/src/GDLInterpreter.hpp
 --- gdl-0.9.2/src/GDLInterpreter.hpp	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLInterpreter.hpp	2011-12-03 07:28:36.000000000 -0700
++++ gdl/src/GDLInterpreter.hpp	2012-02-21 09:54:33.871004197 -0700
 @@ -696,7 +696,8 @@
      }
  
@@ -29647,7 +29787,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLInterpreter.hpp gdl/src/GDLInterpreter.
  	
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLInterpreterTokenTypes.hpp gdl/src/GDLInterpreterTokenTypes.hpp
 --- gdl-0.9.2/src/GDLInterpreterTokenTypes.hpp	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLInterpreterTokenTypes.hpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLInterpreterTokenTypes.hpp	2012-02-21 09:54:33.877003979 -0700
 @@ -48,198 +48,200 @@
  		FOREACH_INDEX_LOOP = 37,
  		FCALL = 38,
@@ -30043,7 +30183,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLInterpreterTokenTypes.hpp gdl/src/GDLIn
  #ifdef __cplusplus
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLInterpreterTokenTypes.txt gdl/src/GDLInterpreterTokenTypes.txt
 --- gdl-0.9.2/src/GDLInterpreterTokenTypes.txt	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLInterpreterTokenTypes.txt	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLInterpreterTokenTypes.txt	2012-02-21 09:54:33.933001946 -0700
 @@ -36,195 +36,197 @@
  FOREACH_INDEX_LOOP=37
  FCALL=38
@@ -30436,7 +30576,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLInterpreterTokenTypes.txt gdl/src/GDLIn
 +MAX_TOKEN_NUMBER=233
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLLexer.cpp gdl/src/GDLLexer.cpp
 --- gdl-0.9.2/src/GDLLexer.cpp	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLLexer.cpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLLexer.cpp	2012-02-21 09:54:33.954001185 -0700
 @@ -36,47 +36,47 @@
  
  void GDLLexer::initLiterals()
@@ -30552,7 +30692,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLLexer.cpp gdl/src/GDLLexer.cpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLParser.cpp gdl/src/GDLParser.cpp
 --- gdl-0.9.2/src/GDLParser.cpp	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLParser.cpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLParser.cpp	2012-02-21 09:54:34.040998028 -0700
 @@ -9302,7 +9302,7 @@
  
  void GDLParser::initializeASTFactory( antlr::ASTFactory& factory )
@@ -30757,7 +30897,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLParser.cpp gdl/src/GDLParser.cpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLParser.hpp gdl/src/GDLParser.hpp
 --- gdl-0.9.2/src/GDLParser.hpp	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLParser.hpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLParser.hpp	2012-02-21 09:54:34.064997158 -0700
 @@ -214,10 +214,10 @@
  private:
  	static const char* tokenNames[];
@@ -30773,7 +30913,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLParser.hpp gdl/src/GDLParser.hpp
  	
 diff -ruN --exclude CVS gdl-0.9.2/src/gdlpsstream.hpp gdl/src/gdlpsstream.hpp
 --- gdl-0.9.2/src/gdlpsstream.hpp	2011-09-19 06:06:11.000000000 -0600
-+++ gdl/src/gdlpsstream.hpp	2011-12-28 06:25:24.000000000 -0700
++++ gdl/src/gdlpsstream.hpp	2012-02-21 09:54:35.679938557 -0700
 @@ -28,7 +28,7 @@
    bool encapsulated;
  public:
@@ -30785,7 +30925,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gdlpsstream.hpp gdl/src/gdlpsstream.hpp
    }
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLTokenTypes.hpp gdl/src/GDLTokenTypes.hpp
 --- gdl-0.9.2/src/GDLTokenTypes.hpp	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLTokenTypes.hpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLTokenTypes.hpp	2012-02-21 09:54:34.106995634 -0700
 @@ -48,198 +48,200 @@
  		FOREACH_INDEX_LOOP = 37,
  		FCALL = 38,
@@ -31181,7 +31321,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTokenTypes.hpp gdl/src/GDLTokenTypes.hp
  #ifdef __cplusplus
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLTokenTypes.txt gdl/src/GDLTokenTypes.txt
 --- gdl-0.9.2/src/GDLTokenTypes.txt	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLTokenTypes.txt	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLTokenTypes.txt	2012-02-21 09:54:34.163993565 -0700
 @@ -36,195 +36,197 @@
  FOREACH_INDEX_LOOP=37
  FCALL=38
@@ -31574,7 +31714,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTokenTypes.txt gdl/src/GDLTokenTypes.tx
 +MAX_TOKEN_NUMBER=233
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.cpp gdl/src/GDLTreeParser.cpp
 --- gdl-0.9.2/src/GDLTreeParser.cpp	2011-11-07 16:38:20.000000000 -0700
-+++ gdl/src/GDLTreeParser.cpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLTreeParser.cpp	2012-07-17 09:30:30.688772774 -0600
 @@ -3010,8 +3010,11 @@
  		nParam = para_AST->GetNParam();
  		
@@ -31587,7 +31727,26 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.cpp gdl/src/GDLTreeParser.cp
  		
  		p_AST->setType(PCALL_LIB);
  		p_AST->setText("pcall_lib");
-@@ -5465,12 +5468,20 @@
+@@ -3939,8 +3942,7 @@
+ 	{
+ 	int t = k_AST->getType();
+ 	if( t == FCALL_LIB || t == MFCALL_LIB || //t == FCALL_LIB_N_ELEMENTS ||
+-	
+-	t == MFCALL_PARENT_LIB //||
++	t == MFCALL_PARENT_LIB  || t == QUESTION //||
+ 	//                          t == FCALL_LIB_RETNEW || t == MFCALL_LIB_RETNEW || 
+ 	//                          t == MFCALL_PARENT_LIB_RETNEW //||
+ 	//                          t == ARRARYEXPR_MFCALL_LIB // MFCALL_LIB or VAR or DEREF 
+@@ -4016,7 +4018,7 @@
+ 	int t = e_AST->getType();
+ 	// Note: Right now there are no MFCALL_LIB or MFCALL_PARENT_LIB nodes
+ 	if( t == FCALL_LIB || t == MFCALL_LIB || //t == FCALL_LIB_N_ELEMENTS ||
+-	t == MFCALL_PARENT_LIB //||
++	t == MFCALL_PARENT_LIB || t == QUESTION //||
+ 	//                      t == FCALL_LIB_RETNEW || t == MFCALL_LIB_RETNEW || 
+ 	//                      t == MFCALL_PARENT_LIB_RETNEW
+ 	//                      t == ARRARYEXPR_MFCALL_LIB // MFCALL_LIB or VAR or DEREF 
+@@ -5465,12 +5467,20 @@
  	nParam = el_AST->GetNParam();
  	
  	int libParam = libFunList[i]->NPar();
@@ -31608,7 +31767,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.cpp gdl/src/GDLTreeParser.cp
  	id_AST->setType( FCALL_LIB_RETNEW);
  	arrayexpr_fn_AST =
  	RefDNode(astFactory->make((new antlr::ASTArray(2))->add(antlr::RefAST(id_AST))->add(antlr::RefAST(el_AST))));
-@@ -5810,11 +5821,18 @@
+@@ -5810,11 +5820,18 @@
  		nParam = p_AST->GetNParam();
  		
  		int libParam = libFunList[i]->NPar();
@@ -31628,7 +31787,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.cpp gdl/src/GDLTreeParser.cp
  		f_AST->setType(FCALL_LIB_RETNEW);
  		f_AST->setText(id_AST->getText());
  		f_AST->SetLibFun( libFunList[i]);
-@@ -7060,7 +7078,7 @@
+@@ -7060,7 +7077,7 @@
  
  void GDLTreeParser::initializeASTFactory( antlr::ASTFactory& factory )
  {
@@ -31637,7 +31796,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.cpp gdl/src/GDLTreeParser.cp
  }
  const char* GDLTreeParser::tokenNames[] = {
  	"<0>",
-@@ -7103,6 +7121,8 @@
+@@ -7103,6 +7120,8 @@
  	"FOREACH_INDEX_LOOP",
  	"FCALL",
  	"FCALL_LIB",
@@ -31646,7 +31805,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.cpp gdl/src/GDLTreeParser.cp
  	"FCALL_LIB_RETNEW",
  	"IF_ELSE",
  	"KEYDECL",
-@@ -7298,7 +7318,7 @@
+@@ -7298,7 +7317,7 @@
  	0
  };
  
@@ -31655,7 +31814,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.cpp gdl/src/GDLTreeParser.cp
  // ASSIGN BLOCK BREAK CONTINUE COMMONDECL COMMONDEF "for" "foreach" MPCALL 
  // MPCALL_PARENT PCALL "repeat" RETURN "while" "case" "forward_function" 
  // "goto" "if" "on_ioerror" "switch" DEC INC AND_OP_EQ ASTERIX_EQ EQ_OP_EQ 
-@@ -7306,7 +7326,7 @@
+@@ -7306,7 +7325,7 @@
  // MATRIX_OP2_EQ MINUS_EQ MOD_OP_EQ NE_OP_EQ OR_OP_EQ PLUS_EQ POW_EQ SLASH_EQ 
  // XOR_OP_EQ 
  const antlr::BitSet GDLTreeParser::_tokenSet_0(_tokenSet_0_data_,12);
@@ -31666,7 +31825,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.cpp gdl/src/GDLTreeParser.cp
  // STRUC SYSVAR UMINUS VAR "and" "eq" "ge" "gt" "le" "lt" "mod" "ne" "not" 
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.hpp gdl/src/GDLTreeParser.hpp
 --- gdl-0.9.2/src/GDLTreeParser.hpp	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/GDLTreeParser.hpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLTreeParser.hpp	2012-02-21 09:54:34.240990771 -0700
 @@ -42,6 +42,7 @@
              lT == FCALL_LIB ||
  //            lT == FCALL_LIB_N_ELEMENTS ||
@@ -31690,7 +31849,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParser.hpp gdl/src/GDLTreeParser.hp
  	
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParserTokenTypes.hpp gdl/src/GDLTreeParserTokenTypes.hpp
 --- gdl-0.9.2/src/GDLTreeParserTokenTypes.hpp	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/GDLTreeParserTokenTypes.hpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLTreeParserTokenTypes.hpp	2012-02-21 09:54:34.257990155 -0700
 @@ -48,198 +48,200 @@
  		FOREACH_INDEX_LOOP = 37,
  		FCALL = 38,
@@ -32086,7 +32245,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParserTokenTypes.hpp gdl/src/GDLTre
  #ifdef __cplusplus
 diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParserTokenTypes.txt gdl/src/GDLTreeParserTokenTypes.txt
 --- gdl-0.9.2/src/GDLTreeParserTokenTypes.txt	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/GDLTreeParserTokenTypes.txt	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/GDLTreeParserTokenTypes.txt	2012-02-21 09:54:34.296988739 -0700
 @@ -36,195 +36,197 @@
  FOREACH_INDEX_LOOP=37
  FCALL=38
@@ -32479,7 +32638,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/GDLTreeParserTokenTypes.txt gdl/src/GDLTre
 +MAX_TOKEN_NUMBER=233
 diff -ruN --exclude CVS gdl-0.9.2/src/gdlwidget.cpp gdl/src/gdlwidget.cpp
 --- gdl-0.9.2/src/gdlwidget.cpp	2010-11-15 16:06:48.000000000 -0700
-+++ gdl/src/gdlwidget.cpp	2012-07-02 03:09:10.000000000 -0600
++++ gdl/src/gdlwidget.cpp	2012-07-17 09:30:31.025772759 -0600
 @@ -626,7 +626,7 @@
      wxString *choices = new wxString[n];
      for( SizeT i=0; i<n; ++i) choices[i] = wxString((*val)[i].c_str(), wxConvUTF8);
@@ -32519,7 +32678,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gdlwidget.cpp gdl/src/gdlwidget.cpp
      id = (*static_cast<DLongGDL*>
 diff -ruN --exclude CVS gdl-0.9.2/src/gdlxstream.cpp gdl/src/gdlxstream.cpp
 --- gdl-0.9.2/src/gdlxstream.cpp	2010-06-11 09:09:51.000000000 -0600
-+++ gdl/src/gdlxstream.cpp	2012-01-26 16:21:14.000000000 -0700
++++ gdl/src/gdlxstream.cpp	2012-02-21 09:54:35.705937613 -0700
 @@ -171,12 +171,13 @@
    r1 = (PLINT) rb;
    g1 = (PLINT) gb;
@@ -33098,7 +33257,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/getas.cpp gdl/src/getas.cpp
 \ No newline at end of file
 diff -ruN --exclude CVS gdl-0.9.2/src/graphics.cpp gdl/src/graphics.cpp
 --- gdl-0.9.2/src/graphics.cpp	2010-06-11 09:09:51.000000000 -0600
-+++ gdl/src/graphics.cpp	2011-12-28 16:14:09.000000000 -0700
++++ gdl/src/graphics.cpp	2012-02-21 09:54:35.731936666 -0700
 @@ -232,6 +232,5 @@
  
  void Graphics::LoadCT( UInt iCT)
@@ -33108,7 +33267,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/graphics.cpp gdl/src/graphics.cpp
  }
 diff -ruN --exclude CVS gdl-0.9.2/src/gshhs.cpp gdl/src/gshhs.cpp
 --- gdl-0.9.2/src/gshhs.cpp	2011-07-08 06:39:43.000000000 -0600
-+++ gdl/src/gshhs.cpp	2011-11-16 11:08:50.000000000 -0700
++++ gdl/src/gshhs.cpp	2012-02-21 09:54:35.751935943 -0700
 @@ -301,7 +301,7 @@
    void map_continents(EnvT* e)
    {
@@ -33120,7 +33279,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gshhs.cpp gdl/src/gshhs.cpp
  } // namespace
 diff -ruN --exclude CVS gdl-0.9.2/src/gsl_fun.cpp gdl/src/gsl_fun.cpp
 --- gdl-0.9.2/src/gsl_fun.cpp	2011-10-20 02:08:53.000000000 -0600
-+++ gdl/src/gsl_fun.cpp	2012-07-14 12:56:37.000000000 -0600
++++ gdl/src/gsl_fun.cpp	2012-07-17 09:30:31.050772756 -0600
 @@ -4,7 +4,7 @@
      begin                : Jan 20 2004
      copyright            : (C) 2004 by Joel Gales
@@ -35325,7 +35484,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gsl_fun.cpp gdl/src/gsl_fun.cpp
          : COMPLEX, 
 diff -ruN --exclude CVS gdl-0.9.2/src/gsl_fun.hpp gdl/src/gsl_fun.hpp
 --- gdl-0.9.2/src/gsl_fun.hpp	2010-05-31 04:59:30.000000000 -0600
-+++ gdl/src/gsl_fun.hpp	2012-06-27 04:13:57.000000000 -0600
++++ gdl/src/gsl_fun.hpp	2012-07-17 09:30:31.065772757 -0600
 @@ -49,6 +49,12 @@
    void inplacemxradixfft(double a[], double b[], 
  			 int ntot, int n, int nspan, int isn);
@@ -35758,7 +35917,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/gsl_matrix.hpp gdl/src/gsl_matrix.hpp
 +
 diff -ruN --exclude CVS gdl-0.9.2/src/initsysvar.cpp gdl/src/initsysvar.cpp
 --- gdl-0.9.2/src/initsysvar.cpp	2011-11-08 14:52:06.000000000 -0700
-+++ gdl/src/initsysvar.cpp	2011-11-22 15:29:19.000000000 -0700
++++ gdl/src/initsysvar.cpp	2012-02-21 09:54:35.890930899 -0700
 @@ -42,7 +42,7 @@
    UInt pathIx, promptIx, edit_inputIx, quietIx, 
      dIx, pIx, xIx, yIx, zIx, vIx, gdlIx, cIx, MouseIx,
@@ -35810,7 +35969,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/initsysvar.cpp gdl/src/initsysvar.cpp
  }
 diff -ruN --exclude CVS gdl-0.9.2/src/initsysvar.hpp gdl/src/initsysvar.hpp
 --- gdl-0.9.2/src/initsysvar.hpp	2011-09-19 06:06:11.000000000 -0600
-+++ gdl/src/initsysvar.hpp	2011-11-22 15:29:19.000000000 -0700
++++ gdl/src/initsysvar.hpp	2012-02-21 09:54:35.916929954 -0700
 @@ -82,7 +82,10 @@
    DLong JournalLUN();
    void JournalLUN( DLong jLUN);
@@ -36630,7 +36789,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/interp_multid.h gdl/src/interp_multid.h
 +#endif
 diff -ruN --exclude CVS gdl-0.9.2/src/libinit_ac.cpp gdl/src/libinit_ac.cpp
 --- gdl-0.9.2/src/libinit_ac.cpp	2010-09-21 16:48:41.000000000 -0600
-+++ gdl/src/libinit_ac.cpp	2012-06-27 04:13:57.000000000 -0600
++++ gdl/src/libinit_ac.cpp	2012-07-17 09:30:31.087772757 -0600
 @@ -23,6 +23,8 @@
  #endif
  
@@ -36685,7 +36844,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/libinit_ac.cpp gdl/src/libinit_ac.cpp
    const string spl1Key[]={"YP0","YPN_1","DOUBLE","HELP",KLISTEND};
 diff -ruN --exclude CVS gdl-0.9.2/src/libinit.cpp gdl/src/libinit.cpp
 --- gdl-0.9.2/src/libinit.cpp	2011-09-19 06:06:11.000000000 -0600
-+++ gdl/src/libinit.cpp	2012-05-25 04:47:14.000000000 -0600
++++ gdl/src/libinit.cpp	2012-07-17 09:30:31.081772756 -0600
 @@ -282,7 +282,7 @@
    new DLibFunRetNew(lib::cindgen,string("CINDGEN"),MAXRANK,NULL,NULL,true);
    new DLibFunRetNew(lib::dcindgen,string("DCINDGEN"),MAXRANK,NULL,NULL,true);
@@ -36906,7 +37065,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/libinit.cpp gdl/src/libinit.cpp
    new DLibFun(lib::laguerre,string("LAGUERRE"),3,laguerreKey);
 diff -ruN --exclude CVS gdl-0.9.2/src/libinit_jmg.cpp gdl/src/libinit_jmg.cpp
 --- gdl-0.9.2/src/libinit_jmg.cpp	2011-08-17 04:55:32.000000000 -0600
-+++ gdl/src/libinit_jmg.cpp	2012-06-20 09:36:55.000000000 -0600
++++ gdl/src/libinit_jmg.cpp	2012-07-17 09:30:31.098772756 -0600
 @@ -89,10 +89,10 @@
  
    const string histogramKey[]={"BINSIZE","INPUT","MAX","MIN","NBINS",
@@ -36949,7 +37108,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/libinit_jmg.cpp gdl/src/libinit_jmg.cpp
    const string tvrdKey[]={"CHANNEL","ORDER","TRUE","WORDS",KLISTEND};
 diff -ruN --exclude CVS gdl-0.9.2/src/magick_cl.cpp gdl/src/magick_cl.cpp
 --- gdl-0.9.2/src/magick_cl.cpp	2011-10-31 06:00:24.000000000 -0600
-+++ gdl/src/magick_cl.cpp	2012-05-10 02:50:10.000000000 -0600
++++ gdl/src/magick_cl.cpp	2012-05-10 15:10:05.165478632 -0600
 @@ -168,7 +168,8 @@
        Image a;
        try 
@@ -37208,7 +37367,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/magick_cl.cpp gdl/src/magick_cl.cpp
      catch (Exception &error_ )
 diff -ruN --exclude CVS gdl-0.9.2/src/Makefile.am gdl/src/Makefile.am
 --- gdl-0.9.2/src/Makefile.am	2011-11-06 20:07:18.000000000 -0700
-+++ gdl/src/Makefile.am	2012-06-27 16:36:53.000000000 -0600
++++ gdl/src/Makefile.am	2012-07-17 09:30:30.699772775 -0600
 @@ -24,7 +24,8 @@
  		gdlsvgstream.cpp gdlsvgstream.hpp gdlpython.cpp gdlpython.hpp \
  		GDLTokenTypes.hpp GDLTreeParser.cpp GDLTreeParser.hpp GDLTreeParserTokenTypes.hpp \
@@ -37230,7 +37389,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/Makefile.am gdl/src/Makefile.am
                  plotting_device.cpp plotting_cursor.cpp plotting_contour.cpp plotting_surface.cpp \
 diff -ruN --exclude CVS gdl-0.9.2/src/Makefile.in gdl/src/Makefile.in
 --- gdl-0.9.2/src/Makefile.in	2011-11-06 20:07:18.000000000 -0700
-+++ gdl/src/Makefile.in	2012-06-28 03:54:54.000000000 -0600
++++ gdl/src/Makefile.in	2012-07-17 09:30:30.726772772 -0600
 @@ -76,28 +76,28 @@
  	GDLTokenTypes.hpp GDLTreeParser.cpp GDLTreeParser.hpp \
  	GDLTreeParserTokenTypes.hpp gdlwinstream.cpp gdlwinstream.hpp \
@@ -37498,7 +37657,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/Makefile.in gdl/src/Makefile.in
  @am__fastdepCXX_TRUE@	$(am__mv) $(DEPDIR)/gdl-grib.Tpo $(DEPDIR)/gdl-grib.Po
 diff -ruN --exclude CVS gdl-0.9.2/src/math_fun.cpp gdl/src/math_fun.cpp
 --- gdl-0.9.2/src/math_fun.cpp	2011-09-29 12:54:30.000000000 -0600
-+++ gdl/src/math_fun.cpp	2011-11-24 04:43:23.000000000 -0700
++++ gdl/src/math_fun.cpp	2012-02-21 09:54:36.094923497 -0700
 @@ -223,16 +223,19 @@
      return res;
    }
@@ -38242,7 +38401,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/math_fun.cpp gdl/src/math_fun.cpp
  	  static_cast< DFloatGDL*>( p0->Convert2( FLOAT, BaseGDL::COPY));
 diff -ruN --exclude CVS gdl-0.9.2/src/math_fun.hpp gdl/src/math_fun.hpp
 --- gdl-0.9.2/src/math_fun.hpp	2010-06-08 06:08:18.000000000 -0600
-+++ gdl/src/math_fun.hpp	2011-11-24 04:31:27.000000000 -0700
++++ gdl/src/math_fun.hpp	2012-02-21 09:54:36.138921901 -0700
 @@ -25,32 +25,32 @@
  
    void svdc( EnvT* e);
@@ -38294,7 +38453,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/math_fun.hpp gdl/src/math_fun.hpp
    BaseGDL* gauss_pdf(EnvT* e);
 diff -ruN --exclude CVS gdl-0.9.2/src/math_fun_jmg.cpp gdl/src/math_fun_jmg.cpp
 --- gdl-0.9.2/src/math_fun_jmg.cpp	2011-10-11 01:37:36.000000000 -0600
-+++ gdl/src/math_fun_jmg.cpp	2012-06-28 07:59:01.000000000 -0600
++++ gdl/src/math_fun_jmg.cpp	2012-07-17 09:30:31.110772755 -0600
 @@ -220,6 +220,76 @@
         do_it(static_cast<T*>(src), kwNaN, kwInfinity);
     };
@@ -38685,7 +38844,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/math_fun_jmg.cpp gdl/src/math_fun_jmg.cpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/math_fun_jmg.hpp gdl/src/math_fun_jmg.hpp
 --- gdl-0.9.2/src/math_fun_jmg.hpp	2010-06-11 09:09:51.000000000 -0600
-+++ gdl/src/math_fun_jmg.hpp	2011-12-29 19:25:12.000000000 -0700
++++ gdl/src/math_fun_jmg.hpp	2012-02-21 09:54:36.187920123 -0700
 @@ -68,9 +68,9 @@
    image_t * image_warp(SizeT, SizeT, SizeT, SizeT, DType, void*, 
  		       char *kernel_type,
@@ -38700,7 +38859,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/math_fun_jmg.hpp gdl/src/math_fun_jmg.hpp
  } // namespace
 diff -ruN --exclude CVS gdl-0.9.2/src/newprognode.cpp gdl/src/newprognode.cpp
 --- gdl-0.9.2/src/newprognode.cpp	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/newprognode.cpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/newprognode.cpp	2012-02-21 09:54:36.210919288 -0700
 @@ -103,13 +103,19 @@
    if( refNode == RefDNode(antlr::nullAST)) return NULL;
  
@@ -38949,7 +39108,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/newprognode.cpp gdl/src/newprognode.cpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/objects.cpp gdl/src/objects.cpp
 --- gdl-0.9.2/src/objects.cpp	2010-12-30 17:37:52.000000000 -0700
-+++ gdl/src/objects.cpp	2011-11-18 11:42:17.000000000 -0700
++++ gdl/src/objects.cpp	2012-02-21 09:54:36.241918164 -0700
 @@ -17,6 +17,7 @@
  
  #include "includefirst.hpp"
@@ -40339,7 +40498,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plot3d_nr.cpp gdl/src/plot3d_nr.cpp
 -
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_axis.cpp gdl/src/plotting_axis.cpp
 --- gdl-0.9.2/src/plotting_axis.cpp	2011-07-08 06:37:54.000000000 -0600
-+++ gdl/src/plotting_axis.cpp	2012-01-26 17:02:50.000000000 -0700
++++ gdl/src/plotting_axis.cpp	2012-02-21 09:54:36.346914353 -0700
 @@ -279,7 +279,7 @@
        if (e->KeywordSet("SAVE"))
        {
@@ -40360,7 +40519,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_axis.cpp gdl/src/plotting_axis.cp
          set_axis_type("Y",yLog);
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_contour.cpp gdl/src/plotting_contour.cpp
 --- gdl-0.9.2/src/plotting_contour.cpp	2011-09-19 06:06:11.000000000 -0600
-+++ gdl/src/plotting_contour.cpp	2012-01-26 17:01:33.000000000 -0700
++++ gdl/src/plotting_contour.cpp	2012-02-21 09:54:36.376913265 -0700
 @@ -849,15 +849,15 @@
  
      private: virtual void post_call(EnvT*, GDLGStream* actStream) // {{{
@@ -40382,7 +40541,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_contour.cpp gdl/src/plotting_cont
          set_axis_type("X",xLog);
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting.cpp gdl/src/plotting.cpp
 --- gdl-0.9.2/src/plotting.cpp	2011-09-19 06:06:11.000000000 -0600
-+++ gdl/src/plotting.cpp	2012-03-05 08:35:07.000000000 -0700
++++ gdl/src/plotting.cpp	2012-05-10 15:10:05.288474195 -0600
 @@ -1,1329 +1,1458 @@
 -/***************************************************************************
 -                       plotting.cpp  -  GDL routines for plotting
@@ -43173,7 +43332,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting.cpp gdl/src/plotting.cpp
 +} // namespace
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_cursor.cpp gdl/src/plotting_cursor.cpp
 --- gdl-0.9.2/src/plotting_cursor.cpp	2011-06-28 06:53:58.000000000 -0600
-+++ gdl/src/plotting_cursor.cpp	2012-01-26 17:01:33.000000000 -0700
++++ gdl/src/plotting_cursor.cpp	2012-02-21 09:54:36.392912684 -0700
 @@ -20,207 +20,233 @@
  #include "math_utl.hpp"
  #define PLK_Escape            0x1B
@@ -43590,7 +43749,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_cursor.cpp gdl/src/plotting_curso
  } // namespace
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_erase.cpp gdl/src/plotting_erase.cpp
 --- gdl-0.9.2/src/plotting_erase.cpp	2011-07-08 06:37:54.000000000 -0600
-+++ gdl/src/plotting_erase.cpp	2012-03-13 10:17:36.000000000 -0600
++++ gdl/src/plotting_erase.cpp	2012-05-10 15:10:05.346472099 -0600
 @@ -38,19 +38,52 @@
  
      private: void call_plplot(EnvT* e, GDLGStream* actStream) // {{{
@@ -43657,7 +43816,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_erase.cpp gdl/src/plotting_erase.
      {
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting.hpp gdl/src/plotting.hpp
 --- gdl-0.9.2/src/plotting.hpp	2011-07-08 06:37:54.000000000 -0600
-+++ gdl/src/plotting.hpp	2012-03-05 08:35:07.000000000 -0700
++++ gdl/src/plotting.hpp	2012-05-10 15:10:05.305473578 -0600
 @@ -35,6 +35,7 @@
    void xyouts( EnvT* e);
    void axis( EnvT* e);
@@ -43718,7 +43877,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting.hpp gdl/src/plotting.hpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_misc.cpp gdl/src/plotting_misc.cpp
 --- gdl-0.9.2/src/plotting_misc.cpp	2011-06-28 06:53:58.000000000 -0600
-+++ gdl/src/plotting_misc.cpp	2012-02-07 04:23:00.000000000 -0700
++++ gdl/src/plotting_misc.cpp	2012-02-21 09:54:36.408912104 -0700
 @@ -200,6 +200,16 @@
  	      }
  	  }
@@ -43739,7 +43898,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_misc.cpp gdl/src/plotting_misc.cp
  } // namespace
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_oplot.cpp gdl/src/plotting_oplot.cpp
 --- gdl-0.9.2/src/plotting_oplot.cpp	2011-07-08 06:37:54.000000000 -0600
-+++ gdl/src/plotting_oplot.cpp	2012-06-20 09:26:32.000000000 -0600
++++ gdl/src/plotting_oplot.cpp	2012-07-17 09:30:31.119772754 -0600
 @@ -24,99 +24,151 @@
  
    class oplot_call : public plotting_routine_call 
@@ -44015,7 +44174,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_oplot.cpp gdl/src/plotting_oplot.
      actStream->lsty(1);//reset linestyle
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_plot.cpp gdl/src/plotting_plot.cpp
 --- gdl-0.9.2/src/plotting_plot.cpp	2011-07-08 06:37:54.000000000 -0600
-+++ gdl/src/plotting_plot.cpp	2012-03-05 08:35:07.000000000 -0700
++++ gdl/src/plotting_plot.cpp	2012-05-10 15:10:05.371471197 -0600
 @@ -1,306 +1,411 @@
 -/***************************************************************************
 -                       plotting_plot.cpp  -  GDL routines for plotting
@@ -44736,7 +44895,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_plot.cpp gdl/src/plotting_plot.cp
 +
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_plots.cpp gdl/src/plotting_plots.cpp
 --- gdl-0.9.2/src/plotting_plots.cpp	2011-07-08 06:37:54.000000000 -0600
-+++ gdl/src/plotting_plots.cpp	2012-03-05 08:35:07.000000000 -0700
++++ gdl/src/plotting_plots.cpp	2012-05-10 15:10:05.374471090 -0600
 @@ -1,331 +1,286 @@
 -/***************************************************************************
 -                       plotting.cpp  -  GDL routines for plotting
@@ -45357,7 +45516,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_plots.cpp gdl/src/plotting_plots.
 +} // namespace
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_polyfill.cpp gdl/src/plotting_polyfill.cpp
 --- gdl-0.9.2/src/plotting_polyfill.cpp	2011-07-08 06:37:54.000000000 -0600
-+++ gdl/src/plotting_polyfill.cpp	2012-01-26 17:01:33.000000000 -0700
++++ gdl/src/plotting_polyfill.cpp	2012-02-21 09:54:36.522907967 -0700
 @@ -134,14 +134,14 @@
      DDouble minVal = yStart, maxVal = yEnd;
  
@@ -45383,7 +45542,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_polyfill.cpp gdl/src/plotting_pol
      if ( xEnd - xStart == 0 || yEnd - yStart == 0 || isnan(xStart) || isnan(yStart) ) {
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_surface.cpp gdl/src/plotting_surface.cpp
 --- gdl-0.9.2/src/plotting_surface.cpp	2011-07-08 06:37:54.000000000 -0600
-+++ gdl/src/plotting_surface.cpp	2012-06-28 02:10:45.000000000 -0600
++++ gdl/src/plotting_surface.cpp	2012-07-17 09:30:31.123772754 -0600
 @@ -460,7 +460,8 @@
  	  xVec1[i] = (*xVal)[j*xEl+i];
  	  yVec1[i] = (*yVal)[j*xEl+i];
@@ -45428,7 +45587,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_surface.cpp gdl/src/plotting_surf
        set_axis_type("X", xLog);
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_windows.cpp gdl/src/plotting_windows.cpp
 --- gdl-0.9.2/src/plotting_windows.cpp	2011-07-02 09:14:05.000000000 -0600
-+++ gdl/src/plotting_windows.cpp	2012-02-02 18:05:27.000000000 -0700
++++ gdl/src/plotting_windows.cpp	2012-02-21 09:54:36.611904739 -0700
 @@ -61,12 +61,9 @@
  	title = "GDL "+i2s( wIx);
        }
@@ -45460,7 +45619,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_windows.cpp gdl/src/plotting_wind
  		 "(BadValue (integer parameter out of range for "
 diff -ruN --exclude CVS gdl-0.9.2/src/plotting_xyouts.cpp gdl/src/plotting_xyouts.cpp
 --- gdl-0.9.2/src/plotting_xyouts.cpp	2011-07-08 06:37:54.000000000 -0600
-+++ gdl/src/plotting_xyouts.cpp	2012-01-26 17:01:33.000000000 -0700
++++ gdl/src/plotting_xyouts.cpp	2012-02-21 09:54:36.651903286 -0700
 @@ -75,7 +75,7 @@
      
      DDouble xStart, xEnd, yStart, yEnd;
@@ -45557,7 +45716,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/plotting_xyouts.cpp gdl/src/plotting_xyout
      handle_pmulti_position(e, actStream);
 diff -ruN --exclude CVS gdl-0.9.2/src/print.cpp gdl/src/print.cpp
 --- gdl-0.9.2/src/print.cpp	2011-05-11 10:11:09.000000000 -0600
-+++ gdl/src/print.cpp	2011-12-03 07:28:36.000000000 -0700
++++ gdl/src/print.cpp	2012-02-21 09:54:36.681902198 -0700
 @@ -200,8 +200,8 @@
  
      // GDL magick (based on the Python interface code)
@@ -45592,7 +45751,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/print.cpp gdl/src/print.cpp
      // looping over the parameters
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/appleman.pro gdl/src/pro/appleman.pro
 --- gdl-0.9.2/src/pro/appleman.pro	2010-01-20 04:41:56.000000000 -0700
-+++ gdl/src/pro/appleman.pro	2012-01-02 14:20:38.000000000 -0700
++++ gdl/src/pro/appleman.pro	2012-02-21 09:54:37.192883656 -0700
 @@ -1,50 +1,37 @@
 -;$Id: appleman.pro,v 1.3 2010/01/20 11:41:56 slayoo Exp $
 -pro AppleMan,xRange,yRange,RESULT=res
@@ -45807,7 +45966,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/bilinear.pro gdl/src/pro/bilinear.pro
 +end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/congrid.pro gdl/src/pro/congrid.pro
 --- gdl-0.9.2/src/pro/congrid.pro	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/src/pro/congrid.pro	2012-04-13 06:19:50.000000000 -0600
++++ gdl/src/pro/congrid.pro	2012-05-10 15:10:05.866453331 -0600
 @@ -0,0 +1,142 @@
 +; part of GNU Data Language - GDL 
 +;-------------------------------------------------------------
@@ -46057,7 +46216,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/diag_matrix.pro gdl/src/pro/diag_matri
 +end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/dicom/Makefile.in gdl/src/pro/dicom/Makefile.in
 --- gdl-0.9.2/src/pro/dicom/Makefile.in	2011-11-01 17:46:37.000000000 -0600
-+++ gdl/src/pro/dicom/Makefile.in	2012-06-28 03:54:55.000000000 -0600
++++ gdl/src/pro/dicom/Makefile.in	2012-07-17 09:30:31.325772746 -0600
 @@ -103,6 +103,7 @@
  FGREP = @FGREP@
  GDLDATADIR = @GDLDATADIR@
@@ -46068,7 +46227,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/dicom/Makefile.in gdl/src/pro/dicom/Ma
  INSTALL_DATA = @INSTALL_DATA@
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/file_lines.pro gdl/src/pro/file_lines.pro
 --- gdl-0.9.2/src/pro/file_lines.pro	2010-01-14 16:03:57.000000000 -0700
-+++ gdl/src/pro/file_lines.pro	2012-07-04 10:10:29.000000000 -0600
++++ gdl/src/pro/file_lines.pro	2012-07-17 09:30:31.225772749 -0600
 @@ -20,7 +20,9 @@
  ;
  ; COMMON BLOCKS: none
@@ -46145,7 +46304,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/file_lines.pro gdl/src/pro/file_lines.
  end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/findex.pro gdl/src/pro/findex.pro
 --- gdl-0.9.2/src/pro/findex.pro	2011-08-15 03:05:16.000000000 -0600
-+++ gdl/src/pro/findex.pro	2012-02-27 18:08:50.000000000 -0700
++++ gdl/src/pro/findex.pro	2012-05-10 15:10:05.937450769 -0600
 @@ -1,97 +1,101 @@
 - ;+
 -   ; ROUTINE:  findex
@@ -46375,7 +46534,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/get_login_info.pro gdl/src/pro/get_log
 +;
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/hist_equal.pro gdl/src/pro/hist_equal.pro
 --- gdl-0.9.2/src/pro/hist_equal.pro	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/src/pro/hist_equal.pro	2012-05-25 04:47:16.000000000 -0600
++++ gdl/src/pro/hist_equal.pro	2012-07-17 09:30:31.235772747 -0600
 @@ -0,0 +1,197 @@
 +;+
 +;
@@ -46576,7 +46735,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/hist_equal.pro gdl/src/pro/hist_equal.
 +end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/identity.pro gdl/src/pro/identity.pro
 --- gdl-0.9.2/src/pro/identity.pro	2011-02-27 12:05:38.000000000 -0700
-+++ gdl/src/pro/identity.pro	2011-12-29 19:02:47.000000000 -0700
++++ gdl/src/pro/identity.pro	2012-02-21 09:54:37.241881878 -0700
 @@ -1,24 +1,18 @@
 -;$Id: identity.pro,v 1.2 2011/02/27 19:05:38 slayoo Exp $
 -
@@ -46812,7 +46971,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/image_statistics.pro gdl/src/pro/image
 +end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/interpol.pro gdl/src/pro/interpol.pro
 --- gdl-0.9.2/src/pro/interpol.pro	2011-08-15 03:05:16.000000000 -0600
-+++ gdl/src/pro/interpol.pro	2012-03-05 07:50:55.000000000 -0700
++++ gdl/src/pro/interpol.pro	2012-05-10 15:10:06.022447700 -0600
 @@ -1,55 +1,115 @@
 +;
 +; under GNU GPL v2 or later
@@ -46981,7 +47140,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/interpol.pro gdl/src/pro/interpol.pro
  end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/kurtosis.pro gdl/src/pro/kurtosis.pro
 --- gdl-0.9.2/src/pro/kurtosis.pro	2005-07-25 01:33:25.000000000 -0600
-+++ gdl/src/pro/kurtosis.pro	2012-07-13 16:28:02.000000000 -0600
++++ gdl/src/pro/kurtosis.pro	2012-07-17 09:30:31.238772750 -0600
 @@ -1,27 +1,25 @@
 -;$Id: kurtosis.pro,v 1.2 2005/07/25 07:33:25 m_schellens Exp $
 -function kurtosis, x, double=double, NaN=NaN
@@ -47080,7 +47239,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/la_invert.pro gdl/src/pro/la_invert.pr
 +
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/loadct.pro gdl/src/pro/loadct.pro
 --- gdl-0.9.2/src/pro/loadct.pro	2011-03-31 20:21:49.000000000 -0600
-+++ gdl/src/pro/loadct.pro	2012-03-14 19:07:08.000000000 -0600
++++ gdl/src/pro/loadct.pro	2012-05-10 15:10:06.037447159 -0600
 @@ -93,10 +93,18 @@
  TVLCT,r,g,b,/GET
  
@@ -47122,7 +47281,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/ludc.pro gdl/src/pro/ludc.pro
 -end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/Makefile.am gdl/src/pro/Makefile.am
 --- gdl-0.9.2/src/pro/Makefile.am	2011-08-09 08:07:01.000000000 -0600
-+++ gdl/src/pro/Makefile.am	2012-05-14 06:37:08.000000000 -0600
++++ gdl/src/pro/Makefile.am	2012-05-15 12:11:38.725550294 -0600
 @@ -3,9 +3,12 @@
  prolib_DATA = \
    appleman.pro \
@@ -47192,7 +47351,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/Makefile.am gdl/src/pro/Makefile.am
    write_png.pro \
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/Makefile.in gdl/src/pro/Makefile.in
 --- gdl-0.9.2/src/pro/Makefile.in	2011-11-01 17:46:37.000000000 -0600
-+++ gdl/src/pro/Makefile.in	2012-06-28 03:54:55.000000000 -0600
++++ gdl/src/pro/Makefile.in	2012-07-17 09:30:31.218772750 -0600
 @@ -158,6 +158,7 @@
  FGREP = @FGREP@
  GDLDATADIR = @GDLDATADIR@
@@ -47270,7 +47429,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/Makefile.in gdl/src/pro/Makefile.in
    write_png.pro \
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/mean.pro gdl/src/pro/mean.pro
 --- gdl-0.9.2/src/pro/mean.pro	2005-07-25 01:33:25.000000000 -0600
-+++ gdl/src/pro/mean.pro	2012-07-13 16:28:02.000000000 -0600
++++ gdl/src/pro/mean.pro	2012-07-17 09:30:31.240772750 -0600
 @@ -1,32 +1,29 @@
 -;$Id: mean.pro,v 1.2 2005/07/25 07:33:25 m_schellens Exp $
 -function mean, x, double=double, nan=nan
@@ -47373,7 +47532,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/mean.pro gdl/src/pro/mean.pro
  end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/moment.pro gdl/src/pro/moment.pro
 --- gdl-0.9.2/src/pro/moment.pro	2010-10-13 16:55:48.000000000 -0600
-+++ gdl/src/pro/moment.pro	2012-07-14 12:53:49.000000000 -0600
++++ gdl/src/pro/moment.pro	2012-07-17 09:30:31.253772748 -0600
 @@ -1,24 +1,20 @@
  function MOMENT, x, mdev=mdev, sdev=sdev, $
                   double=double, NaN=NaN, $
@@ -47548,7 +47707,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/moment.pro gdl/src/pro/moment.pro
  end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/read_ascii.pro gdl/src/pro/read_ascii.pro
 --- gdl-0.9.2/src/pro/read_ascii.pro	2009-10-18 16:03:55.000000000 -0600
-+++ gdl/src/pro/read_ascii.pro	2011-11-15 17:51:17.000000000 -0700
++++ gdl/src/pro/read_ascii.pro	2012-02-21 09:54:37.341878249 -0700
 @@ -1,5 +1,4 @@
  ;+
 -;
@@ -48438,7 +48597,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/read_image.pro gdl/src/pro/read_image.
 +end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/read_jpeg.pro gdl/src/pro/read_jpeg.pro
 --- gdl-0.9.2/src/pro/read_jpeg.pro	2011-08-18 11:39:08.000000000 -0600
-+++ gdl/src/pro/read_jpeg.pro	2012-02-07 16:23:25.000000000 -0700
++++ gdl/src/pro/read_jpeg.pro	2012-02-21 09:54:37.392876397 -0700
 @@ -1,9 +1,9 @@
 -;$Id: read_jpeg.pro,v 1.6 2011/08/18 17:39:08 alaingdl Exp $
 +;$Id: read_jpeg.pro,v 1.13 2012/02/07 23:23:25 alaingdl Exp $
@@ -48586,7 +48745,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/read_jpeg.pro gdl/src/pro/read_jpeg.pr
  ;endelse
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/read_png.pro gdl/src/pro/read_png.pro
 --- gdl-0.9.2/src/pro/read_png.pro	2011-08-18 11:26:43.000000000 -0600
-+++ gdl/src/pro/read_png.pro	2012-05-25 15:27:39.000000000 -0600
++++ gdl/src/pro/read_png.pro	2012-07-17 09:30:31.260772749 -0600
 @@ -1,34 +1,15 @@
 -;$Id: read_png.pro,v 1.3 2011/08/18 17:26:43 alaingdl Exp $
 -;
@@ -48776,7 +48935,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/read_png.pro gdl/src/pro/read_png.pro
 +end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/read_xwd.pro gdl/src/pro/read_xwd.pro
 --- gdl-0.9.2/src/pro/read_xwd.pro	2010-01-20 04:41:59.000000000 -0700
-+++ gdl/src/pro/read_xwd.pro	2011-11-15 17:51:17.000000000 -0700
++++ gdl/src/pro/read_xwd.pro	2012-02-21 09:54:37.464873785 -0700
 @@ -1,77 +1,82 @@
 -;$Id: read_xwd.pro,v 1.3 2010/01/20 11:41:59 slayoo Exp $
 -
@@ -48893,7 +49052,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/read_xwd.pro gdl/src/pro/read_xwd.pro
  
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/skewness.pro gdl/src/pro/skewness.pro
 --- gdl-0.9.2/src/pro/skewness.pro	2005-07-25 01:33:25.000000000 -0600
-+++ gdl/src/pro/skewness.pro	2012-07-13 16:28:02.000000000 -0600
++++ gdl/src/pro/skewness.pro	2012-07-17 09:30:31.277772745 -0600
 @@ -1,27 +1,24 @@
 -;$Id: skewness.pro,v 1.2 2005/07/25 07:33:25 m_schellens Exp $
 -function skewness, x, double=double, NaN=NaN
@@ -48973,7 +49132,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/skewness.pro gdl/src/pro/skewness.pro
  end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/smooth.pro gdl/src/pro/smooth.pro
 --- gdl-0.9.2/src/pro/smooth.pro	2008-03-28 04:25:23.000000000 -0600
-+++ gdl/src/pro/smooth.pro	2012-05-08 03:48:44.000000000 -0600
++++ gdl/src/pro/smooth.pro	2012-05-10 15:10:06.208440987 -0600
 @@ -3,9 +3,19 @@
  ;
  ; PURPOSE:  The SMOOTH function returns a smoothed array of the input array.
@@ -49314,7 +49473,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/smooth.pro gdl/src/pro/smooth.pro
  if KEYWORD_SET(test) then STOP
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/standardize.pro gdl/src/pro/standardize.pro
 --- gdl-0.9.2/src/pro/standardize.pro	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/src/pro/standardize.pro	2012-05-16 08:38:39.000000000 -0600
++++ gdl/src/pro/standardize.pro	2012-07-17 09:30:31.279772746 -0600
 @@ -0,0 +1,82 @@
 +;+
 +;
@@ -49400,7 +49559,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/standardize.pro gdl/src/pro/standardiz
 +end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/STATUS gdl/src/pro/STATUS
 --- gdl-0.9.2/src/pro/STATUS	2010-02-20 13:46:27.000000000 -0700
-+++ gdl/src/pro/STATUS	2012-05-14 06:37:08.000000000 -0600
++++ gdl/src/pro/STATUS	2012-05-15 12:11:38.747549479 -0600
 @@ -124,7 +124,7 @@
  !h_eq_int.pro
  !hilbert.pro
@@ -49443,7 +49602,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/STATUS gdl/src/pro/STATUS
   write_ppm.pro
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/stddev.pro gdl/src/pro/stddev.pro
 --- gdl-0.9.2/src/pro/stddev.pro	2005-07-25 01:33:25.000000000 -0600
-+++ gdl/src/pro/stddev.pro	2012-07-13 16:28:02.000000000 -0600
++++ gdl/src/pro/stddev.pro	2012-07-17 09:30:31.295772746 -0600
 @@ -1,33 +1,29 @@
 -;$Id: stddev.pro,v 1.2 2005/07/25 07:33:25 m_schellens Exp $
 -
@@ -49587,7 +49746,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/strmatch.pro gdl/src/pro/strmatch.pro
 +end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/strsplit.pro gdl/src/pro/strsplit.pro
 --- gdl-0.9.2/src/pro/strsplit.pro	2011-08-12 09:33:34.000000000 -0600
-+++ gdl/src/pro/strsplit.pro	2012-07-11 07:45:51.000000000 -0600
++++ gdl/src/pro/strsplit.pro	2012-07-17 09:30:31.304772746 -0600
 @@ -19,6 +19,7 @@
  ;                 better managment of (missing/void) inputs
  ;   11-Aug-2011 : Alain Coulais : solving conflits due to
@@ -49644,7 +49803,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/strsplit.pro gdl/src/pro/strsplit.pro
  ;
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/tvscl.pro gdl/src/pro/tvscl.pro
 --- gdl-0.9.2/src/pro/tvscl.pro	2010-04-14 09:10:22.000000000 -0600
-+++ gdl/src/pro/tvscl.pro	2012-06-12 15:08:23.000000000 -0600
++++ gdl/src/pro/tvscl.pro	2012-07-17 09:30:31.312772746 -0600
 @@ -2,52 +2,69 @@
  ; NAME:
  ;	TVSCL
@@ -49774,7 +49933,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/tvscl.pro gdl/src/pro/tvscl.pro
  end
 diff -ruN --exclude CVS gdl-0.9.2/src/pro/variance.pro gdl/src/pro/variance.pro
 --- gdl-0.9.2/src/pro/variance.pro	2005-07-25 01:33:25.000000000 -0600
-+++ gdl/src/pro/variance.pro	2012-07-13 16:28:02.000000000 -0600
++++ gdl/src/pro/variance.pro	2012-07-17 09:30:31.315772745 -0600
 @@ -1,17 +1,13 @@
 -;$Id: variance.pro,v 1.2 2005/07/25 07:33:25 m_schellens Exp $
 -function variance, x, double=double, NaN=NaN
@@ -50078,8 +50237,8 @@ diff -ruN --exclude CVS gdl-0.9.2/src/pro/write_image.pro gdl/src/pro/write_imag
 +end
 diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
 --- gdl-0.9.2/src/prognode.cpp	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/prognode.cpp	2011-12-13 00:20:25.000000000 -0700
-@@ -552,7 +552,8 @@
++++ gdl/src/prognode.cpp	2012-07-17 09:30:31.135772753 -0600
+@@ -552,13 +552,15 @@
  }
  
  
@@ -50089,7 +50248,14 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
  void KEYDEF_REFNode::Parameter( EnvBaseT* actEnv)
  {
    ProgNodeP _t = this->getFirstChild();
-@@ -567,10 +568,6 @@
+ //   ProgNodeP knameR = _t;
+   // 			match(antlr::RefAST(_t),IDENTIFIER);
+ //   _t = _t->getNextSibling();
++  
+   BaseGDL** kvalRef=_t->getNextSibling()->LEval();
+   //ProgNode::interpreter->ref_parameter(_t->getNextSibling(), actEnv);
+ 
+@@ -567,10 +569,6 @@
  			
    ProgNode::interpreter->_retTree = this->getNextSibling();
  }
@@ -50100,7 +50266,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
  
  void KEYDEF_REF_EXPRNode::Parameter( EnvBaseT* actEnv)
  {
-@@ -591,10 +588,6 @@
+@@ -591,10 +589,6 @@
  			
    ProgNode::interpreter->_retTree = this->getNextSibling();
  }
@@ -50111,7 +50277,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
  
  void KEYDEFNode::Parameter( EnvBaseT* actEnv)
  {
-@@ -608,11 +601,37 @@
+@@ -608,11 +602,62 @@
  			
    ProgNode::interpreter->_retTree = this->getNextSibling();
  }
@@ -50126,6 +50292,31 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
 +//   ProgNodeP knameCk = _t;
 +  // 			match(antlr::RefAST(_t),IDENTIFIER);
 +//   _t = _t->getNextSibling();
++  ProgNodeP p = this->getFirstChild()->getNextSibling();
++
++  if( p->getType() == GDLTokenTypes::QUESTION)
++  {
++    QUESTIONNode* q = static_cast<QUESTIONNode*>( p);
++    ProgNodeP branch = q->AsParameter();
++    
++    while( branch->getType() == GDLTokenTypes::QUESTION)
++    {
++      QUESTIONNode* qRecursive = static_cast<QUESTIONNode*>( branch);
++      branch = qRecursive->AsParameter();
++    }
++    
++    BaseGDL** lVal = branch->LEval(); // right->down
++    if( lVal != NULL)
++    {   // pass reference
++      actEnv->SetKeyword(this->getFirstChild()->getText(), lVal); 
++    }
++    else
++    {   // pass value
++      actEnv->SetKeyword(this->getFirstChild()->getText(), branch->Eval()); 
++    }
++  }
++  else
++  {
 +  BaseGDL* kval=ProgNode::interpreter->
 +    lib_function_call(this->getFirstChild()->getNextSibling());
 +			
@@ -50138,7 +50329,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
 +    {   // pass value
 +      actEnv->SetKeyword(this->getFirstChild()->getText(), kval); 
 +    }
-+			
++  }
 +  ProgNode::interpreter->_retTree = this->getNextSibling();
 +}
 +
@@ -50153,7 +50344,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
  void REFNode::Parameter( EnvBaseT* actEnv)
  {
  //   ProgNodeP _t = this->getFirstChild();
-@@ -631,6 +650,15 @@
+@@ -631,6 +676,15 @@
    ProgNode::interpreter->_retTree = this->getNextSibling();
  }
  
@@ -50169,7 +50360,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
  void REF_EXPRNode::Parameter( EnvBaseT* actEnv)
  {
    // 			match(antlr::RefAST(_t),REF_EXPR);
-@@ -656,32 +684,21 @@
+@@ -656,63 +710,118 @@
    ProgNode::interpreter->_retTree = this->getNextSibling();
  }
  
@@ -50186,21 +50377,36 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
 -			
 -  BaseGDL** kvalRef = ProgNode::interpreter->callStack.back()->GetPtrTo( kval);
 -  if( kvalRef != NULL)
-+  pval=ProgNode::interpreter->lib_function_call(this->getFirstChild());		
-+  BaseGDL** pvalRef = ProgNode::interpreter->callStack.back()->GetPtrTo( pval);
-+  return (pvalRef != NULL);
-+  if( pvalRef != NULL)
-     {   // pass reference
+-    {   // pass reference
 -      actEnv->SetKeyword(this->getFirstChild()->getText(), kvalRef); 
-+      return true;
-     }
-   else 
-     {   // pass value
+-    }
+-  else 
+-    {   // pass value
 -      actEnv->SetKeyword(this->getFirstChild()->getText(), kval); 
-+      return false;
-     }
+-    }
 -			
 -  ProgNode::interpreter->_retTree = this->getNextSibling();
++  ProgNodeP p = this->getFirstChild();
++  if( p->getType() == GDLTokenTypes::QUESTION)
++  {
++    // for the trinary operator we just use pass by value which should be ok, 
++    // as direct functions cannot modify their (single) parameter anyway.
++    // LEval might save a copy operation here, but considering that direct functions are
++    // probably very seldom called with the trinary operator we leave it like this for now. 
++    pval = p->Eval();
++    return false; // pass value
++  }
++  pval=ProgNode::interpreter->lib_function_call(p);
++  BaseGDL** pvalRef = ProgNode::interpreter->callStack.back()->GetPtrTo( pval);
++  return (pvalRef != NULL);
++//   if( pvalRef != NULL)
++//     {   // pass reference
++//       return true;
++//     }
++//   else 
++//     {   // pass value
++//       return false;
++//     }
  }
 -// void KEYDEF_REF_CHECKNode::ParameterVarNum( EnvBaseT* actEnv)
 -// {
@@ -50209,8 +50415,97 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
 -
  void REF_CHECKNode::Parameter( EnvBaseT* actEnv)
  {
-   BaseGDL* pval=ProgNode::interpreter->lib_function_call(this->getFirstChild());
-@@ -713,6 +730,11 @@
+-  BaseGDL* pval=ProgNode::interpreter->lib_function_call(this->getFirstChild());
+-			
+-  BaseGDL** pvalRef = ProgNode::interpreter->callStack.back()->GetPtrTo( pval);
+-  if( pvalRef != NULL)
++  ProgNodeP p = this->getFirstChild();
++
++  if( p->getType() == GDLTokenTypes::QUESTION)
++  {
++    QUESTIONNode* q = static_cast<QUESTIONNode*>( p);
++    ProgNodeP branch = q->AsParameter();
++    
++    while( branch->getType() == GDLTokenTypes::QUESTION)
++    {
++      QUESTIONNode* qRecursive = static_cast<QUESTIONNode*>( branch);
++      branch = qRecursive->AsParameter();
++    }
++    
++    BaseGDL** lVal = branch->LEval(); // right->down
++    if( lVal != NULL)
+     {   // pass reference
+-      actEnv->SetNextParUnchecked( pvalRef); 
++      actEnv->SetNextParUnchecked( lVal); 
+     }
+-  else 
++    else
+     {   // pass value
+-      actEnv->SetNextParUnchecked( pval); 
++      actEnv->SetNextParUnchecked( branch->Eval()); 
+     }
+-			
++  }
++  else
++  {  
++    BaseGDL* pval=ProgNode::interpreter->lib_function_call(this->getFirstChild());
++			  
++    BaseGDL** pvalRef = ProgNode::interpreter->callStack.back()->GetPtrTo( pval);
++    if( pvalRef != NULL)
++      {   // pass reference
++	actEnv->SetNextParUnchecked( pvalRef); 
++      }
++    else 
++      {   // pass value
++	actEnv->SetNextParUnchecked( pval); 
++      }
++  }
+   ProgNode::interpreter->_retTree = this->getNextSibling();
+ }
+ void REF_CHECKVNNode::Parameter( EnvBaseT* actEnv)
+ {
+-  BaseGDL* pval=ProgNode::interpreter->lib_function_call(this->getFirstChild());
+-  BaseGDL** pvalRef = ProgNode::interpreter->callStack.back()->GetPtrTo( pval);
+-  if( pvalRef != NULL)
++  ProgNodeP p = this->getFirstChild();
++
++  if( p->getType() == GDLTokenTypes::QUESTION)
++  {
++    QUESTIONNode* q = static_cast<QUESTIONNode*>( p);
++    ProgNodeP branch = q->AsParameter();
++    
++    while( branch->getType() == GDLTokenTypes::QUESTION)
++    {
++      QUESTIONNode* qRecursive = static_cast<QUESTIONNode*>( branch);
++      branch = qRecursive->AsParameter();
++    }
++    
++    BaseGDL** lVal = branch->LEval(); // right->down
++    if( lVal != NULL)
+     {   // pass reference
+-      actEnv->SetNextParUncheckedVarNum( pvalRef); 
++      actEnv->SetNextParUncheckedVarNum( lVal); 
+     }
+-  else 
++    else
+     {   // pass value
+-      actEnv->SetNextParUncheckedVarNum( pval); 
++      actEnv->SetNextParUncheckedVarNum( branch->Eval()); 
+     }
++  }
++  else
++  {
++    BaseGDL* pval=ProgNode::interpreter->lib_function_call(this->getFirstChild());
++    BaseGDL** pvalRef = ProgNode::interpreter->callStack.back()->GetPtrTo( pval);
++    if( pvalRef != NULL)
++      {   // pass reference
++	actEnv->SetNextParUncheckedVarNum( pvalRef); 
++      }
++    else 
++      {   // pass value
++	actEnv->SetNextParUncheckedVarNum( pval); 
++      }
++  }
    ProgNode::interpreter->_retTree = this->getNextSibling();
  }
  
@@ -50222,7 +50517,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
  void ParameterNode::Parameter( EnvBaseT* actEnv)
  {
  //   BaseGDL* pval=this->Eval();//expr(this);
-@@ -722,7 +744,6 @@
+@@ -722,7 +831,6 @@
  			
    ProgNode::interpreter->_retTree = this->getNextSibling();
  }
@@ -50230,7 +50525,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
  void ParameterVNNode::Parameter( EnvBaseT* actEnv)
  {
    actEnv->SetNextParUncheckedVarNum(this->getFirstChild()->Eval()); 
-@@ -959,8 +980,8 @@
+@@ -959,8 +1067,8 @@
  
  RetCode  PCALL_LIBNode::Run()
  {
@@ -50241,7 +50536,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
    BaseGDL *self;
  	
    // 		match(antlr::RefAST(_t),PCALL_LIB);
-@@ -972,11 +993,13 @@
+@@ -972,11 +1080,13 @@
    EnvT* newEnv=new EnvT( pl, pl->libPro);//libProList[pl->proIx]);
  		
    ProgNode::interpreter->parameter_def_nocheck(_t, newEnv);
@@ -50257,7 +50552,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
  		
    // make the call
    static_cast<DLibPro*>(newEnv->GetPro())->Pro()(newEnv);
-@@ -1748,13 +1771,13 @@
+@@ -1748,13 +1858,13 @@
  }
  RetCode      BREAKNode::Run()
  {
@@ -50276,8 +50571,22 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.cpp gdl/src/prognode.cpp
  RetCode      LABELNode::Run()
 diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
 --- gdl-0.9.2/src/prognodeexpr.cpp	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/prognodeexpr.cpp	2011-12-05 03:48:26.000000000 -0700
-@@ -168,9 +168,11 @@
++++ gdl/src/prognodeexpr.cpp	2012-07-17 09:30:31.161772752 -0600
+@@ -71,9 +71,10 @@
+ 
+ BaseGDL** ProgNode::LEval()
+ {
+-  throw GDLException( this,
+-		      "Internal error. "
+-		      "ProgNode::LEval() called.",true,false);
++  return NULL; // ok, called QUESTIONNode::AsParameter()
++//   throw GDLException( this,
++// 		      "Internal error. "
++// 		      "ProgNode::LEval() called.",true,false);
+ }
+ 
+ RetCode   ProgNode::Run()
+@@ -168,9 +169,11 @@
  //       throw GDLException( "Expressions of this type cannot be converted.");
  //     }
  
@@ -50291,7 +50600,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
      {
        e2 = e2->Convert2( COMPLEXDBL, BaseGDL::COPY);
        g2.reset( e2); // delete former e2
-@@ -179,15 +181,22 @@
+@@ -179,15 +182,22 @@
        return;
      }
  
@@ -50317,7 +50626,35 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
        // convert e1 to e2
        e1 = e1->Convert2( bTy, BaseGDL::COPY);
        g1.reset( e1); // delete former e1
-@@ -1231,6 +1240,132 @@
+@@ -421,6 +431,27 @@
+   return op3->Eval(); // right->right
+ }
+ 
++ProgNodeP QUESTIONNode::AsParameter()
++{
++  auto_ptr<BaseGDL> e1_guard;
++  BaseGDL* e1;
++  if( NonCopyNode( op1->getType()))
++  {
++	e1 = op1->EvalNC();
++  }
++  else
++  {
++	e1 = op1->Eval();
++    e1_guard.reset(e1);
++  }
++//  auto_ptr<BaseGDL> e1( op1->Eval());
++  if( e1->True())
++    {
++      return op2;
++    }
++  return op3;
++}
++
+ // unary operators
+ BaseGDL* UMINUSNode::Eval()
+ {
+@@ -1231,6 +1262,132 @@
    res=e1->GtOp(e2);
    return res;
  }
@@ -50450,7 +50787,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
  BaseGDL* PLUSNCNode::Eval()
  {
  	BaseGDL* res;
-@@ -1301,8 +1436,121 @@
+@@ -1301,8 +1458,121 @@
  	}
  	return res;
  }
@@ -50573,7 +50910,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
   auto_ptr<BaseGDL> g1;
   auto_ptr<BaseGDL> g2;
   BaseGDL *e1, *e2; AdjustTypesNC( g1, e1, g2, e2); 
-@@ -1457,6 +1705,143 @@
+@@ -1457,6 +1727,143 @@
         }
   return res;
  }
@@ -50717,7 +51054,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
  BaseGDL* ASTERIXNCNode::Eval()
  {
  	BaseGDL* res;
-@@ -1640,6 +2025,118 @@
+@@ -1640,6 +2047,118 @@
   res=e2->MatrixOp(e1);
   return res;
  }
@@ -50836,7 +51173,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
  BaseGDL* SLASHNCNode::Eval()
  { BaseGDL* res;
   auto_ptr<BaseGDL> g1;
-@@ -1992,37 +2489,68 @@
+@@ -1992,37 +2511,68 @@
  //   return new POSTINCNode( refNode);
  // }
  
@@ -50920,7 +51257,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
      // make the call
      //*** MUST always return a defined expression
      BaseGDL* res = static_cast<DLibFun*>(newEnv->GetPro())->Fun()(newEnv);
-@@ -2030,22 +2558,60 @@
+@@ -2030,22 +2580,60 @@
      return res;
    }
  
@@ -50987,7 +51324,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
      if( res == NULL)
  	    throw GDLException( this, "Library function must return a "
  	    "l-value in this context: "+this->getText());
-@@ -2054,17 +2620,18 @@
+@@ -2054,17 +2642,18 @@
  
    BaseGDL* FCALL_LIBNode::EvalFCALL_LIB()
    {
@@ -51010,7 +51347,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
      // make the call
      BaseGDL* res=static_cast<DLibFun*>(newEnv->GetPro())->Fun()(newEnv);
      // *** MUST always return a defined expression
-@@ -2075,18 +2642,20 @@
+@@ -2075,18 +2664,20 @@
    // returns always a new variable - see EvalFCALL_LIB
    BaseGDL* FCALL_LIBNode::Eval() 
    {
@@ -51038,7 +51375,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.cpp gdl/src/prognodeexpr.cpp
      // *** MUST always return a defined expression
 diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.hpp gdl/src/prognodeexpr.hpp
 --- gdl-0.9.2/src/prognodeexpr.hpp	2011-11-01 21:47:29.000000000 -0600
-+++ gdl/src/prognodeexpr.hpp	2011-11-15 16:19:00.000000000 -0700
++++ gdl/src/prognodeexpr.hpp	2012-07-17 09:30:31.169772750 -0600
 @@ -103,6 +103,24 @@
    BaseGDL* Eval();
  };
@@ -51064,7 +51401,15 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.hpp gdl/src/prognodeexpr.hpp
  
  
  class FCALL_LIBNode: public LeafNode
-@@ -499,11 +517,21 @@
+@@ -271,6 +289,7 @@
+ { public:
+   QUESTIONNode( const RefDNode& refNode): TrinaryExpr( refNode){}
+   BaseGDL* Eval();
++  ProgNodeP AsParameter(); // as parameter or keyword
+   BaseGDL** LExpr(BaseGDL* right);
+ //   BaseGDL** LExprGrab(BaseGDL* right);
+ };
+@@ -499,11 +518,21 @@
    PLUSNCNode( const RefDNode& refNode): BinaryExprNC( refNode){}
    BaseGDL* Eval();
  };
@@ -51086,7 +51431,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.hpp gdl/src/prognodeexpr.hpp
  class LTMARKNCNode: public BinaryExprNC
  { public:
    LTMARKNCNode( const RefDNode& refNode): BinaryExprNC( refNode){}
-@@ -514,6 +542,11 @@
+@@ -514,6 +543,11 @@
    GTMARKNCNode( const RefDNode& refNode): BinaryExprNC( refNode){}
    BaseGDL* Eval();
  };
@@ -51098,7 +51443,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.hpp gdl/src/prognodeexpr.hpp
  class ASTERIXNCNode: public BinaryExprNC
  { public:
    ASTERIXNCNode( const RefDNode& refNode): BinaryExprNC( refNode){}
-@@ -534,6 +567,11 @@
+@@ -534,6 +568,11 @@
    SLASHNCNode( const RefDNode& refNode): BinaryExprNC( refNode){}
    BaseGDL* Eval();
  };
@@ -51112,7 +51457,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognodeexpr.hpp gdl/src/prognodeexpr.hpp
    MOD_OPNCNode( const RefDNode& refNode): BinaryExprNC( refNode){}
 diff -ruN --exclude CVS gdl-0.9.2/src/prognode.hpp gdl/src/prognode.hpp
 --- gdl-0.9.2/src/prognode.hpp	2011-11-07 16:38:21.000000000 -0700
-+++ gdl/src/prognode.hpp	2011-12-13 00:20:25.000000000 -0700
++++ gdl/src/prognode.hpp	2012-02-21 09:54:36.755899513 -0700
 @@ -387,13 +387,17 @@
  };
  class BREAKNode: public DefaultNode
@@ -51176,9 +51521,37 @@ diff -ruN --exclude CVS gdl-0.9.2/src/prognode.hpp gdl/src/prognode.hpp
  //   void ParameterVarNum( EnvBaseT* actEnv); // for variable number of parameters
  };
  class REFVNNode: public ParameterNode
+diff -ruN --exclude CVS gdl-0.9.2/src/pythongdl.cpp gdl/src/pythongdl.cpp
+--- gdl-0.9.2/src/pythongdl.cpp	2011-09-20 05:33:52.000000000 -0600
++++ gdl/src/pythongdl.cpp	2012-07-17 09:30:31.183772751 -0600
+@@ -224,7 +224,7 @@
+ 	}
+     }
+   
+-  e.Extra(); // expand _EXTRA
++  e.ResolveExtra(); // expand _EXTRA
+ 
+   return true;
+ }
+@@ -383,8 +383,13 @@
+ 
+     // make the call
+     StackSizeGuard<EnvStackT> guard( GDLInterpreter::CallStack());
+-    GDLInterpreter::CallStack().push_back( e);
+-
++    
++    if( !libCall)
++    {
++      GDLInterpreter::CallStack().push_back( static_cast<EnvUDT*>(e));
++      e_guard.release();
++    }
++    
+     BaseGDL* retValGDL = NULL;
+     auto_ptr<BaseGDL> retValGDL_guard;
+     if( functionCall)
 diff -ruN --exclude CVS gdl-0.9.2/src/specializations.hpp gdl/src/specializations.hpp
 --- gdl-0.9.2/src/specializations.hpp	2011-10-19 08:45:19.000000000 -0600
-+++ gdl/src/specializations.hpp	2011-12-08 00:03:09.000000000 -0700
++++ gdl/src/specializations.hpp	2012-02-21 09:54:36.871895303 -0700
 @@ -673,6 +673,12 @@
  
  
@@ -51194,7 +51567,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/specializations.hpp gdl/src/specialization
  // topython.cpp
 diff -ruN --exclude CVS gdl-0.9.2/src/str.cpp gdl/src/str.cpp
 --- gdl-0.9.2/src/str.cpp	2011-11-08 15:15:51.000000000 -0700
-+++ gdl/src/str.cpp	2011-11-29 22:43:03.000000000 -0700
++++ gdl/src/str.cpp	2012-02-21 09:54:36.915893707 -0700
 @@ -179,6 +179,17 @@
      r[i]=toupper(sCStr[i]);
    return string(r);
@@ -51270,7 +51643,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/str.cpp gdl/src/str.cpp
       if( p.we_wordc > 0)
 diff -ruN --exclude CVS gdl-0.9.2/src/str.hpp gdl/src/str.hpp
 --- gdl-0.9.2/src/str.hpp	2008-12-09 12:05:36.000000000 -0700
-+++ gdl/src/str.hpp	2011-11-29 22:43:03.000000000 -0700
++++ gdl/src/str.hpp	2012-02-21 09:54:36.980891348 -0700
 @@ -75,7 +75,9 @@
  	     bool reverseOffset, bool reverseSearch);
  std::string StrMid(const std::string& s, long first, long len, bool reverse);
@@ -51283,7 +51656,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/str.hpp gdl/src/str.hpp
  
 diff -ruN --exclude CVS gdl-0.9.2/src/typedefs.hpp gdl/src/typedefs.hpp
 --- gdl-0.9.2/src/typedefs.hpp	2011-11-08 16:44:26.000000000 -0700
-+++ gdl/src/typedefs.hpp	2012-01-02 14:20:38.000000000 -0700
++++ gdl/src/typedefs.hpp	2012-02-21 09:54:36.997890731 -0700
 @@ -406,7 +406,7 @@
  
    T& operator[]( SizeT ix) throw()
@@ -51313,7 +51686,7 @@ diff -ruN --exclude CVS gdl-0.9.2/src/typedefs.hpp gdl/src/typedefs.hpp
  	assert( sz == right.size());
 diff -ruN --exclude CVS gdl-0.9.2/src/widget.cpp gdl/src/widget.cpp
 --- gdl-0.9.2/src/widget.cpp	2011-04-04 20:09:26.000000000 -0600
-+++ gdl/src/widget.cpp	2012-02-19 21:10:38.000000000 -0700
++++ gdl/src/widget.cpp	2012-02-21 09:54:37.049888845 -0700
 @@ -675,9 +675,10 @@
        // Call widget event handler routine
        if ( lasttop != top) {
@@ -51380,7 +51753,7 @@ diff -ruN --exclude CVS gdl-0.9.2/templates/h gdl/templates/h
 + ***************************************************************************/
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/Makefile.am gdl/testsuite/Makefile.am
 --- gdl-0.9.2/testsuite/Makefile.am	2011-11-02 17:17:58.000000000 -0600
-+++ gdl/testsuite/Makefile.am	2012-06-27 17:07:02.000000000 -0600
++++ gdl/testsuite/Makefile.am	2012-07-17 09:30:31.330772743 -0600
 @@ -33,6 +33,7 @@
    test_bug_3147181.pro \
    test_bug_3147733.pro \
@@ -51455,7 +51828,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/Makefile.am gdl/testsuite/Makefile.a
    test_zeropoly.pro \
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/Makefile.in gdl/testsuite/Makefile.in
 --- gdl-0.9.2/testsuite/Makefile.in	2011-11-02 17:17:58.000000000 -0600
-+++ gdl/testsuite/Makefile.in	2012-06-28 03:54:55.000000000 -0600
++++ gdl/testsuite/Makefile.in	2012-07-17 09:30:31.332772742 -0600
 @@ -115,6 +115,7 @@
  FGREP = @FGREP@
  GDLDATADIR = @GDLDATADIR@
@@ -51757,7 +52130,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_call_procedure.pro gdl/testsuit
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_congrid.pro gdl/testsuite/test_congrid.pro
 --- gdl-0.9.2/testsuite/test_congrid.pro	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/testsuite/test_congrid.pro	2012-04-13 15:08:47.000000000 -0600
++++ gdl/testsuite/test_congrid.pro	2012-05-10 15:10:06.707422978 -0600
 @@ -0,0 +1,146 @@
 +;
 +; This basic test for CONGRID, using the Saturn.jpg image in the
@@ -51951,7 +52324,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_diag_matrix.pro gdl/testsuite/t
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_dicom.pro gdl/testsuite/test_dicom.pro
 --- gdl-0.9.2/testsuite/test_dicom.pro	2010-12-28 11:19:26.000000000 -0700
-+++ gdl/testsuite/test_dicom.pro	2012-07-05 13:22:22.000000000 -0600
++++ gdl/testsuite/test_dicom.pro	2012-07-17 09:30:31.354772744 -0600
 @@ -1,4 +1,26 @@
 +;
  ; just tests if gdlffdicom is in path
@@ -51983,7 +52356,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_dicom.pro gdl/testsuite/test_di
  end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_execute.pro gdl/testsuite/test_execute.pro
 --- gdl-0.9.2/testsuite/test_execute.pro	2010-08-27 08:25:17.000000000 -0600
-+++ gdl/testsuite/test_execute.pro	2012-06-27 17:07:02.000000000 -0600
++++ gdl/testsuite/test_execute.pro	2012-07-17 09:30:31.361772743 -0600
 @@ -1,9 +1,138 @@
 +;
 +; Alain C., 22 June 2012
@@ -52161,7 +52534,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_fft_dim.pro gdl/testsuite/test_
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_file_copy.pro gdl/testsuite/test_file_copy.pro
 --- gdl-0.9.2/testsuite/test_file_copy.pro	2010-06-29 02:47:39.000000000 -0600
-+++ gdl/testsuite/test_file_copy.pro	2011-11-15 17:57:05.000000000 -0700
++++ gdl/testsuite/test_file_copy.pro	2012-02-21 09:54:37.701865187 -0700
 @@ -4,18 +4,32 @@
  ; Lea Noreskal, June 2010
  ; under GNU GPL 2 or later
@@ -52454,7 +52827,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_file_copy.pro gdl/testsuite/tes
  if KEYWORD_SET(test) then STOP
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_file_delete.pro gdl/testsuite/test_file_delete.pro
 --- gdl-0.9.2/testsuite/test_file_delete.pro	2010-06-29 02:47:39.000000000 -0600
-+++ gdl/testsuite/test_file_delete.pro	2011-11-15 17:57:05.000000000 -0700
++++ gdl/testsuite/test_file_delete.pro	2012-02-21 09:54:37.721864461 -0700
 @@ -5,56 +5,61 @@
  ; initial version by AC, 28 Avril 2009
  ; very basic tests for FILE_DELETE
@@ -53050,7 +53423,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_hist_equal.pro gdl/testsuite/te
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_histo.pro gdl/testsuite/test_histo.pro
 --- gdl-0.9.2/testsuite/test_histo.pro	2009-10-30 10:56:27.000000000 -0600
-+++ gdl/testsuite/test_histo.pro	2011-12-06 15:30:24.000000000 -0700
++++ gdl/testsuite/test_histo.pro	2012-02-21 09:54:37.792861884 -0700
 @@ -1,9 +1,9 @@
  ;
 -; AC 01-jun-2007
@@ -53124,7 +53497,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_histo.pro gdl/testsuite/test_hi
 +
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_image_statistics.pro gdl/testsuite/test_image_statistics.pro
 --- gdl-0.9.2/testsuite/test_image_statistics.pro	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/testsuite/test_image_statistics.pro	2012-03-05 17:21:54.000000000 -0700
++++ gdl/testsuite/test_image_statistics.pro	2012-05-10 15:10:06.762420995 -0600
 @@ -0,0 +1,96 @@
 +;
 +; Alain Coulais, 16-Nov-2011, from an idea by LLuvia
@@ -53224,7 +53597,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_image_statistics.pro gdl/testsu
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_interpol.pro gdl/testsuite/test_interpol.pro
 --- gdl-0.9.2/testsuite/test_interpol.pro	2010-04-09 04:30:38.000000000 -0600
-+++ gdl/testsuite/test_interpol.pro	2012-03-05 07:50:56.000000000 -0700
++++ gdl/testsuite/test_interpol.pro	2012-05-10 15:10:06.791419943 -0600
 @@ -1,39 +1,126 @@
 +;
 +; testin INTERPOL on few basic cases ...
@@ -53516,7 +53889,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_ludc_lusol.pro gdl/testsuite/te
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_moment.pro gdl/testsuite/test_moment.pro
 --- gdl-0.9.2/testsuite/test_moment.pro	2010-10-13 17:07:51.000000000 -0600
-+++ gdl/testsuite/test_moment.pro	2012-07-14 13:01:41.000000000 -0600
++++ gdl/testsuite/test_moment.pro	2012-07-17 09:30:31.390772742 -0600
 @@ -5,11 +5,126 @@
  ;
  ; ToDo: testing /NaN ?!
@@ -53717,7 +54090,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_moment.pro gdl/testsuite/test_m
 +
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_mpfit.pro gdl/testsuite/test_mpfit.pro
 --- gdl-0.9.2/testsuite/test_mpfit.pro	2010-10-26 16:30:15.000000000 -0600
-+++ gdl/testsuite/test_mpfit.pro	2011-11-16 15:32:57.000000000 -0700
++++ gdl/testsuite/test_mpfit.pro	2012-02-21 09:54:37.871859017 -0700
 @@ -6,6 +6,12 @@
  ; AC 26/10/2010: better managment of error when CMSV lib. or MPFIT
  ; lib. are not in the path ...
@@ -53754,7 +54127,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_mpfit.pro gdl/testsuite/test_mp
  RESTORE, datafile
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_plotting_ranges.pro gdl/testsuite/test_plotting_ranges.pro
 --- gdl-0.9.2/testsuite/test_plotting_ranges.pro	2011-07-03 06:52:03.000000000 -0600
-+++ gdl/testsuite/test_plotting_ranges.pro	2012-01-26 16:18:51.000000000 -0700
++++ gdl/testsuite/test_plotting_ranges.pro	2012-02-21 09:54:37.893858219 -0700
 @@ -15,12 +15,11 @@
  
    print, '2'
@@ -53774,7 +54147,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_plotting_ranges.pro gdl/testsui
  
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_poly2d.pro gdl/testsuite/test_poly2d.pro
 --- gdl-0.9.2/testsuite/test_poly2d.pro	2009-11-24 09:44:13.000000000 -0700
-+++ gdl/testsuite/test_poly2d.pro	2012-01-23 09:51:41.000000000 -0700
++++ gdl/testsuite/test_poly2d.pro	2012-02-21 09:54:37.912857529 -0700
 @@ -1,4 +1,14 @@
 -pro test_poly2d
 +;
@@ -54103,7 +54476,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_poly2d.pro gdl/testsuite/test_p
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_postscript.pro gdl/testsuite/test_postscript.pro
 --- gdl-0.9.2/testsuite/test_postscript.pro	2011-08-30 02:37:21.000000000 -0600
-+++ gdl/testsuite/test_postscript.pro	2011-12-29 18:10:47.000000000 -0700
++++ gdl/testsuite/test_postscript.pro	2012-02-21 09:54:37.914857457 -0700
 @@ -3,7 +3,35 @@
  ;
  ; Alain Coulais 23/08/2011
@@ -54162,7 +54535,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_postscript.pro gdl/testsuite/te
 +
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_ps_decomposed.pro gdl/testsuite/test_ps_decomposed.pro
 --- gdl-0.9.2/testsuite/test_ps_decomposed.pro	2011-10-29 03:55:16.000000000 -0600
-+++ gdl/testsuite/test_ps_decomposed.pro	2011-12-29 18:10:47.000000000 -0700
++++ gdl/testsuite/test_ps_decomposed.pro	2012-02-21 09:54:37.933856768 -0700
 @@ -5,7 +5,7 @@
  ; this code was failing on a computer with "bad" locale (fr_FR.utf8)
  ;
@@ -54338,7 +54711,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_qromb.pro gdl/testsuite/test_qr
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_qromo.pro gdl/testsuite/test_qromo.pro
 --- gdl-0.9.2/testsuite/test_qromo.pro	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/testsuite/test_qromo.pro	2012-06-19 04:17:43.000000000 -0600
++++ gdl/testsuite/test_qromo.pro	2012-07-17 09:30:31.402772742 -0600
 @@ -0,0 +1,167 @@
 +;
 +; under GNU GPL v2 or later
@@ -54509,7 +54882,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_qromo.pro gdl/testsuite/test_qr
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_random.pro gdl/testsuite/test_random.pro
 --- gdl-0.9.2/testsuite/test_random.pro	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/testsuite/test_random.pro	2012-04-13 15:10:27.000000000 -0600
++++ gdl/testsuite/test_random.pro	2012-05-10 15:10:06.905415829 -0600
 @@ -0,0 +1,68 @@
 +;
 +; Alain Coulais, 5 Janvier 2011, under GNU GPL v2 or later
@@ -54581,7 +54954,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_random.pro gdl/testsuite/test_r
 +
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test-read_ascii.pro gdl/testsuite/test-read_ascii.pro
 --- gdl-0.9.2/testsuite/test-read_ascii.pro	2011-06-07 10:45:42.000000000 -0600
-+++ gdl/testsuite/test-read_ascii.pro	2011-11-15 17:49:34.000000000 -0700
++++ gdl/testsuite/test-read_ascii.pro	2012-02-21 09:54:37.598868924 -0700
 @@ -1,14 +1,14 @@
  ;
  ; Script : test-read_ascii
@@ -54659,7 +55032,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test-read_ascii.pro gdl/testsuite/te
  end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_read_jpeg.pro gdl/testsuite/test_read_jpeg.pro
 --- gdl-0.9.2/testsuite/test_read_jpeg.pro	2010-04-14 09:07:58.000000000 -0600
-+++ gdl/testsuite/test_read_jpeg.pro	2012-01-24 02:11:39.000000000 -0700
++++ gdl/testsuite/test_read_jpeg.pro	2012-02-21 09:54:37.966855569 -0700
 @@ -6,8 +6,9 @@
  ; What is tested ?
  ; -- reading back a small (600x259) JPEG image
@@ -54700,7 +55073,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_read_jpeg.pro gdl/testsuite/tes
  end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_read_standard_images.pro gdl/testsuite/test_read_standard_images.pro
 --- gdl-0.9.2/testsuite/test_read_standard_images.pro	1969-12-31 17:00:00.000000000 -0700
-+++ gdl/testsuite/test_read_standard_images.pro	2012-05-09 18:10:52.000000000 -0600
++++ gdl/testsuite/test_read_standard_images.pro	2012-05-10 15:10:06.917415396 -0600
 @@ -0,0 +1,435 @@
 +;
 +; AC, 5-Feb-2012
@@ -55139,7 +55512,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_read_standard_images.pro gdl/te
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_smooth.pro gdl/testsuite/test_smooth.pro
 --- gdl-0.9.2/testsuite/test_smooth.pro	2006-10-05 17:42:30.000000000 -0600
-+++ gdl/testsuite/test_smooth.pro	2012-05-08 03:48:44.000000000 -0600
++++ gdl/testsuite/test_smooth.pro	2012-05-10 15:10:06.921415253 -0600
 @@ -1,9 +1,112 @@
  ;
 -; ARSC 13/07/2006
@@ -55360,7 +55733,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_standardize.pro gdl/testsuite/t
 +
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_str_functions.pro gdl/testsuite/test_str_functions.pro
 --- gdl-0.9.2/testsuite/test_str_functions.pro	2010-04-16 08:41:32.000000000 -0600
-+++ gdl/testsuite/test_str_functions.pro	2011-11-29 04:04:20.000000000 -0700
++++ gdl/testsuite/test_str_functions.pro	2012-02-21 09:54:38.001854301 -0700
 @@ -3,6 +3,10 @@
  ;
  ; Few basic tests on functions working on Strings
@@ -55464,7 +55837,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_strmatch.pro gdl/testsuite/test
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_strsplit.pro gdl/testsuite/test_strsplit.pro
 --- gdl-0.9.2/testsuite/test_strsplit.pro	2011-08-19 06:38:14.000000000 -0600
-+++ gdl/testsuite/test_strsplit.pro	2012-07-11 07:55:34.000000000 -0600
++++ gdl/testsuite/test_strsplit.pro	2012-07-17 09:30:31.430772739 -0600
 @@ -244,6 +244,27 @@
     nb_pbs=nb_pbs+1
  endif
@@ -55673,7 +56046,7 @@ diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_usersym.pro gdl/testsuite/test_
 +end
 diff -ruN --exclude CVS gdl-0.9.2/testsuite/test_zip.pro gdl/testsuite/test_zip.pro
 --- gdl-0.9.2/testsuite/test_zip.pro	2010-06-29 03:20:57.000000000 -0600
-+++ gdl/testsuite/test_zip.pro	2012-05-14 08:22:35.000000000 -0600
++++ gdl/testsuite/test_zip.pro	2012-05-15 12:11:39.267530203 -0600
 @@ -3,124 +3,216 @@
  ;
  ; Maxime Lenoir, June 2010

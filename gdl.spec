@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        7.cvs20120716%{?dist}
+Release:        8.cvs20120717%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -20,8 +20,6 @@ Patch1:         gdl-antlr-auto.patch
 Patch2:         gdl-shared.patch
 # Patch to allow make check to work for out of tree builds
 Patch3:         gdl-build.patch
-# Patch to comment out env push_pack in pythongdl.c as elsewhere
-Patch4:         gdl-0.9.2-env.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL doesn't have the needed antlr version/headers, has old plplot
@@ -97,7 +95,6 @@ popd
 %endif
 %patch2 -p1 -b .shared
 %patch3 -p1 -b .build
-%patch4 -p1 -b .env
 rm ltmain.sh
 autoreconf --install
 
@@ -180,6 +177,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul 17 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-8.cvs20120717
+- Update to current cvs
+- Drop env patch fixed upstream
+
 * Mon Jul 16 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-7.cvs20120716
 - Update to current cvs
 
