@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        8.cvs20120717%{?dist}
+Release:        9.cvs20120717%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -177,6 +177,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jul 27 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-9.cvs20120717
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Tue Jul 17 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-8.cvs20120717
 - Update to current cvs
 - Drop env patch fixed upstream
