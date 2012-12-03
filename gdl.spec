@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.2
-Release:        9.cvs20120717%{?dist}
+Release:        10.cvs20120717%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -177,6 +177,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Dec 3 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-10.cvs20120717
+- Rebuild for hdf5 1.8.10
+
 * Fri Jul 27 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-9.cvs20120717
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
