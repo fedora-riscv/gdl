@@ -1,8 +1,8 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9.2
-Release:        10.cvs20120717%{?dist}
+Version:        0.9.3
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -12,7 +12,7 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-Patch0:         gdl-0.9.2-cvs.patch
+#Patch0:         gdl-0.9.2-cvs.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr-auto.patch
@@ -82,7 +82,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %prep
 %setup -q -n %{name}-%{version}
-%patch0 -p1 -b .cvs
+#patch0 -p1 -b .cvs
 %if 0%{?fedora}
 %patch1 -p1 -b .antlr-auto
 rm -rf src/antlr
@@ -177,6 +177,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Dec 27 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-1
+- Update to 0.9.3
+- Rebase antlr-auto patch
+
 * Mon Dec 3 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-10.cvs20120717
 - Rebuild for hdf5 1.8.10
 

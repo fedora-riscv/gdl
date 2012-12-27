@@ -1,27 +1,27 @@
-diff -up gdl-0.9.1/configure.in.antlr-auto gdl-0.9.1/configure.in
---- gdl-0.9.1/configure.in.antlr-auto	2011-10-25 16:29:31.908423227 -0600
-+++ gdl-0.9.1/configure.in	2011-10-25 16:29:32.705394481 -0600
-@@ -1108,7 +1108,7 @@ dnl AC_CHECK_FUNCS(strdup strtod strtol
+diff -up gdl-0.9.3/configure.in.antlr-auto gdl-0.9.3/configure.in
+--- gdl-0.9.3/configure.in.antlr-auto	2012-12-27 09:22:45.000000000 -0700
++++ gdl-0.9.3/configure.in	2012-12-27 16:29:27.602699881 -0700
+@@ -1180,7 +1180,7 @@ dnl AC_CHECK_FUNCS(strdup strtod strtol
  dnl perform program name transformation
  dnl AC_ARG_PROGRAM
  
--AC_CONFIG_FILES(Makefile src/Makefile src/antlr/Makefile src/pro/Makefile src/pro/dicom/Makefile testsuite/Makefile doc/Makefile)
-+AC_CONFIG_FILES(Makefile src/Makefile src/pro/Makefile src/pro/dicom/Makefile testsuite/Makefile doc/Makefile)
+-AC_CONFIG_FILES(Makefile src/Makefile src/antlr/Makefile src/pro/Makefile src/pro/dicom/Makefile src/pro/envi/Makefile testsuite/Makefile doc/Makefile)
++AC_CONFIG_FILES(Makefile src/Makefile src/pro/Makefile src/pro/dicom/Makefile src/pro/envi/Makefile testsuite/Makefile doc/Makefile)
  AC_OUTPUT
  
  dnl == summary table =======================================
-diff -up gdl-0.9.1/src/Makefile.am.antlr-auto gdl-0.9.1/src/Makefile.am
---- gdl-0.9.1/src/Makefile.am.antlr-auto	2011-10-25 16:29:32.521401116 -0600
-+++ gdl-0.9.1/src/Makefile.am	2011-10-25 16:29:59.176439745 -0600
+diff -up gdl-0.9.3/src/Makefile.am.antlr-auto gdl-0.9.3/src/Makefile.am
+--- gdl-0.9.3/src/Makefile.am.antlr-auto	2012-12-27 09:22:44.000000000 -0700
++++ gdl-0.9.3/src/Makefile.am	2012-12-27 16:29:41.153584841 -0700
 @@ -1,6 +1,6 @@
  # set the include path found by configure
  INCLUDES = $(EXT_INCLUDES) $(all_includes)
 -SUBDIRS = antlr pro
 +SUBDIRS = pro
  
- cpp_hpp_files = allix.hpp allix.cpp prognode.hpp prognodeexpr.hpp \
- 		accessdesc.hpp arrayindex.hpp assocdata.cpp assocdata.hpp \
-@@ -61,7 +61,7 @@ gdl_SOURCES = $(cpp_hpp_files) gdl.cpp l
+ cpp_hpp_files = overload.hpp overload.cpp nullgdl.hpp nullgdl.cpp allix.hpp allix.cpp prognode.hpp \
+ 		prognodeexpr.hpp accessdesc.hpp arrayindex.hpp assocdata.cpp assocdata.hpp \
+@@ -65,7 +65,7 @@ gdl_SOURCES = $(cpp_hpp_files) gdl.cpp l
  gdl_CXXFLAGS = $(AM_CXXFLAGS)
  # the library search path.
  gdl_LDFLAGS = $(all_libraries)
@@ -30,7 +30,7 @@ diff -up gdl-0.9.1/src/Makefile.am.antlr-auto gdl-0.9.1/src/Makefile.am
  endif
  
  # build as library (for python module)
-@@ -77,6 +77,6 @@ else
+@@ -81,6 +81,6 @@ else
  libgdl_la_LDFLAGS = $(all_libraries) -Wl,-z,muldefs
  endif 
  
