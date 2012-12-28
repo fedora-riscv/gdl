@@ -24,7 +24,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?fedora} || 0%{?rhel} >= 6
- %if 0%{?fedora} >= 14
+ %if 0%{?fedora}
 BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
  %else
@@ -92,8 +92,6 @@ Provides:       %{name}-runtime = %{version}-%{release}
 #patch0 -p1 -b .cvs
 %if 0%{?fedora} || 0%{?rhel} >= 6
 %patch1 -p1 -b .antlr-auto
-%endif
-%if 0%{?fedora} || 0%{?rhel} >= 6
 rm -rf src/antlr
 pushd src
 for f in *.g
