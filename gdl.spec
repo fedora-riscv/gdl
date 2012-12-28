@@ -22,10 +22,15 @@ Patch2:         gdl-shared.patch
 Patch3:         gdl-build.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-#RHEL doesn't have the needed antlr version/headers, has old plplot
-%if 0%{?fedora}
+#RHEL5 doesn't have the needed antlr version/headers, has old plplot
+%if 0%{?fedora} || 0%{?rhel} >= 6
+ %if 0%{?fedora}
 BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
+ %else
+BuildRequires:  antlr
+BuildRequires:  java
+ %endif
 %global plplot_config %{nil}
 %else
 %global plplot_config --enable-oldplplot
@@ -35,7 +40,9 @@ BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
 BuildRequires:  netcdf-cxx-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
+%if 0%{?fedora} || 0%{?rhel} >= 6
 BuildRequires:  grib_api-static
+%endif
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  pslib-devel
@@ -60,7 +67,7 @@ Systems Inc.
 Summary:        Common files for GDL
 Group:          Applications/Engineering
 Requires:       %{name}-runtime = %{version}-%{release}
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?rhel} >= 6
 BuildArch:      noarch
 %endif
 
@@ -83,7 +90,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %prep
 %setup -q -n %{name}-%{version}
 #patch0 -p1 -b .cvs
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 6
 %patch1 -p1 -b .antlr-auto
 rm -rf src/antlr
 pushd src
