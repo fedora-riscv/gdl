@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -184,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jan 18 2013 Adam Tkac <atkac redhat com> - 0.9.3-2
+- rebuild due to "jpeg8-ABI" feature drop
+
 * Thu Dec 27 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-1
 - Update to 0.9.3
 - Rebase antlr-auto patch
