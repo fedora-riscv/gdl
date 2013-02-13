@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -184,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
 * Fri Jan 18 2013 Adam Tkac <atkac redhat com> - 0.9.3-2
 - rebuild due to "jpeg8-ABI" feature drop
 
