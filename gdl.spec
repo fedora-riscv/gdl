@@ -8,7 +8,7 @@ Summary:        GNU Data Language
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}-cvs.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
