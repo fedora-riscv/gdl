@@ -1,8 +1,8 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9.1
-Release:        1%{?dist}
+Version:        0.9.3
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -12,17 +12,27 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
+#Patch0:         gdl-0.9.2-cvs.patch
+# Build with system antlr library.  Request for upstream change here:
+# https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
+Patch1:         gdl-antlr-auto.patch
+# Force build of libgdl.so
+Patch2:         gdl-shared.patch
+# Patch to allow make check to work for out of tree builds
+Patch3:         gdl-build.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-#RHEL doesn't have the needed antlr version/headers, has old plplot
-%if 0%{?fedora}
- %if 0%{?fedora} >= 14
+#RHEL5 doesn't have the needed antlr version/headers, has old plplot
+%if 0%{?fedora} || 0%{?rhel} >= 6
+ %if 0%{?fedora}
 BuildRequires:  antlr-C++
+BuildRequires:  antlr-tool
  %else
 BuildRequires:  antlr
+BuildRequires:  java
  %endif
 %global plplot_config %{nil}
 %else
@@ -30,12 +40,15 @@ BuildRequires:  antlr
 %endif
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
-BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
+BuildRequires:  netcdf-cxx-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
+%if 0%{?fedora} || 0%{?rhel} >= 6
 BuildRequires:  grib_api-static
+%endif
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
+BuildRequires:  pslib-devel
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
 BuildRequires:  cmake
@@ -43,6 +56,8 @@ BuildRequires:  cmake
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
 Provides:       %{name}-runtime = %{version}-%{release}
+# Need to match hdf5 compile time version
+Requires:       hdf5 = %{_hdf5_version}
 
 
 %description
@@ -55,7 +70,7 @@ Systems Inc.
 Summary:        Common files for GDL
 Group:          Applications/Engineering
 Requires:       %{name}-runtime = %{version}-%{release}
-%if !0%{?rhel}
+%if 0%{?fedora} || 0%{?rhel} >= 6
 BuildArch:      noarch
 %endif
 
@@ -76,9 +91,18 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n %{name}-%{version}-cvs
+%setup -q -n %{name}-%{version}
 rm -rf src/antlr
 %patch13 -p1 -b .antlr
+pushd src
+for f in *.g
+do
+  antlr $f
+done
+popd
+%patch2 -p1 -b .shared
+%patch3 -p1 -b .build
+rm ltmain.sh
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
@@ -86,7 +110,6 @@ rm -rf src/antlr
    -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
    -DGRIB=ON \\\
 %{nil}
-
 # TODO - build an mpi version
 #           INCLUDES="-I/usr/include/mpich2" \
 #           --with-mpich=%{_libdir}/mpich2 \
@@ -130,10 +153,9 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 
 %check
-#cd testsuite
-#echo ".r test_suite" | ../build/src/gdl
 cd build
 make check VERBOSE=1
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -156,6 +178,76 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Fri Jan 18 2013 Adam Tkac <atkac redhat com> - 0.9.3-2
+- rebuild due to "jpeg8-ABI" feature drop
+
+* Thu Dec 27 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-1
+- Update to 0.9.3
+- Rebase antlr-auto patch
+
+* Mon Dec 3 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-10.cvs20120717
+- Rebuild for hdf5 1.8.10
+
+* Fri Jul 27 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-9.cvs20120717
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Tue Jul 17 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-8.cvs20120717
+- Update to current cvs
+- Drop env patch fixed upstream
+
+* Mon Jul 16 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-7.cvs20120716
+- Update to current cvs
+
+* Tue May 15 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-6.cvs20120515
+- Update to current cvs
+- Add patch for testsuite make check to work in build directory
+- Add patch to fix pythongdl.c compile
+- Run the testsuite properly with make check
+
+* Wed Mar 21 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-5
+- Rebuild antlr generated files
+- Rebuild for ImageMagick
+
+* Tue Feb 28 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.2-4
+- Rebuilt for c++ ABI breakage
+
+* Sat Jan 7 2012 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-3
+- Build with pslib
+
+* Wed Nov 16 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-2
+- Rebuild for hdf5 1.8.8
+
+* Fri Nov 11 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.2-1
+- Update to 0.9.2
+- Drop upstreamed patches
+- Drop hdf support from python module, add patch to force building of python
+  shared library
+
+* Wed Oct 26 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.1-5
+- Rebuilt for glibc bug#747377
+
+* Thu Aug 18 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-4
+- Rebuild for plplot 5.9.8
+- Add upstream patch to fix strsplit and str_sep
+- Add patch to fix compile issues with string
+- Add patch to change plplot SetOpt to setopt
+
+* Tue May 17 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-3
+- Rebuild for hdf5 1.8.7
+
+* Thu Mar 31 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-2
+- Rebuild for netcdf 4.1.2
+
+* Tue Mar 29 2011 Orion Poplawski <orion@cora.nwra.com> - 0.9.1-1
+- Update to 0.9.1
+- Drop numpy and wx patches fixed upstream
+
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Wed Oct 11 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-5
 - Rebuild for plplot 5.9.7
 
