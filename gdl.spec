@@ -264,7 +264,7 @@ rm -rf $RPM_BUILD_ROOT
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
-* Wed Oct 11 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-5
+* Mon Oct 11 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-5
 - Rebuild for plplot 5.9.7
 
 * Wed Sep 29 2010 jkeating - 0.9-4
@@ -305,7 +305,7 @@ rm -rf $RPM_BUILD_ROOT
 * Mon Mar 8 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.11.rc4
 - Rebuild for new ImageMagick
 
-* Wed Feb 15 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.10.rc4
+* Wed Feb 17 2010 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.10.rc4
 - Update to 0.9rc4
 - Enable grib, udunits2, and wxWidgets support
 - Build python module and add sub-package for it
@@ -315,10 +315,10 @@ rm -rf $RPM_BUILD_ROOT
 - Explicitly BR hdf-static in accordance with the Packaging
   Guidelines (hdf-devel is still static-only).
 
-* Wed Nov 11 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.8.rc3
+* Wed Nov 11 2009 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.8.rc3
 - Rebuild for netcdf-4.1.0
 
-* Thu Oct 15 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.7.rc3
+* Thu Oct 15 2009 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.7.rc3
 - Update to 0.9rc3
 - Drop gcc43, ppc64, friend patches fixed upstream
 - Add source for makecvstarball
@@ -329,123 +329,123 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9-0.6.rc2.20090312
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
-* Mon Mar 16 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.5.rc2.20090312
+* Mon Mar 16 2009 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.5.rc2.20090312
 - Back off building python module until configure macro is updated
 
-* Thu Mar 12 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.4.rc2.20090312
+* Thu Mar 12 2009 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.4.rc2.20090312
 - Update to 0.9rc2 cvs 20090312
 - Rebase antlr patch
 - Rebuild for new ImageMagick
 
-* Thu Feb 26 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.3.rc2.20090224
+* Thu Feb 26 2009 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.3.rc2.20090224
 - Build python module
 - Move common code to noarch common sub-package
 
-* Tue Feb 24 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.2.rc2.20090224
+* Tue Feb 24 2009 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.2.rc2.20090224
 - Update to 0.9rc2 cvs 20090224
 - Fix release tag
 - Drop ImageMagick patch fixed upstream
 - Add patch to compile with gcc 4.4.0 - needs new friend statement
 - Don't build included copy of antlr, use system version
 
-* Fri Jan 23 2009 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc2.1
+* Fri Jan 23 2009 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc2.1
 - Update to 0.9rc2 based cvs
 
 * Sun Nov 30 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.9-0.rc1.4.1
 - Rebuild for Python 2.6
 
-* Fri Sep  5 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.4
+* Fri Sep  5 2008 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.4
 - Add a requires on plplot to pull in drivers (bug#458277)
 
-* Fri May 16 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.3
+* Fri May 16 2008 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.3
 - Update to latest cvs
 - Add patch to handle new ImageMagick
 - Update netcdf locations
 
-* Mon Apr 28 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.2
+* Mon Apr 28 2008 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.2
 - Rebuild for new ImageMagick
 
-* Sat Apr  5 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.1
+* Sat Apr  5 2008 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.rc1.1
 - Update to 0.9rc1
 
-* Mon Mar 17 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6.2
+* Mon Mar 17 2008 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6.2
 - Update cvs patch to latest cvs
 
-* Tue Mar 4 2008 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6.1
+* Tue Mar 4 2008 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6.1
 - Rebuild for gcc 4.3, and add patch for gcc 4.3 support
 - Add patch to build against plplot 5.9.0
 - Add cvs patch to update to latest cvs
 
-* Fri Nov  1 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6
+* Fri Nov  2 2007 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre6
 - Update to 0.9pre6
 
-* Tue Aug 21 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre5.2
+* Tue Aug 21 2007 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre5.2
 - Add patch to fix build on ppc64
 
-* Tue Aug 21 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre5.1
+* Tue Aug 21 2007 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre5.1
 - Update license tag to GPLv2+
 - Rebuild for BuildID
 
-* Mon Jul  9 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre5
+* Mon Jul  9 2007 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre5
 - Update to 0.9pre5
 
-* Tue May 22 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4.2
+* Tue May 22 2007 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4.2
 - Rebuild for netcdf 3.6.2 with shared libraries
 
-* Tue Jan  9 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4.1
+* Tue Jan  9 2007 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4.1
 - Package the library routines and point to them by default
 
-* Fri Jan  5 2007 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4
+* Fri Jan  5 2007 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre4
 - Update to 0.9pre4
 
-* Mon Dec 18 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.4
+* Mon Dec 18 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.4
 - Add patch for configure to handle python 2.5
 
 * Thu Dec 14 2006 - Jef Spaleta <jspaleta@gmail.com> - 0.9-0.pre3.3
 - Bump and build for python 2.5
 
-* Wed Nov 22 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.2
+* Wed Nov 22 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.2
 - Update to 0.9pre3
 
-* Wed Oct  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.1
+* Wed Oct  2 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.1
 - rebuilt for unwind info generation, broken in gcc-4.1.1-21
 
-* Mon Sep 19 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3
+* Mon Sep 18 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3
 - Rebuild for FC6
 - Add patch for specialization error caught by gcc 4.1.1
 
-* Thu Jun 29 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre2
+* Thu Jun 29 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre2
 - Update to 0.9pre2
 
-* Sun Jun 11 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre.1
+* Sun Jun 11 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre.1
 - Rebuild for ImageMagick so bump
 
-* Mon Apr  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre
+* Mon Apr  3 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre
 - Update to 0.9pre
 
-* Fri Feb 24 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-4
+* Fri Feb 24 2006 Orion Poplawski <orion@cora.nwra.com> - 0.8.11-4
 - Add --with-fftw to configure
 
-* Thu Feb  2 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-3
+* Thu Feb  2 2006 Orion Poplawski <orion@cora.nwra.com> - 0.8.11-3
 - Enable hdf for ppc
 - Change fftw3 to fftw
 
-* Tue Jan  3 2006 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-2
+* Tue Jan  3 2006 Orion Poplawski <orion@cora.nwra.com> - 0.8.11-2
 - Rebuild
 
-* Mon Nov 21 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.11-1
+* Mon Nov 21 2005 Orion Poplawski <orion@cora.nwra.com> - 0.8.11-1
 - Upstream 0.8.11
 - Remove hdf patch fixed upstream
 - Remove X11R6 lib path - not needed with modular X
 
-* Wed Nov 16 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-4
+* Wed Nov 16 2005 Orion Poplawski <orion@cora.nwra.com> - 0.8.10-4
 - Update for new ImageMagick version
 
-* Thu Sep 22 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-3
+* Thu Sep 22 2005 Orion Poplawski <orion@cora.nwra.com> - 0.8.10-3
 - Disable hdf with configure on ppc
 
-* Thu Sep 22 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-2
+* Thu Sep 22 2005 Orion Poplawski <orion@cora.nwra.com> - 0.8.10-2
 - Don't include hdf support on ppc
 
-* Fri Aug 19 2005 - Orion Poplawski <orion@cora.nwra.com> - 0.8.10-1
+* Fri Aug 19 2005 Orion Poplawski <orion@cora.nwra.com> - 0.8.10-1
 - Initial Fedora Extras version
