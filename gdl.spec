@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -12,7 +12,7 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-#Patch0:         gdl-0.9.2-cvs.patch
+Patch0:         gdl-cvs.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr-auto.patch
@@ -20,6 +20,10 @@ Patch1:         gdl-antlr-auto.patch
 Patch2:         gdl-shared.patch
 # Patch to allow make check to work for out of tree builds
 Patch3:         gdl-build.patch
+# Patch to have test_ce.pro look in the current directory for libtest_ce.so
+Patch4:         gdl-test_ce.patch
+# Patch to have run tests without stdin
+Patch5:         gdl-tests.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch13:        gdl-0.9-antlr-cmake.patch
@@ -46,6 +50,7 @@ BuildRequires:  fftw-devel, hdf-static
 %if 0%{?fedora} || 0%{?rhel} >= 6
 BuildRequires:  grib_api-static
 %endif
+BuildRequires:  eigen3-devel
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  pslib-devel
@@ -92,6 +97,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %prep
 %setup -q -n %{name}-%{version}
+%patch0 -p1 -b .cvs
 rm -rf src/antlr
 %patch13 -p1 -b .antlr
 pushd src
@@ -102,7 +108,10 @@ done
 popd
 %patch2 -p1 -b .shared
 %patch3 -p1 -b .build
+%patch4 -p1 -b .test_ce
+%patch5 -p1 -b .tests
 rm ltmain.sh
+rm -r CMakeFiles
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
@@ -143,7 +152,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
 cp -p src/libgdl.so \
       $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
-rm -r $RPM_BUILD_ROOT/%{_prefix}/lib
 popd
 
 # Install the profile file to set GDL_PATH
@@ -154,7 +162,9 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 %check
 cd build
-make check VERBOSE=1
+# test_bug_3104326 expects to use DISPLAY
+# Known issues with str_sep
+make check ARGS="-V -E 'test_bug_3104326|test_str_sep'"
 
 
 %clean
@@ -178,6 +188,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Mar 15 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-4
+- Change to use cmake
+- Update to current cvs via patch
+- Add patches to fix tests under cmake
+- Build with eigen3
+
 * Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.3-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
