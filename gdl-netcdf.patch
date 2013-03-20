@@ -1,0 +1,123 @@
+diff -up gdl-0.9.3/CMakeLists.txt.netcdf gdl-0.9.3/CMakeLists.txt
+--- gdl-0.9.3/CMakeLists.txt.netcdf	2013-03-20 16:59:45.275423730 -0600
++++ gdl-0.9.3/CMakeLists.txt	2013-03-20 16:59:47.882410649 -0600
+@@ -373,18 +373,18 @@ if(NETCDF)
+ 	find_package(NetCDF QUIET)
+ 	if(NETCDF_FOUND)
+ 		set(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIRS})
+-		check_include_file_cxx(netcdfcpp.h HAVE_NETCDFCPP_H)
+-		if(HAVE_NETCDFCPP_H)
++		check_include_file_cxx(netcdf.h HAVE_NETCDF_H)
++		if(HAVE_NETCDF_H)
+ 			set(LIBRARIES ${LIBRARIES} ${NETCDF_LIBRARIES})
+ 			set(LINK_DIRECTORIES ${LINK_DIRECTORIES} ${NETCDF_LIBRARY_DIRS})
+ 			include_directories(${NETCDF_INCLUDE_DIRS})
+ 			set(USE_NETCDF 1)
+-		else(HAVE_NETCDFCPP_H)
++		else(HAVE_NETCDF_H)
+ 			message(FATAL_ERROR "NetCDF installation seems not to be usable.\n"
+ 			"This suggests a conflicting netCDF-HDF4 installation e.g.\n"
+ 			"- Uninstalling HDF4 after installation of NetCDF.\n"
+ 			"- Installing NetCDF before HDF4.")
+-		endif(HAVE_NETCDFCPP_H)
++		endif(HAVE_NETCDF_H)
+ 		set(CMAKE_REQUIRED_INCLUDES)
+ 	else(NETCDF_FOUND)
+ 		message(FATAL_ERROR "NetCDF version 3.5.1 or later is required but was not found.\n"
+diff -up gdl-0.9.3/CMakeModules/FindNetCDF.cmake.netcdf gdl-0.9.3/CMakeModules/FindNetCDF.cmake
+--- gdl-0.9.3/CMakeModules/FindNetCDF.cmake.netcdf	2012-12-27 09:22:45.000000000 -0700
++++ gdl-0.9.3/CMakeModules/FindNetCDF.cmake	2013-03-20 16:59:47.882410649 -0600
+@@ -9,24 +9,17 @@
+ #
+ 
+ 
+-find_path(NETCDFPKG netcdf.pc PATH_SUFFIXES lib lib/pkgconfig)
+-include(FindPackageHandleStandardArgs)
+-if(NETCDFPKG)
+-	set(ENV{PKG_CONFIG_PATH} ${NETCDFPKG}) # pkg search path
+-	include(FindPkgConfig)
+-	pkg_check_modules(NETCDF netcdf)
+-	if(NETCDF_FOUND)
+-		find_package_handle_standard_args(NETCDF DEFAULT_MSG NETCDF_LIBRARIES NETCDF_INCLUDE_DIRS)
+-	endif(NETCDF_FOUND)
+-else(NETCDFPKG) # no netcdf.pc file
++find_package(PkgConfig QUIET)
++pkg_check_modules(NETCDF netcdf)
++if(NETCDF_FOUND) # no netcdf.pc file
++	find_package_handle_standard_args(NETCDF DEFAULT_MSG NETCDF_LIBRARIES)
++else(NETCDF_FOUND) # no netcdf.pc file
+ 	find_library(NETCDF_LIBRARIES NAMES netcdf)
+-	find_path(NETCDF_INCLUDE_DIRS NAMES netcdfcpp.h PATH_SUFFIXES netcdf-3)	
++	find_path(NETCDF_INCLUDE_DIRS NAMES netcdf.h PATH_SUFFIXES netcdf-3)
+ 	find_package_handle_standard_args(NETCDF DEFAULT_MSG NETCDF_LIBRARIES NETCDF_INCLUDE_DIRS)
+-endif(NETCDFPKG)
++endif(NETCDF_FOUND)
+ 
+ mark_as_advanced(
+-NETCDFPKG
+-NETCDF
+ NETCDF_INCLUDE_DIRS
+ NETCDF_LIBRARIES
+ )
+diff -up gdl-0.9.3/configure.in.netcdf gdl-0.9.3/configure.in
+--- gdl-0.9.3/configure.in.netcdf	2013-03-20 16:59:45.277423720 -0600
++++ gdl-0.9.3/configure.in	2013-03-20 17:00:59.002056390 -0600
+@@ -562,8 +562,8 @@ if test "x$with_netcdf" != "xno"; then
+     exit -1
+     ])
+ 
+-  AC_CHECK_HEADERS("netcdfcpp.h", [], [
+-    AC_CHECK_HEADERS("$ncdfincdir/netcdfcpp.h", [], [
++  AC_CHECK_HEADERS("netcdf.h", [], [
++    AC_CHECK_HEADERS("$ncdfincdir/netcdf.h", [], [
+       echo ""
+       echo "Error! netCDF installation seems not to be usable"
+       echo "       This suggests a conflicting netCDF-HDF4 installation, e.g."
+diff -up gdl-0.9.3/src/ncdf_att_cl.cpp.netcdf gdl-0.9.3/src/ncdf_att_cl.cpp
+--- gdl-0.9.3/src/ncdf_att_cl.cpp.netcdf	2012-12-27 09:22:44.000000000 -0700
++++ gdl-0.9.3/src/ncdf_att_cl.cpp	2013-03-20 16:59:47.883410644 -0600
+@@ -32,7 +32,7 @@
+ #  include <gsl/gsl_sys.h>
+ #  include <gsl/gsl_linalg.h>
+ #  include <gsl/gsl_sf.h>
+-#  include <netcdfcpp.h>
++#  include <netcdf.h>
+ 
+ #  include "datatypes.hpp"
+ #  include "math_utl.hpp"
+diff -up gdl-0.9.3/src/ncdf_cl.hpp.netcdf gdl-0.9.3/src/ncdf_cl.hpp
+--- gdl-0.9.3/src/ncdf_cl.hpp.netcdf	2012-12-27 09:22:44.000000000 -0700
++++ gdl-0.9.3/src/ncdf_cl.hpp	2013-03-20 16:59:47.883410644 -0600
+@@ -18,7 +18,7 @@
+ #ifndef NCDF_HPP_CL_
+ #define NCDF_HPP_CL_
+ 
+-#include <netcdfcpp.h>
++#include <netcdf.h>
+ #include <string>
+ 
+ namespace lib {
+diff -up gdl-0.9.3/src/ncdf_dim_cl.cpp.netcdf gdl-0.9.3/src/ncdf_dim_cl.cpp
+--- gdl-0.9.3/src/ncdf_dim_cl.cpp.netcdf	2012-12-27 09:22:44.000000000 -0700
++++ gdl-0.9.3/src/ncdf_dim_cl.cpp	2013-03-20 16:59:47.883410644 -0600
+@@ -30,7 +30,7 @@
+ #include <gsl/gsl_sys.h>
+ #include <gsl/gsl_linalg.h>
+ #include <gsl/gsl_sf.h>
+-#include <netcdfcpp.h>
++#include <netcdf.h>
+ 
+ #include "datatypes.hpp"
+ #include "math_utl.hpp"
+diff -up gdl-0.9.3/src/ncdf_var_cl.cpp.netcdf gdl-0.9.3/src/ncdf_var_cl.cpp
+--- gdl-0.9.3/src/ncdf_var_cl.cpp.netcdf	2013-03-20 16:59:45.301423599 -0600
++++ gdl-0.9.3/src/ncdf_var_cl.cpp	2013-03-20 16:59:47.884410639 -0600
+@@ -31,7 +31,7 @@
+ #include <gsl/gsl_sys.h>
+ #include <gsl/gsl_linalg.h>
+ #include <gsl/gsl_sf.h>
+-#include <netcdfcpp.h>
++#include <netcdf.h>
+ 
+ #include "datatypes.hpp"
+ #include "math_utl.hpp"

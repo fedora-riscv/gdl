@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -24,6 +24,9 @@ Patch3:         gdl-build.patch
 Patch4:         gdl-test_ce.patch
 # Patch to have run tests without stdin
 Patch5:         gdl-tests.patch
+# Patch to find netcdf with cmake
+# https://sourceforge.net/tracker/?func=detail&aid=3608649&group_id=97659&atid=618685
+Patch6:         gdl-netcdf.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch13:        gdl-0.9-antlr-cmake.patch
@@ -44,7 +47,7 @@ BuildRequires:  java
 %endif
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
-BuildRequires:  netcdf-cxx-devel, hdf5-devel, libjpeg-devel
+BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
 %if 0%{?fedora} || 0%{?rhel} >= 6
@@ -110,6 +113,7 @@ popd
 %patch3 -p1 -b .build
 %patch4 -p1 -b .test_ce
 %patch5 -p1 -b .tests
+%patch6 -p1 -b .netcdf
 rm ltmain.sh
 rm -r CMakeFiles
 
@@ -188,6 +192,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Mar 20 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-5
+- Add patch to handle netcdf better with cmake
+- BR netcdf-devel instead of netcdf-cxx-devel
+
 * Fri Mar 15 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-4
 - Change to use cmake
 - Update to current cvs via patch
