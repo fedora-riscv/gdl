@@ -1,6 +1,6 @@
 diff -up gdl-0.9.3/testsuite/CMakeLists.txt.tests gdl-0.9.3/testsuite/CMakeLists.txt
 --- gdl-0.9.3/testsuite/CMakeLists.txt.tests	2012-12-27 09:22:44.000000000 -0700
-+++ gdl-0.9.3/testsuite/CMakeLists.txt	2013-03-11 22:20:45.311421094 -0600
++++ gdl-0.9.3/testsuite/CMakeLists.txt	2013-03-21 10:32:39.998832060 -0600
 @@ -4,6 +4,12 @@ set(BASE_BINARY ${CMAKE_BINARY_DIR})
  set(LAUNCH
  "#include<unistd.h>
@@ -43,7 +43,7 @@ diff -up gdl-0.9.3/testsuite/CMakeLists.txt.tests gdl-0.9.3/testsuite/CMakeLists
  file(WRITE ${CMAKE_SOURCE_DIR}/testsuite/launchtest.c "${LAUNCH}")
 diff -up gdl-0.9.3/testsuite/test_execute.pro.tests gdl-0.9.3/testsuite/test_execute.pro
 --- gdl-0.9.3/testsuite/test_execute.pro.tests	2012-12-27 09:22:44.000000000 -0700
-+++ gdl-0.9.3/testsuite/test_execute.pro	2013-03-12 09:08:01.347485926 -0600
++++ gdl-0.9.3/testsuite/test_execute.pro	2013-03-21 10:32:39.998832060 -0600
 @@ -69,10 +69,10 @@ if KEYWORD_SET(verbose) then print, com,
  ;
  ; internal intrinsic procedure (better idea welcome !)
@@ -68,24 +68,58 @@ diff -up gdl-0.9.3/testsuite/test_execute.pro.tests gdl-0.9.3/testsuite/test_exe
  end
  ;
 diff -up gdl-0.9.3/testsuite/test_image_statistics.pro.tests gdl-0.9.3/testsuite/test_image_statistics.pro
---- gdl-0.9.3/testsuite/test_image_statistics.pro.tests	2013-03-12 09:21:08.100225141 -0600
-+++ gdl-0.9.3/testsuite/test_image_statistics.pro	2013-03-12 09:20:55.495293098 -0600
-@@ -76,13 +76,13 @@ IMAGE_STATISTICS, cube, COUNT = pixelNum
+--- gdl-0.9.3/testsuite/test_image_statistics.pro.tests	2012-12-27 09:22:44.000000000 -0700
++++ gdl-0.9.3/testsuite/test_image_statistics.pro	2013-03-21 10:32:39.998832060 -0600
+@@ -76,13 +76,34 @@ IMAGE_STATISTICS, cube, COUNT = pixelNum
  nb_errors=0
  ;
  if pixelNumber NE 466200 then nb_errors=nb_errors+1
 -if ~DIFF_BELOW_TOL(pixelTotal, 2.26349e+07, 1e3) then nb_errors=nb_errors+1
-+if ~DIFF_BELOW_TOL(pixelTotal, 2.26349e+07, 7e3) then nb_errors=nb_errors+1
- if ~DIFF_BELOW_TOL(pixelMax, 255.0, 0.001) then nb_errors=nb_errors+1
+-if ~DIFF_BELOW_TOL(pixelMax, 255.0, 0.001) then nb_errors=nb_errors+1
 -if ~DIFF_BELOW_TOL(pixelMean, 48.5520, 0.0001) then nb_errors=nb_errors+1
-+if ~DIFF_BELOW_TOL(pixelMean, 48.5520, 0.004) then nb_errors=nb_errors+1
- if ~DIFF_BELOW_TOL(pixelMin,0.0, 0.0001) then nb_errors=nb_errors+1
+-if ~DIFF_BELOW_TOL(pixelMin,0.0, 0.0001) then nb_errors=nb_errors+1
 -if ~DIFF_BELOW_TOL(pixelDeviation, 65.5660, 0.0001) then nb_errors=nb_errors+1
 -if ~DIFF_BELOW_TOL(pixelSquareSum, 3.10312e+09, 1e4) then nb_errors=nb_errors+1
 -if ~DIFF_BELOW_TOL(pixelVariance, 4298.91, 0.01) then nb_errors=nb_errors+1
-+if ~DIFF_BELOW_TOL(pixelDeviation, 65.5660, 0.004) then nb_errors=nb_errors+1
-+if ~DIFF_BELOW_TOL(pixelSquareSum, 3.10312e+09, 4e6) then nb_errors=nb_errors+1
-+if ~DIFF_BELOW_TOL(pixelVariance, 4298.91, 0.5) then nb_errors=nb_errors+1
++if ~DIFF_BELOW_TOL(pixelTotal, 2.26349e+07, 7e3) then begin
++   MESSAGE, /continue, 'pixelTotal '+STRING(pixelTotal)+' not within 2.26349e+07, 7e3'
++   nb_errors=nb_errors+1
++endif
++if ~DIFF_BELOW_TOL(pixelMax, 255.0, 0.001) then begin
++   MESSAGE, /continue, 'pixelMax '+STRING(pixelMax)+' not within 255.0, 0.001'
++   nb_errors=nb_errors+1
++endif
++if ~DIFF_BELOW_TOL(pixelMean, 48.5520, 0.005) then begin
++   MESSAGE, /continue, 'pixelMean '+STRING(pixelMean)+' not within 48.5520, 0.005'
++   nb_errors=nb_errors+1
++endif
++if ~DIFF_BELOW_TOL(pixelMin,0.0, 0.0001) then begin
++   MESSAGE, /continue, 'pixelMin '+STRING(pixelMin)+' not within 0.0, 0.0001'
++   nb_errors=nb_errors+1
++endif
++if ~DIFF_BELOW_TOL(pixelDeviation, 65.5660, 0.004) then begin
++   MESSAGE, /continue, 'pixelDeviation '+STRING(pixelDeviation)+' not within 65.5660, 0.004'
++   nb_errors=nb_errors+1
++endif
++if ~DIFF_BELOW_TOL(pixelSquareSum, 3.10312e+09, 4e6) then begin
++   MESSAGE, /continue, 'pixelSquareSum '+STRING(pixelSquareSum)+' not within 3.10312e+09, 4e6'
++   nb_errors=nb_errors+1
++endif
++if ~DIFF_BELOW_TOL(pixelVariance, 4298.91, 0.5) then begin
++   MESSAGE, /continue, 'pixelVariance '+STRING(pixelVariance)+' not within 4298.91, 0.5'
++   nb_errors=nb_errors+1
++endif
  ;
  if (nb_errors GT 0) then begin
     MESSAGE, /continue, 'Number of Errors: '+STRING(nb_errors)
+diff -up gdl-0.9.3/testsuite/test_memory.pro.tests gdl-0.9.3/testsuite/test_memory.pro
+--- gdl-0.9.3/testsuite/test_memory.pro.tests	2012-12-27 09:22:44.000000000 -0700
++++ gdl-0.9.3/testsuite/test_memory.pro	2013-03-21 10:38:49.419098783 -0600
+@@ -1,6 +1,7 @@
+ pro test_memory
+   mem = memory(/curr)
+   a = dblarr(99999)
++  message, 'start = '+string(mem)+', end = '+string(memory(/curr)), /conti
+   if mem ge memory(/curr) then begin
+     message, 'reported memory consumption should increase after allocating a big array!', /conti
+     exit, status=1
