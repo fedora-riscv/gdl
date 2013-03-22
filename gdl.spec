@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.3
-Release:        5%{?dist}
+Release:        6.cvs20130321%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -29,6 +29,8 @@ Patch5:         gdl-tests.patch
 Patch6:         gdl-netcdf.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
+# Patch to find the correct python version for cmake
+Patch7:         gdl-python.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -114,6 +116,7 @@ popd
 %patch4 -p1 -b .test_ce
 %patch5 -p1 -b .tests
 %patch6 -p1 -b .netcdf
+%patch7 -p1 -b .python
 rm ltmain.sh
 rm -r CMakeFiles
 
@@ -140,7 +143,7 @@ make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON ..
+%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=2.7 ..
 make %{?_smp_mflags}
 popd
 
@@ -192,6 +195,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Mar 22 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-6.cvs20130321
+- Update cvs patch to current cvs
+- Add patch to use python 2 with cmake
+
 * Wed Mar 20 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-5
 - Add patch to handle netcdf better with cmake
 - BR netcdf-devel instead of netcdf-cxx-devel
