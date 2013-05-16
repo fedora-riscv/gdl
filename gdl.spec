@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.3
-Release:        6.cvs20130321%{?dist}
+Release:        7.cvs20130516%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -193,6 +193,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu May 16 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-7.cvs20130516
+- Update cvs patch to current cvs
+- Rebuild for hdf5 1.8.11
+
 * Fri Mar 22 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-6.cvs20130321
 - Update cvs patch to current cvs
 - Add patch to use python 2 with cmake
