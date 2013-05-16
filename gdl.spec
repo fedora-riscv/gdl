@@ -20,15 +20,6 @@ Patch1:         gdl-antlr-auto.patch
 Patch2:         gdl-shared.patch
 # Patch to allow make check to work for out of tree builds
 Patch3:         gdl-build.patch
-# Patch to have test_ce.pro look in the current directory for libtest_ce.so
-Patch4:         gdl-test_ce.patch
-# Patch to have run tests without stdin
-Patch5:         gdl-tests.patch
-# Patch to find netcdf with cmake
-# https://sourceforge.net/tracker/?func=detail&aid=3608649&group_id=97659&atid=618685
-Patch6:         gdl-netcdf.patch
-# Patch to find the correct python version for cmake
-Patch7:         gdl-python.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -111,10 +102,6 @@ done
 popd
 %patch2 -p1 -b .shared
 %patch3 -p1 -b .build
-%patch4 -p1 -b .test_ce
-%patch5 -p1 -b .tests
-%patch6 -p1 -b .netcdf
-%patch7 -p1 -b .python
 rm ltmain.sh
 rm -r CMakeFiles
 
@@ -195,6 +182,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Thu May 16 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-7.cvs20130516
 - Update cvs patch to current cvs
+- Drop test_ce,tests, netcdf, and python patch applied upstream
 - Rebuild for hdf5 1.8.11
 
 * Fri Mar 22 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-6.cvs20130321
