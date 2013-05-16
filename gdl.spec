@@ -27,8 +27,6 @@ Patch5:         gdl-tests.patch
 # Patch to find netcdf with cmake
 # https://sourceforge.net/tracker/?func=detail&aid=3608649&group_id=97659&atid=618685
 Patch6:         gdl-netcdf.patch
-# Build with system antlr library.  Request for upstream change here:
-# https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 # Patch to find the correct python version for cmake
 Patch7:         gdl-python.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
