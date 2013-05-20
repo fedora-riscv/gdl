@@ -37,7 +37,7 @@ BuildRequires:  java
 %global plplot_config --enable-oldplplot
 %endif
 BuildRequires:  readline-devel, ncurses-devel
-BuildRequires:  gsl-devel, plplot-devel, ImageMagick-c++-devel
+BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
@@ -184,6 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 - Update cvs patch to current cvs
 - Drop test_ce,tests, netcdf, and python patch applied upstream
 - Rebuild for hdf5 1.8.11
+- Switch to GraphicsMagick
 
 * Fri Mar 22 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-6.cvs20130321
 - Update cvs patch to current cvs
