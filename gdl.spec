@@ -414,7 +414,7 @@ rm -rf $RPM_BUILD_ROOT
 * Wed Nov 22 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.2
 - Update to 0.9pre3
 
-* Wed Oct  2 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.1
+* Wed Oct  4 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3.1
 - rebuilt for unwind info generation, broken in gcc-4.1.1-21
 
 * Mon Sep 18 2006 Orion Poplawski <orion@cora.nwra.com> - 0.9-0.pre3
