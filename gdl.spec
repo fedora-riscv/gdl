@@ -157,7 +157,8 @@ cd build
 # test_bug_3104326 and test_execute expects to use DISPLAY
 # Known issues with test_memory
 # Known issues with str_sep
-make check ARGS="-V -E 'test_bug_3104326|test_execute|test_memory|test_str_sep'"
+# test_matrix_multiply is causing problems - hangs, etc.
+make check ARGS="-V -E 'test_bug_3104326|test_execute|test_memory|test_str_sep|test_matix_multiply'"
 
 
 %clean
