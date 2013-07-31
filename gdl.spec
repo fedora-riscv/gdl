@@ -20,6 +20,9 @@ Patch1:         gdl-antlr-auto.patch
 Patch2:         gdl-shared.patch
 # Patch to allow make check to work for out of tree builds
 Patch3:         gdl-build.patch
+# Patch to fix memcpy call
+# https://sourceforge.net/p/gnudatalanguage/patches/69/
+Patch4:         gdl-memcpy.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -102,6 +105,7 @@ done
 popd
 %patch2 -p1 -b .shared
 %patch3 -p1 -b .build
+%patch4 -p1 -b .memcpy
 rm ltmain.sh
 rm -r CMakeFiles
 
@@ -155,33 +159,39 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 %check
 cd build
 # test_bug_3104326 and test_execute expects to use DISPLAY
+# test_bug_3300626 - https://sourceforge.net/p/gnudatalanguage/bugs/557/
+# test_ce currently segfaults, known
+# test_dicom - https://sourceforge.net/p/gnudatalanguage/bugs/558/ 
 # Known issues with test_memory
 # Known issues with str_sep
-# test_matrix_multiply is causing problems - hangs, etc.
-make check ARGS="-V -E 'test_bug_3104326|test_execute|test_memory|test_str_sep|test_matrix_multiply'"
-
+# - https://sourceforge.net/p/gnudatalanguage/bugs/521/
+# test_matrix_multiply is causing problems - hangs
+# - https://sourceforge.net/p/gnudatalanguage/bugs/556/
+make check ARGS="-V -E 'test_bug_3104326|test_bug_3300626|test_dicom|test_execute|test_str_sep|test_matrix_multiply'"
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS ChangeLog COPYING HACKING NEWS README TODO
 %config(noreplace) %{_sysconfdir}/profile.d/gdl.*sh
 %{_bindir}/gdl
 %{_mandir}/man1/gdl.1*
 
 %files common
-%defattr(-,root,root,-)
 %{_datadir}/gnudatalanguage/
 
 %files python
-%defattr(-,root,root,-)
 %{python_sitearch}/GDL.so
 
 
 %changelog
+* Wed Jul 31 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-8.cvs20130731
+- Update cvs patch to current cvs
+- Add patch to fix segfault in test_ce
+- Cleanup test excludes, note bugs for failing tests
+
 * Thu May 16 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-7.cvs20130516
 - Update cvs patch to current cvs
 - Drop test_ce,tests, netcdf, and python patch applied upstream

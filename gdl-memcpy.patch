@@ -1,0 +1,12 @@
+diff -up gdl-0.9.3/src/basic_pro_jmg.cpp.memcpy gdl-0.9.3/src/basic_pro_jmg.cpp
+--- gdl-0.9.3/src/basic_pro_jmg.cpp.memcpy	2013-07-31 10:29:00.770280780 -0600
++++ gdl-0.9.3/src/basic_pro_jmg.cpp	2013-07-31 11:00:28.203484213 -0600
+@@ -399,7 +399,7 @@ namespace lib {
+ 			     + e->GetParString(i)
+ 		    );
+ 		}
+-		memcpy(argv[i-2], (void*) par->DataAddr(), par->Sizeof());
++		memcpy(&argv[i-2], (void*) par->DataAddr(), par->Sizeof());
+ 	    }
+ 	    else if (pType == GDL_STRING) {
+ 		argv[i-2] = (void*) (*(DStringGDL*)(par))[0].c_str();
