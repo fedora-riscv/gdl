@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.3
-Release:        7.cvs20130516%{?dist}
+Release:        8.cvs20130731%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
