@@ -27062,26 +27062,30 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro.hpp gdl
  #endif
 diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro_jmg.cpp gdl/src/basic_pro_jmg.cpp
 --- gdl-0.9.3/src/basic_pro_jmg.cpp	2012-12-27 09:22:44.000000000 -0700
-+++ gdl/src/basic_pro_jmg.cpp	2013-07-08 12:39:21.544397282 -0600
-@@ -271,12 +271,16 @@
++++ gdl/src/basic_pro_jmg.cpp	2013-08-04 20:25:18.730700435 -0600
+@@ -271,15 +271,20 @@
    }
  
    // CALL_EXTERNAL by Christoph Fuchs
-+#ifdef USE_EIGEN
-+  SizeT defaultAlign = 16;
-+#else  
++  //AC #ifdef USE_EIGEN
++  //AC SizeT defaultAlign = 16;
++  //AC #else  
    typedef struct {
      char      c;
      long long l;
    } testAlign;
    SizeT defaultAlign = (SizeT)( sizeof(testAlign)-sizeof(long long) );
 -
-+#endif
++  //AC #endif
 +  
    BaseGDL* call_external( EnvT* e)
    {
      DString image, entry;
-@@ -341,10 +345,11 @@
++    static std::string s;
+     SizeT myAlign      = defaultAlign;
+     DType myReturnType = GDL_UNDEF;
+ 
+@@ -341,10 +346,11 @@
  	e->Throw("Conflicting keywords ALL_VALUE and ALL_GDL");
      }
  
@@ -27097,7 +27101,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro_jmg.cpp
  
      for (SizeT i=0; i<nParam-2;i++) {
  	byValue[i] = flagAllValue ? 1 : flagAllGdl ? -1 : 0;
-@@ -368,11 +373,13 @@
+@@ -368,11 +374,13 @@
      e->AssureStringScalarPar( (SizeT)1, entry);
  
      int argc      = nParam-2;
@@ -27112,7 +27116,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro_jmg.cpp
      // Fill argv with the parameters
  
      for(SizeT i =2; i < nParam; i++){
-@@ -386,13 +393,13 @@
+@@ -386,13 +394,13 @@
  		);
  	    }
  
@@ -27124,11 +27128,11 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro_jmg.cpp
  		    );
  		}
 -		memcpy(argv+i-2, (void*) par->DataAddr(), par->Sizeof());
-+		memcpy(argv[i-2], (void*) par->DataAddr(), par->Sizeof());
++		memcpy(&argv[i-2], (void*) par->DataAddr(), par->Sizeof());
  	    }
  	    else if (pType == GDL_STRING) {
  		argv[i-2] = (void*) (*(DStringGDL*)(par))[0].c_str();
-@@ -407,7 +414,7 @@
+@@ -407,7 +415,7 @@
  	    argv[i-2] = (void*) par;
  	}
  	else {					// By reference (default)
@@ -27137,8 +27141,43 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro_jmg.cpp
  		argv[i-2] = (void*) par->DataAddr();
  	    }
  	    else if (pType == GDL_STRING) {
-@@ -505,7 +512,8 @@
- 	}
+@@ -477,7 +485,7 @@
+ 		      break;
+ 	case GDL_ULONG64: ret.d_ulong64 = ((DULong64(*)(int, void**))func)(argc, argv);
+ 		      break;
+-	case GDL_STRING:  ret.d_string  = ((char*(*)   (int, void**))func)(argc, argv);
++	case GDL_STRING:  ret.d_string  = ((char*(*)   (int, void**))func)(argc, argv); 
+ 		      break;
+ 	default:      e->Throw("Return type not supported: " + myReturnType );
+ 		      break;
+@@ -490,22 +498,24 @@
+ 	while (! dlclose(handle) ) {}
+ #endif
+     }
+-
++// necessary since struct is freed below, i do not see how??? (FIXME)
++    if (myReturnType == GDL_STRING) {s=ret.d_string;}
+     // Copy strings and structures back to GDL, free memory
+ 
+-    for(SizeT i = nParam-1; i >= 2; i--){
++    for (SizeT i = nParam - 1; i >= 2; i--) {
+ 	if (byValue[i-2] != 0) {continue;}
+-	BaseGDL* par = e->GetParDefined(i);
+-	SizeT pType  = par->Type();
+-	if (pType == GDL_STRING) {
+-	    ce_StringIDLtoGDL((EXTERN_STRING*) argv[i-2], par, 1);
+-	}
+-	else if (pType == GDL_STRUCT) {
+-	    ce_StructIDLtoGDL( e, argv[i-2], par, 1, myAlign);
+-	}
++      BaseGDL* par = e->GetParDefined(i);
++      SizeT pType = par->Type();
++      if (pType == GDL_STRING) {
++        ce_StringIDLtoGDL((EXTERN_STRING*) argv[i - 2], par, 1);
++      }
++      else if (pType == GDL_STRUCT) {
++        ce_StructIDLtoGDL(e, argv[i - 2], par, 1, myAlign);
++      }
      }
  
 -    free(argv);
@@ -27147,7 +27186,16 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro_jmg.cpp
  
      // Return the return value
  
-@@ -606,7 +614,7 @@
+@@ -528,7 +538,7 @@
+ 			break;
+         case GDL_ULONG64:   return new DULong64GDL(ret.d_ulong64);
+ 			break;
+-        case GDL_STRING:    return new DStringGDL(ret.d_string);
++        case GDL_STRING:    return new DStringGDL(s);
+ 			break;
+     }
+ 	    
+@@ -606,7 +616,7 @@
  		SizeT sizeOf;
  		void* source;
  		int   doFree = 0;
@@ -27156,7 +27204,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro_jmg.cpp
  		    source = (void*) member->DataAddr();
  		    length = member->NBytes();
  		    sizeOf = member->Sizeof();
-@@ -658,7 +666,7 @@
+@@ -658,7 +668,7 @@
  		SizeT length;
  		SizeT sizeOf;
  		void* dest;
@@ -27165,7 +27213,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro_jmg.cpp
  		    sizeOf = member->Sizeof();
  		}
  		else {
-@@ -670,7 +678,7 @@
+@@ -670,7 +680,7 @@
  		    p += space;
  		}
  
@@ -27174,7 +27222,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/basic_pro_jmg.cpp
  		    length = member->NBytes();
  		    dest   = (void*) member->DataAddr();
  		    memcpy(dest, p, length);
-@@ -709,7 +717,9 @@
+@@ -709,7 +719,9 @@
  	for (SizeT iTag=0; iTag < nTags; iTag++) {
  	    BaseGDL* member = s->GetTag(iTag);
  	    DType    pType  = member->Type();
@@ -37317,7 +37365,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/gdlgstream.cpp gd
  }
 diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/gdlgstream.hpp gdl/src/gdlgstream.hpp
 --- gdl-0.9.3/src/gdlgstream.hpp	2012-12-27 09:22:44.000000000 -0700
-+++ gdl/src/gdlgstream.hpp	2013-07-08 12:39:21.921392816 -0600
++++ gdl/src/gdlgstream.hpp	2013-08-04 20:25:18.830700051 -0600
 @@ -18,6 +18,9 @@
  #ifndef GDLGSTREAM_HPP_
  #define GDLGSTREAM_HPP_
@@ -37730,7 +37778,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/gdlgstream.hpp gd
 +      wymax=theBox.dy2;
 +  }
 +  PLFLT  boxAspectDevice(){return (theBox.dy2-theBox.dy1)/(theBox.dx2-theBox.dx1);}
-+  PLFLT  boxAspectWorld(){return (theBox.wy2-theBox.wy1)/(theBox.wx2-theBox.wx1);}
++  PLFLT  boxAspectWorld(){return fabs(theBox.wy2-theBox.wy1)/fabs(theBox.wx2-theBox.wx1);}
 +
 +  void SaveLayout()
 +  {
@@ -53151,14 +53199,57 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/objects.hpp gdl/s
  #endif
 diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/ofmt.cpp gdl/src/ofmt.cpp
 --- gdl-0.9.3/src/ofmt.cpp	2012-12-27 09:22:44.000000000 -0700
-+++ gdl/src/ofmt.cpp	2013-07-08 12:39:21.946392520 -0600
-@@ -301,7 +301,115 @@
++++ gdl/src/ofmt.cpp	2013-08-04 20:25:18.990699436 -0600
+@@ -300,8 +300,7 @@
+     }
  
    return tCountOut;
+-}
+-
++} 
+ // F code ****************************************************
+ // other
+ template<class Sp> SizeT Data_<Sp>::
+@@ -675,8 +674,11 @@
+       (*os) << oct << setw(w) << setfill(f) << (*this)[ i];
+   else if ( oMode == BIN)
+     for( SizeT i=offs; i<endEl; ++i)
++#ifdef _MSC_VER
++      (*os) << binstr((int)(*this)[ i], w);
++#else
+       (*os) << binstr((*this)[ i], w);
+-//       (*os) << binstr((std::bitset<32>)i, w);
++#endif
+   else if ( oMode == HEX)
+     for( SizeT i=offs; i<endEl; ++i)
+       (*os) << uppercase << hex << setw(w) << setfill(f) << (*this)[ i];
+@@ -710,11 +712,15 @@
+   else if ( oMode == BIN)
+     for( SizeT i=offs; i<endEl; ++i)
+     {
+-//       if (w > 32) 
+-// 	(*os) << binstr((std::bitset<32>)i >> 32, w - 32);
+-//       (*os) << binstr((std::bitset<32>)i, w <= 32 ? w : 32);
+-      if (w > 32) (*os) << binstr((*this)[ i] >> 32, w - 32);
++#ifdef _MSC_VER
++      if (w > 32)
++	(*os) << binstr((int)(*this)[ i] >> 32, w - 32);
++      (*os) << binstr((int)(*this)[ i], w <= 32 ? w : 32);
++#else
++      if (w > 32) 
++	(*os) << binstr((*this)[ i] >> 32, w - 32);
+       (*os) << binstr((*this)[ i], w <= 32 ? w : 32);
++#endif
+     }
+   else if ( oMode == HEX)
+     for( SizeT i=offs; i<endEl; ++i)
+@@ -953,6 +959,205 @@
+   return tCountOut;
  }
+ 
 +// C code ****************************************************
-+    void j2ymdhms(DDouble jd, DLong &iMonth, DLong &iDay , DLong &Year ,
-+                  DLong &Hour , DLong &Minute, DDouble &Second)
++    void j2ymdhms(DDouble jd, DLong &iMonth, DLong &iDay , DLong &iYear ,
++                  DLong &iHour , DLong &iMinute, DDouble &Second)
 +    {
 +    DDouble JD,Z,F,a;
 +    DLong A,B,C,D,E;
@@ -53183,18 +53274,30 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/ofmt.cpp gdl/src/
 +    iDay=B - D - (DLong)(30.6001 * E);
 +
 +    // year
-+    Year = iMonth > 2 ? C - 4716 : C - 4715;
++    iYear = iMonth > 2 ? C - 4716 : C - 4715;
 +    // hours
-+    Hour = (DLong) (F * 24);
-+    F -= (DDouble)Hour / 24;
++    iHour = (DLong) (F * 24);
++    F -= (DDouble)iHour / 24;
 +    // minutes
-+    Minute = (DLong) (F * 1440);
-+    F -= (DDouble)Minute / 1440;
++    iMinute = (DLong) (F * 1440);
++    F -= (DDouble)iMinute / 1440;
 +    // seconds
 +    Second = F * 86400;
 +  }
- 
++   static struct 
++   {
++     DLong iMonth;
++     DLong iDay;
++     DLong iYear;
++     DLong iHour;
++     DLong iMinute;
++     DLong dow;
++     DLong icap;
++     DDouble Second;
++   } mytime;
++   
 +// other
++ 
 + template<class Sp> SizeT Data_<Sp>::
 + OFmtCal( ostream* os, SizeT offs, SizeT r, int w, 
 +			int d, char f, BaseGDL::Cal_IOMode cMode)
@@ -53205,24 +53308,42 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/ofmt.cpp gdl/src/
 +   delete cVal;
 +   return retVal;
 + }
++void outA( ostream* os, string s, int w) 
++{
++  if (w==-1) w=3;
++  if (w < 0) {
++    (*os) << left;
++    (*os) << setw(-w) << s;
++  }
++  else if (w == 0) {
++    (*os) << right;
++    (*os) << s;
++  }
++  else {
++    (*os) << right;
++    (*os) << setw(w) << s.substr(0, w);
++  }
++}
 + //double
 + template<> SizeT Data_<SpDDouble>::
 + OFmtCal( ostream* os, SizeT offs, SizeT r, int w, 
 +			int d, char f, BaseGDL::Cal_IOMode cMode)
 + {
-+   static string theMonth[12]={"Jan","Feb","Mar","Apr","May","Jun",
-+      "Jul","Aug","Sep","Oct","Nov","Dec"};
-+   static string theMONTH[12]={"JAN","FEB","MAR","APR","MAY","JUN",
-+      "JUL","AUG","SEP","OCT","NOV","DDEC"};
-+   static string themonth[12]={"jan","feb","mar","apr","may","jun",
-+      "jul","aug","sep","oct","nov","dec"};
-+   static string theDAY[7]={"MON","TUE","WED","THU","FRI","SAT","SUN"};
-+   static string theDay[7]={"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
-+   static string theday[7]={"mon","tue","wed","thu","fri","sat","sun"};
-+
-+   DLong iMonth, iDay , Year , Hour , Minute, dow;
-+   DDouble Second;
++   static string theMonth[12]={"January","February","March","April","May","June",
++      "July","August","September","October","November","December"};
++   static string theMONTH[12]={"JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE",
++      "JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"};
++   static string themonth[12]={"january","february","march","april","may","june",
++      "july","august","september","october","november","december"};
++   static string theDAY[7]={"MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"};
++   static string theDay[7]={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
++   static string theday[7]={"monday","tuesday","wednesday","thursday","friday","saturday","sunday"};
++   static string capa[2]={"am","pm"};
++   static string cApa[2]={"Am","Pm"};
++   static string cAPa[2]={"AM","PM"};
 +   
++   DLong iMonth, iDay , iYear , iHour , iMinute, dow, icap;
++   DDouble Second;
 +   SizeT nTrans = ToTransfer();
 +
 +  // transfer count
@@ -53231,76 +53352,103 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/ofmt.cpp gdl/src/
 +
 +  SizeT endEl = offs + tCount;
 + 
-+  SetField( w, d, 6,  16, 25);
++  
 +  for( SizeT i=offs; i<endEl; ++i)
 +  {
-+    j2ymdhms((*this)[ i],iMonth, iDay, Year, Hour, Minute, Second);
++    j2ymdhms((*this)[ i], iMonth, iDay, iYear, iHour, iMinute, Second);
 +    // DayOfWeek
 +    dow=((DLong)((*this)[i]))%7;
-+    if( cMode == CMOA) // G
++    //capa:
++    icap=(iHour>11);
++    if( cMode == DEFAULT) 
 +    {
-+      std::cout << theMONTH[iMonth];
++      fprintf(stderr,"cdef\n");
 +    }
-+    else if( cMode == CMoA) // F, D
++    else if( cMode == CMOA)
 +    {
-+      std::cout << theMonth[iMonth];
++      outA(os, theMONTH[iMonth], w);//std::cout << theMONTH[iMonth];
 +    }
-+    else if ( cMode == CmoA) // E 
++    else if( cMode == CMoA) 
 +    {
-+      std::cout << themonth[iMonth];
++      outA(os, theMonth[iMonth], w);
 +    }
-+    else if ( cMode == CDWA) // E 
++    else if ( cMode == CmoA)
 +    {
-+      std::cout << theDAY[dow];
++      outA(os, themonth[iMonth], w);
 +    }
-+    else if ( cMode == CDwA) // E 
++    else if ( cMode == CDWA) 
 +    {
-+      std::cout <<  theDay[dow];
++      outA(os, theDAY[dow], w);
 +    }
-+    else if ( cMode == CdwA) // E 
++    else if ( cMode == CDwA) 
 +    {
-+      std::cout << theday[dow];
++      outA(os,theDay[dow], w);
++    }
++    else if ( cMode == CdwA) 
++    {
++      outA(os, theday[dow], w);
++    }
++    else if( cMode == CapA) 
++    {
++      outA(os, capa[icap], w);
++    }
++    else if( cMode == CApA) 
++    {
++      outA(os, cApa[icap], w);
++    }
++    else if( cMode == CAPA) 
++    {
++      outA(os, cAPa[icap], w);
++    }
++    //integer
++    else if ( cMode == CMOI) 
++    {
++      if (w==-1) w=2; 
++      ZeroPad( os, w, d, f, iMonth);
++    }
++    else if ( cMode == CYI) 
++    {
++      if (w==-1) w=4; 
++      ZeroPad( os, w, d, f, iYear);
++    }
++    else if ( cMode == CHI) 
++    {
++      if (w==-1) w=2; 
++      ZeroPad( os, w, d, f, iHour);
++    }
++    else if ( cMode == ChI) 
++    {
++      if (w==-1) w=2; 
++      ZeroPad( os, w, d, f, iHour%12);
++    }
++    else if ( cMode == CDI) 
++    {
++      if (w==-1) w=2; 
++      ZeroPad( os, w, d, f, iDay);
++    }
++    else if ( cMode == CMI) 
++    {
++      if (w==-1) w=2; 
++      ZeroPad( os, w, d, f, iMinute);
++    }
++    else if ( cMode == CSI) 
++    {
++      if (w==-1) {w=2; d=0;}; 
++      ZeroPad( os, w, d, f, (DLong)Second);
++    }
++    //Float
++    else if ( cMode == CSF) 
++    {
++      if (w==-1) {w=5; d=4;} 
++//      SetField( w, d, 6,  16, 25);
++      OutAuto( *os, Second, w, d, f);
 +    }
 +  }
 +  return tCount;
 + }
-+ 
- // F code ****************************************************
- // other
- template<class Sp> SizeT Data_<Sp>::
-@@ -675,8 +783,11 @@
-       (*os) << oct << setw(w) << setfill(f) << (*this)[ i];
-   else if ( oMode == BIN)
-     for( SizeT i=offs; i<endEl; ++i)
-+#ifdef _MSC_VER
-+      (*os) << binstr((int)(*this)[ i], w);
-+#else
-       (*os) << binstr((*this)[ i], w);
--//       (*os) << binstr((std::bitset<32>)i, w);
-+#endif
-   else if ( oMode == HEX)
-     for( SizeT i=offs; i<endEl; ++i)
-       (*os) << uppercase << hex << setw(w) << setfill(f) << (*this)[ i];
-@@ -710,11 +821,15 @@
-   else if ( oMode == BIN)
-     for( SizeT i=offs; i<endEl; ++i)
-     {
--//       if (w > 32) 
--// 	(*os) << binstr((std::bitset<32>)i >> 32, w - 32);
--//       (*os) << binstr((std::bitset<32>)i, w <= 32 ? w : 32);
--      if (w > 32) (*os) << binstr((*this)[ i] >> 32, w - 32);
-+#ifdef _MSC_VER
-+      if (w > 32)
-+	(*os) << binstr((int)(*this)[ i] >> 32, w - 32);
-+      (*os) << binstr((int)(*this)[ i], w <= 32 ? w : 32);
-+#else
-+      if (w > 32) 
-+	(*os) << binstr((*this)[ i] >> 32, w - 32);
-       (*os) << binstr((*this)[ i], w <= 32 ? w : 32);
-+#endif
-     }
-   else if ( oMode == HEX)
-     for( SizeT i=offs; i<endEl; ++i)
+ 
+ //#include "instantiate_templates.hpp"
+ 
 diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/overload.cpp gdl/src/overload.cpp
 --- gdl-0.9.3/src/overload.cpp	2012-12-27 09:22:44.000000000 -0700
 +++ gdl/src/overload.cpp	2013-07-31 09:41:44.171244889 -0600
@@ -56744,8 +56892,8 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_convert_
  } // namespace
 diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting.cpp gdl/src/plotting.cpp
 --- gdl-0.9.3/src/plotting.cpp	2012-12-27 09:22:44.000000000 -0700
-+++ gdl/src/plotting.cpp	2013-07-31 09:41:44.177244868 -0600
-@@ -19,787 +19,1448 @@
++++ gdl/src/plotting.cpp	2013-08-04 20:25:19.001699394 -0600
+@@ -19,787 +19,1452 @@
  
  #include <memory>
  
@@ -57212,7 +57360,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting.cpp gdl/
 -    if (debug) {cout << "cas: "<< cas << " new range: "<<  val_min << " " << val_max << endl;}
 -
 -    if (log)
-+    if ( cas==0 )
++    if ( cas==0 ) //rounding is not aka idl due to use of ceil and floor. TBD.
      {
 -      val_min = pow(10, val_min);
 -      val_max = pow(10, val_max);
@@ -57500,6 +57648,10 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting.cpp gdl/
 +    
 +    UsymConvX=(0.5*symsize*(a->wCharLength()/a->charScale())); //be dependent only on symsize!
 +    UsymConvY=(0.5*symsize*(a->wCharHeight()/a->charScale()));
++    PLFLT wun, wdeux, wtrois, wquatre; //take care of axes world orientation!
++    a->pageWorldCoordinates(wun, wdeux, wtrois, wquatre);
++    if ((wdeux-wun)<0) UsymConvX*=-1.0;
++    if ((wquatre-wtrois)<0) UsymConvY*=-1.0;
 +    if (GDL_DEBUG_PLSTREAM) fprintf(stderr,"GetUserSymSize(%f,%f)\n",a->wCharLength(),a->wCharHeight());
    }
  
@@ -58784,7 +58936,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting.cpp gdl/
      // Map Stuff (xtype = 3)
      LPTYPE idata;
      XYTYPE odata;
-@@ -807,183 +1468,213 @@
+@@ -807,183 +1472,213 @@
      get_mapset(mapSet);
  
      DDouble xStart, xEnd;
@@ -59124,7 +59276,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting.cpp gdl/
        }
      }
  
-@@ -994,545 +1685,1546 @@
+@@ -994,545 +1689,1546 @@
      return (valid);
    }
    // explicit instantiation for SpDDouble
@@ -66737,8 +66889,8 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_windows.
    void wdelete( EnvT* e)
 diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_xyouts.cpp gdl/src/plotting_xyouts.cpp
 --- gdl-0.9.3/src/plotting_xyouts.cpp	2012-12-27 09:22:44.000000000 -0700
-+++ gdl/src/plotting_xyouts.cpp	2013-07-08 12:39:22.580385006 -0600
-@@ -18,360 +18,392 @@
++++ gdl/src/plotting_xyouts.cpp	2013-08-04 20:25:19.030699283 -0600
+@@ -18,360 +18,397 @@
  #include "includefirst.hpp"
  #include "plotting.hpp"
  #include "math_utl.hpp"
@@ -67174,11 +67326,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_xyouts.c
  
 -        y += .5 * charheight;
 +      PLFLT wun, wdeux, wtrois, wquatre;
-+      if ( coordinateSystem==DATA) //with PLOTS, we can plot *outside* the box(e)s in DATA coordinates.
-+                                   // convert to device coords in this case
-+      {
-+        actStream->pageWorldCoordinates(wun, wdeux, wtrois, wquatre);
-+      }
++      actStream->pageWorldCoordinates(wun, wdeux, wtrois, wquatre);
  
 -	out=(*strVal)[0];
 -	actStream->ptex(x,y,p_orient_x, p_orient_y,alignment,out.c_str());
@@ -67193,29 +67341,21 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_xyouts.c
 +        actStream->wind(0.0, actStream->xPageSize(), 0.0, actStream->yPageSize());
 +        xLog=false;
 +        yLog=false;
-       }
--    else
++      }
 +      else if ( coordinateSystem==NORMAL )
-       {
--	for(int i=0; i<minEl;++i)
--	  {
++      {
 +        actStream->wind(0.0, 1.0, 0.0, 1.0);
 +        xLog=false;
 +        yLog=false;
-+      }
+       }
+-    else
 +      else //with XYOUTS, we can plot *outside* the box(e)s in DATA coordinates.
-+      {
+       {
+-	for(int i=0; i<minEl;++i)
+-	  {
 +        actStream->wind(wun, wdeux, wtrois, wquatre);
 +      }
- 
--	    if(orient != NULL && orient->N_Elements() > 1) 
--	    {
--	      p_orient=(*d_orient)[i];
--	      while(p_orient < 0) p_orient+=360.0;
--	      while(p_orient > 360.0) p_orient-=360.0;
--	      p_orient_x=xScale*cos(p_orient*0.0174533);
--	      p_orient_y=yScale*sin(p_orient*0.0174533);
--	    }
++
 +      PLFLT x,y,aspectw,aspectd;
 +      aspectw=actStream->boxAspectWorld();
 +      aspectd=actStream->boxAspectDevice();
@@ -67263,8 +67403,18 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_xyouts.c
 +        alignement_guard.Init (alignement);
 +        (*alignement)[0]=0;
 +      }
-+
-+
+ 
+-	    if(orient != NULL && orient->N_Elements() > 1) 
+-	    {
+-	      p_orient=(*d_orient)[i];
+-	      while(p_orient < 0) p_orient+=360.0;
+-	      while(p_orient > 360.0) p_orient-=360.0;
+-	      p_orient_x=xScale*cos(p_orient*0.0174533);
+-	      p_orient_y=yScale*sin(p_orient*0.0174533);
+-	    }
+ 
+-	    x=static_cast<PLFLT>((*xVal)[i]);
+-	    y=static_cast<PLFLT>((*yVal)[i]);
 +      // make all clipping computations BEFORE setting graphic properties (color, size)
 +      bool stopClip=false;
 +      if ( doClip )  if ( startClipping(e, actStream, true)==TRUE ) stopClip=true;
@@ -67274,8 +67424,8 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_xyouts.c
 +      gdlSetPlotCharthick(e, actStream);
 +      gdlSetPlotCharsize(e, actStream, true); //accept SIZE kw!
  
--	    x=static_cast<PLFLT>((*xVal)[i]);
--	    y=static_cast<PLFLT>((*yVal)[i]);
+-	    if( yLog) if( y <= 0.0) continue; else takelog( &y, &p_orient_y);
+-	    if( xLog) if( x <= 0.0) continue; else takelog( &x, &p_orient_x);
 +      if ( doT3d ) //convert X,Y,Z in X',Y' as per T3D perspective.
 +      {
 +        DDoubleGDL* t3dMatrix=gdlGetT3DMatrix(); //the original one
@@ -67294,8 +67444,6 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_xyouts.c
 +      // Get decomposed value for colors
 +      DLong decomposed=Graphics::GetDevice()->GetDecomposed();
  
--	    if( yLog) if( y <= 0.0) continue; else takelog( &y, &p_orient_y);
--	    if( xLog) if( x <= 0.0) continue; else takelog( &x, &p_orient_x);
 +      for ( SizeT i=0; i<minEl; ++i )
 +      {
 +        //if string only, fill empty Xval Yval with current value:
@@ -67308,7 +67456,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_xyouts.c
 +        }
 +        x=static_cast<PLFLT>((*xVal)[i%xVal->N_Elements ( )]); //insure even 1 parameter, string array
 +        y=static_cast<PLFLT>((*yVal)[i%xVal->N_Elements ( )]);
- 
++
 +        //following obviously wrong if T3D...
  #ifdef USE_LIBPROJ4
 -	    if (mapSet && !e->KeywordSet("NORMAL")) {
@@ -67352,28 +67500,37 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/plotting_xyouts.c
 +        if (docharsize) actStream->sizeChar(( *size )[i%size->N_Elements ( )]);
 +        if (docolor) actStream->Color ( ( *color )[i%color->N_Elements ( )], decomposed, 2);
 +        if (docharthick) actStream->wid ( ( *charthick )[i%charthick->N_Elements ( )]);
-+        PLFLT ori=(( *orientation )[i%orientation->N_Elements ( )]) * DEGTORAD;
-+        PLFLT cosOri=cos(ori);
-+        PLFLT sinOri=sin(ori);
++        //orientation word is not orientation page depending on axes increment direction [0..1] vs. [1..0]
++        PLFLT oriD=(( *orientation )[i%orientation->N_Elements ( )]); //ori DEVICE
++        PLFLT oriW=oriD; //ori WORLD
++        oriD *= DEGTORAD;
++        if ((wdeux-wun)<0) oriW=180.0-oriW;
++        if ((wquatre-wtrois)<0) oriW*=-1;
++        oriW *= DEGTORAD;
++        PLFLT cosOriD=cos(oriD);
++        PLFLT sinOriD=sin(oriD);
++        PLFLT cosOriW=cos(oriW);
++        PLFLT sinOriW=sin(oriW);
 +        PLFLT align=( *alignement )[i%alignement->N_Elements ( )];
++        align=max(align,0.0); align=min(align,1.0);
 +        PLFLT dispx,dispy, chsize, dx, dy;
 +        // displacement due to offset (reference in IDL is baseline,
 +        // in plplot it's the half-height) is best computed in device coords
 +        chsize=actStream->dCharHeight()*0.5;
 +        actStream->WorldToDevice(x, y, dx, dy);
-+        actStream->DeviceToWorld(dx-chsize*sinOri,dy+chsize*cosOri,dispx,dispy);
++        actStream->DeviceToWorld(dx-chsize*sinOriD,dy+chsize*cosOriD,dispx,dispy);
 +        string out=(*strVal)[i%strVal->N_Elements ( )];
-+        actStream->ptex(dispx, dispy, cosOri, sinOri*aspectw/aspectd, align, out.c_str());
++        actStream->ptex(dispx, dispy, cosOriW, sinOriW*aspectw/aspectd, align, out.c_str());
 +
 +        if (singleArg || (i==minEl-1 ) ) //then x and y are not given and whatever the number of strings, are retrieved
-+                       // from lastTextPos. We must thus rememeber lastTextPos.
++                       // from lastTextPos. We must thus remember lastTextPos.
 +        {
 +          width=actStream->gdlGetmmStringLength(out.c_str()); //in mm
 +          //we want normed size:
 +          width=actStream->m2dx(width);
 +          //save position - compute must be in DEVICE coords, or in normed*aspect!
 +          actStream->WorldToNormedDevice(x, y, dx, dy); //normed
-+          actStream->NormedDeviceToWorld(dx+(1.0-align)*width*cosOri,dy+(1.0-align)*width*sinOri*aspectw/aspectd,dispx,dispy);
++          actStream->NormedDeviceToWorld(dx+(1.0-align)*width*cosOriD,dy+(1.0-align)*width*sinOriD/aspectd,dispx,dispy);
 +          actStream->WorldToDevice(dispx, dispy, lastTextPosX, lastTextPosY);
 +        }
        }
@@ -69116,12 +69273,17 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/pro/str_sep.pro g
          pos=STRPOS(residual, str_separator)
 diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/pro/strsplit.pro gdl/src/pro/strsplit.pro
 --- gdl-0.9.3/src/pro/strsplit.pro	2012-12-27 09:22:44.000000000 -0700
-+++ gdl/src/pro/strsplit.pro	2013-07-31 09:41:44.333244325 -0600
-@@ -22,11 +22,13 @@
++++ gdl/src/pro/strsplit.pro	2013-08-04 20:25:19.391697899 -0600
+@@ -22,11 +22,18 @@
  ;   11-Jul-2012 : When /extract, we must return STRARR even for 1-element
  ;   14-Aug-2012 : Now GDL enforces scalar type in FOR loop ... take care
  ;   of STRLEN ! We ensure to work on pure STRING = '', not STRING = Array[1]
-+;   25-Jul-2013 : After fixing STRTOK this simplified version should do.
++;   25-Jul-2013 : After fixing STRTOK this simplified version should
++;   do.
++;   01-Aug-2013 : Patch for bug #554, insure LENGTH and EXTRACT are
++;   not present simultaneously, return correct length in cases such as
++;   strsplit('aaaaaaaaaaaaaaaaaaaaaa','b',leng=leng) and 
++;   strsplit('aaaaaaaaaaaaaaaaaaaaaa','a',leng=leng).
  ;
  ; LICENCE:
  ; Copyright (C)
@@ -69131,7 +69293,7 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/pro/strsplit.pro 
  ; This program is free software; you can redistribute it and/or modify
  ; it under the terms of the GNU General Public License as published by
  ; the Free Software Foundation; either version 2 of the License, or
-@@ -34,35 +36,6 @@
+@@ -34,39 +41,10 @@
  ;
  ;-
  ;
@@ -69167,13 +69329,61 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/pro/strsplit.pro 
  ;
  ; ----------------------------------------
  ;
-@@ -138,80 +111,13 @@
- ; When no Pattern is provided, default pattern is white space (' ')
+-function STRSPLIT, input1, input2, count=count, length=length, $
++function STRSPLIT, input1, pattern, count=count, length=length, $
+                    extract=extract, regex=regex, escape=escape, $
+                    fold_case=fold_case, preserve_null=preserve_null, $
+                    test=test, help=help
+@@ -74,7 +52,7 @@
+ ON_ERROR, 2
+ ;
+ if KEYWORD_SET(help) then begin
+-   print, 'function STRSPLIT, input1, input2, count=count, length=length, $'
++   print, 'function STRSPLIT, input1, pattern, count=count, length=length, $'
+    print, '                   extract=extract, regex=regex, escape=escape, $'
+    print, '                   fold_case=fold_case, preserve_null=preserve_null, $'
+    print, '                   test=test, help=help'
+@@ -90,7 +68,7 @@
+    MESSAGE, 'Expression must be a scalar or 1 element array in this context: STRINGIN.'
+ ;
+ if (N_PARAMS() EQ 2) then begin
+-   if N_ELEMENTS(input2) EQ 0 then MESSAGE, 'Variable is undefined: PATTERN.'
++   if N_ELEMENTS(pattern) EQ 0 then MESSAGE, 'Variable is undefined: PATTERN.'
+ endif
+ ;
+ if KEYWORD_SET(escape) then begin
+@@ -115,6 +93,7 @@
+    local_input1=input1
+ endelse
+ ;
++if ARG_PRESENT(length) and KEYWORD_SET(extract) then MESSAGE, "Conflicting keywords."
+ ; we explicitely change String [1] array into pure String.
+ local_input1=local_input1[0]
+ ;
+@@ -127,91 +106,29 @@
+    if KEYWORD_SET(extract) then resu='' else resu=0
+ endif
+ if (N_PARAMS() EQ 2) then begin
+-   if (STRLEN(input2) EQ 0) then begin
++   if (STRLEN(pattern) EQ 0) then begin
+       short_cut=1
+       if KEYWORD_SET(extract) then resu='' else resu=0
+    endif else begin
+-      local_input2=input2[0]
++      local_pattern=pattern[0]
+    endelse
+ endif
+ ;
+-; When no Pattern is provided, default pattern is white space (' ')
++; When no Pattern is provided, default pattern is white space (' ' and
++; tab)
  ;
  if ((short_cut EQ 0) AND (N_PARAMS() EQ 1)) then begin
 -   resu=STRTOK(local_input1, extract=extract, preserve_null=preserve_null)
 +   resu=STRTOK(local_input1, extract=extract,$
 +               REGEX=regex, preserve_null=preserve_null)
++; 2nd pass for length.
++if ARG_PRESENT(length) then  temp=STRTOK(local_input1, LENGTH=length, REGEX=regex, preserve_null=preserve_null)
  endif
  ;
  if ((short_cut EQ 0) AND (N_PARAMS() EQ 2)) then begin
@@ -69247,11 +69457,22 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/pro/strsplit.pro 
 -         endif
 -      endelse
 -   endelse
-+   resu=STRTOK(local_input1, local_input2, extract=extract,$
++   resu=STRTOK(local_input1, local_pattern, extract=extract,$
 +               REGEX=regex, preserve_null=preserve_null)
++; 2nd pass for length.
++ if ARG_PRESENT(length) then temp=STRTOK(local_input1, local_pattern, LENGTH=length, REGEX=regex, preserve_null=preserve_null)
  endif
  ;
  if  ARG_PRESENT(count) then begin
+@@ -222,8 +139,6 @@
+    endelse
+ endif
+ ;
+-if ARG_PRESENT(length) then length=STRLEN(resu)
+-;
+ if KEYWORD_SET(test) then STOP
+ ;
+ if (SIZE(resu,/type) NE 7) then begin
 diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/src/pro/wmenu.pro gdl/src/pro/wmenu.pro
 --- gdl-0.9.3/src/pro/wmenu.pro	2012-12-27 09:22:44.000000000 -0700
 +++ gdl/src/pro/wmenu.pro	2013-01-13 16:49:28.000000000 -0700
@@ -76425,6 +76646,46 @@ diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/testsuite/test_python
      python = file_dirname(strtrim(python, 2)) + '/bin/python'
    endif else begin
 Only in gdl-0.9.3/testsuite: test_stregex.pro.~1.1.~
+diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/testsuite/test_strsplit.pro gdl/testsuite/test_strsplit.pro
+--- gdl-0.9.3/testsuite/test_strsplit.pro	2012-12-27 09:22:44.000000000 -0700
++++ gdl/testsuite/test_strsplit.pro	2013-08-04 20:25:19.732696587 -0600
+@@ -110,6 +110,18 @@
+    if KEYWORD_SET(verbose) then MESSAGE, 'error str extract', /continue
+    nb_pbs=nb_pbs+1
+ endif
++
++ext=STRSPLIT(str,'$',/preserve,len=len)
++if ARRAY_EQUAL(len,replicate(0,n_elements(str))) eq 0 then begin 
++   if KEYWORD_SET(verbose) then MESSAGE, 'error str len+preserve', /continue
++   nb_pbs=nb_pbs+1
++endif 
++
++ext=STRSPLIT(str,'$',len=len)
++if (len ne 0) then begin 
++   if KEYWORD_SET(verbose) then MESSAGE, 'error str len', /continue
++   nb_pbs=nb_pbs+1
++endif 
+ ;
+ if KEYWORD_SET(debug) then IPRINT, 'ici', indice
+ ;
+@@ -215,6 +227,17 @@
+    if KEYWORD_SET(verbose) then MESSAGE, 'error str4 extract , preserve', /continue
+    nb_pbs=nb_pbs+1
+ endif
++tab=STRSPLIT(str4,'.',len=len)
++if ARRAY_EQUAL(len,[4,3]) eq 0 then begin
++   if KEYWORD_SET(verbose) then MESSAGE, 'error str4 len', /continue
++   nb_pbs=nb_pbs+1
++endif
++tab=STRSPLIT(str4,'.',len=len,/preserve)
++if ARRAY_EQUAL(len,[0,0,4,3]) eq 0 then begin
++   if KEYWORD_SET(verbose) then MESSAGE, 'error str4 len+preserve', /continue
++   nb_pbs=nb_pbs+1
++endif
++
+ 
+ tab=STRSPLIT(str5,/preserve)
+ res=LONG([0,1,3,5,7,9])
 diff -ru --unidirectional-new-file --exclude CVS gdl-0.9.3/testsuite/test_structures.pro gdl/testsuite/test_structures.pro
 --- gdl-0.9.3/testsuite/test_structures.pro	1969-12-31 17:00:00.000000000 -0700
 +++ gdl/testsuite/test_structures.pro	2013-01-29 04:48:35.000000000 -0700

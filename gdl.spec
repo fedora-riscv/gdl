@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.3
-Release:        8.cvs20130731%{?dist}
+Release:        9.cvs20130731%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -20,9 +20,6 @@ Patch1:         gdl-antlr-auto.patch
 Patch2:         gdl-shared.patch
 # Patch to allow make check to work for out of tree builds
 Patch3:         gdl-build.patch
-# Patch to fix memcpy call
-# https://sourceforge.net/p/gnudatalanguage/patches/69/
-Patch4:         gdl-memcpy.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -105,7 +102,6 @@ done
 popd
 %patch2 -p1 -b .shared
 %patch3 -p1 -b .build
-%patch4 -p1 -b .memcpy
 rm ltmain.sh
 rm -r CMakeFiles
 
@@ -170,9 +166,9 @@ cd build
 %ifarch %{arm}
 # test_finite and test_fix fail currently on arm
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
-make check ARGS="-V -E 'test_bug_3104326|test_bug_3300626|test_ce|test_dicom|test_execute|test_str_sep|test_matrix_multiply|test_finite|test_fix'"
+make check ARGS="-V -E 'test_bug_3104326|test_bug_3300626|test_dicom|test_execute|test_str_sep|test_matrix_multiply|test_finite|test_fix'"
 %else
-make check ARGS="-V -E 'test_bug_3104326|test_bug_3300626|test_ce|test_dicom|test_execute|test_str_sep|test_matrix_multiply'"
+make check ARGS="-V -E 'test_bug_3104326|test_bug_3300626|test_dicom|test_execute|test_str_sep|test_matrix_multiply'"
 %endif
 
 %clean
@@ -193,6 +189,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Aug 4 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-9.cvs20130804
+- Update cvs patch to current cvs
+- Drop test_ce patch, enable test_ce
+
 * Wed Jul 31 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-8.cvs20130731
 - Update cvs patch to current cvs
 - Add patch to fix segfault in test_ce
