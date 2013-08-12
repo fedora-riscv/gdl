@@ -156,7 +156,6 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 cd build
 # test_bug_3104326 and test_execute expects to use DISPLAY
 # test_bug_3300626 - https://sourceforge.net/p/gnudatalanguage/bugs/557/
-# test_ce currently segfaults - https://sourceforge.net/p/gnudatalanguage/patches/69/
 # test_dicom - https://sourceforge.net/p/gnudatalanguage/bugs/558/ 
 # Known issues with test_memory
 # Known issues with str_sep
