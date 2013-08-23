@@ -41,7 +41,7 @@ BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
-%if 0%{?fedora} >= 21
+%if 0%{?fedora} >= 20
 BuildRequires:  grib_api-devel
 %else
 %if 0%{?fedora} || 0%{?rhel} >= 6
