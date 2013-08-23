@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.3
-Release:        9.cvs20130731%{?dist}
+Release:        10.cvs20130731%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -41,8 +41,12 @@ BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
+%if 0%{?fedora} >= 21
+BuildRequires:  grib_api-devel
+%else
 %if 0%{?fedora} || 0%{?rhel} >= 6
 BuildRequires:  grib_api-static
+%endif
 %endif
 BuildRequires:  eigen3-devel
 #TODO - Build with mpi support
@@ -188,6 +192,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Aug 23 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-10.cvs20130804
+- Build with shared grib_api
+
 * Sun Aug 4 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-9.cvs20130804
 - Update cvs patch to current cvs
 - Drop test_ce patch, enable test_ce
