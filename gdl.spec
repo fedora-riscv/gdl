@@ -20,6 +20,9 @@ Patch1:         gdl-antlr-auto.patch
 Patch2:         gdl-shared.patch
 # Patch to allow make check to work for out of tree builds
 Patch3:         gdl-build.patch
+# Patch to support plplot's new width() function
+# https://sourceforge.net/p/gnudatalanguage/patches/70/
+Patch4:         gdl-plwidth.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -106,6 +109,7 @@ done
 popd
 %patch2 -p1 -b .shared
 %patch3 -p1 -b .build
+%patch4 -p1 -b .plwidth
 rm ltmain.sh
 rm -r CMakeFiles
 
@@ -192,6 +196,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Aug 27 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-10.cvs20130804
+- Add patch to support new width() method in plplot
+
 * Fri Aug 23 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-10.cvs20130804
 - Build with shared grib_api
 
