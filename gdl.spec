@@ -162,20 +162,13 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 %check
 cd build
-# test_bug_3104326 and test_execute expects to use DISPLAY
-# test_bug_3300626 - https://sourceforge.net/p/gnudatalanguage/bugs/557/
-# test_dicom - https://sourceforge.net/p/gnudatalanguage/bugs/558/ 
-# Known issues with test_memory
-# Known issues with str_sep
-# - https://sourceforge.net/p/gnudatalanguage/bugs/521/
-# test_matrix_multiply is causing problems - hangs
-# - https://sourceforge.net/p/gnudatalanguage/bugs/556/
+# test_execute expects to use DISPLAY
 %ifarch %{arm}
 # test_finite and test_fix fail currently on arm
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
-make check ARGS="-V -E 'test_bug_3104326|test_bug_3300626|test_dicom|test_execute|test_str_sep|test_matrix_multiply|test_finite|test_fix'"
+make check ARGS="-V -E 'test_execute|test_finite|test_fix'"
 %else
-make check ARGS="-V -E 'test_bug_3104326|test_bug_3300626|test_dicom|test_execute|test_str_sep|test_matrix_multiply'"
+make check ARGS="-V -E 'test_execute'"
 %endif
 
 %clean
