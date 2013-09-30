@@ -1,8 +1,8 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9.3
-Release:        10.cvs20130731%{?dist}
+Version:        0.9.4
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -12,7 +12,6 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-Patch0:         gdl-cvs.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr-auto.patch
@@ -23,6 +22,9 @@ Patch3:         gdl-build.patch
 # Patch to support plplot's new width() function
 # https://sourceforge.net/p/gnudatalanguage/patches/70/
 Patch4:         gdl-plwidth.patch
+# Fix python build
+# https://sourceforge.net/p/gnudatalanguage/bugs/552/
+Patch5:         gdl-python.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -98,7 +100,6 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %prep
 %setup -q -n %{name}-%{version}
-%patch0 -p1 -b .cvs
 rm -rf src/antlr
 %patch13 -p1 -b .antlr
 pushd src
@@ -110,8 +111,7 @@ popd
 %patch2 -p1 -b .shared
 %patch3 -p1 -b .build
 %patch4 -p1 -b .plwidth
-rm ltmain.sh
-rm -r CMakeFiles
+%patch5 -p1 -b .python
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
@@ -196,6 +196,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Sep 30 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-1
+- Update to 0.9.4
+- Update build patch - drop automake components
+- New python patch to fix python build
+
 * Tue Aug 27 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-10.cvs20130804
 - Add patch to support new width() method in plplot
 
