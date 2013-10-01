@@ -1,50 +1,29 @@
 diff -up gdl-0.9.4/testsuite/test_matrix_multiply.pro.test gdl-0.9.4/testsuite/test_matrix_multiply.pro
 --- gdl-0.9.4/testsuite/test_matrix_multiply.pro.test	2013-04-11 10:00:30.000000000 -0600
-+++ gdl-0.9.4/testsuite/test_matrix_multiply.pro	2013-10-01 10:10:48.507995487 -0600
-@@ -54,14 +54,38 @@ test4=trans_matrice#matrice-identity
++++ gdl-0.9.4/testsuite/test_matrix_multiply.pro	2013-10-01 13:55:24.550637078 -0600
+@@ -39,7 +39,7 @@ identity=DIAG_MATRIX(REPLICATE(1., nbp))
+ matrice=DIAG_MATRIX(REPLICATE(value, nbp-1), 1)
+ matrice[0,nbp-1]=value
  ;
- errors=0
- tolerance=1e-5
--if ABS(MIN(test1)) GT tolerance then errors++
--if ABS(MAX(test1)) GT tolerance then errors++
--if ABS(MIN(test2)) GT tolerance then errors++
--if ABS(MAX(test2)) GT tolerance then errors++
--if ABS(MIN(test3)) GT tolerance then errors++
--if ABS(MAX(test3)) GT tolerance then errors++
--if ABS(MIN(test4)) GT tolerance then errors++
--if ABS(MAX(test4)) GT tolerance then errors++
-+if ABS(MIN(test1)) GT tolerance then begin
-+    print, 'ABS(MIN(test1))=',ABS(MIN(test1)),' GT ',tolerance
-+    errors++
-+endif
-+if ABS(MAX(test1)) GT tolerance then begin
-+    print, 'ABS(MAX(test1))=',ABS(MAX(test1)),' GT ',tolerance
-+    errors++
-+endif
-+if ABS(MIN(test2)) GT tolerance then begin
-+    print, 'ABS(MIN(test2))=',ABS(MIN(test2)),' GT ',tolerance
-+    errors++
-+endif
-+if ABS(MAX(test2)) GT tolerance then begin
-+    print, 'ABS(MAX(test2))=',ABS(MAX(test2)),' GT ',tolerance
-+    errors++
-+endif
-+if ABS(MIN(test3)) GT tolerance then begin
-+    print, 'ABS(MIN(test3))=',ABS(MIN(test3)),' GT ',tolerance
-+    errors++
-+endif
-+if ABS(MAX(test3)) GT tolerance then begin
-+    print, 'ABS(MAX(test3))=',ABS(MAX(test3)),' GT ',tolerance
-+    errors++
-+endif
-+if ABS(MIN(test4)) GT tolerance then begin
-+    print, 'ABS(MIN(test4))=',ABS(MIN(test4)),' GT ',tolerance
-+    errors++
-+endif
-+if ABS(MAX(test4)) GT tolerance then begin
-+    print, 'ABS(MAX(test4))=',ABS(MAX(test4)),' GT ',tolerance
-+    errors++
-+endif
+-inv_matrice=INVERT(matrice)
++inv_matrice=INVERT(matrice,status)
  ;
- if (errors GT 0) then begin
-     print, 'size of matrix : ', nbp
+ ; We use a "rotation matrix"
+ ;
+@@ -72,6 +72,7 @@ if (errors GT 0) then begin
+ endif
+ ;
+ if KEYWORD_SET(debug) then begin
++    print, 'Invert status = ', status
+     print, MIN(test1), MAX(test1)
+     print, MIN(test2), MAX(test2)
+     print, MIN(test3), MAX(test3)
+@@ -110,7 +111,7 @@ liste_taille=[2,3,4,10,11,13,25,50,51,10
+ for itailles=0, N_ELEMENTS(liste_taille)-1 do begin
+     for itypes=0, N_ELEMENTS(liste_type)-1 do begin
+         TEST_MATRIX_UNITARY, type=liste_type[itypes], $
+-          nbp=liste_taille[itailles], nb_errors=nb_errors, verbose=verbose
++          nbp=liste_taille[itailles], nb_errors=nb_errors, verbose=verbose, debug=1
+     endfor
+ endfor
+ ;
