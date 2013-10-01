@@ -1,0 +1,50 @@
+diff -up gdl-0.9.4/testsuite/test_matrix_multiply.pro.test gdl-0.9.4/testsuite/test_matrix_multiply.pro
+--- gdl-0.9.4/testsuite/test_matrix_multiply.pro.test	2013-04-11 10:00:30.000000000 -0600
++++ gdl-0.9.4/testsuite/test_matrix_multiply.pro	2013-10-01 10:10:48.507995487 -0600
+@@ -54,14 +54,38 @@ test4=trans_matrice#matrice-identity
+ ;
+ errors=0
+ tolerance=1e-5
+-if ABS(MIN(test1)) GT tolerance then errors++
+-if ABS(MAX(test1)) GT tolerance then errors++
+-if ABS(MIN(test2)) GT tolerance then errors++
+-if ABS(MAX(test2)) GT tolerance then errors++
+-if ABS(MIN(test3)) GT tolerance then errors++
+-if ABS(MAX(test3)) GT tolerance then errors++
+-if ABS(MIN(test4)) GT tolerance then errors++
+-if ABS(MAX(test4)) GT tolerance then errors++
++if ABS(MIN(test1)) GT tolerance then begin
++    print, 'ABS(MIN(test1))=',ABS(MIN(test1)),' GT ',tolerance
++    errors++
++endif
++if ABS(MAX(test1)) GT tolerance then begin
++    print, 'ABS(MAX(test1))=',ABS(MAX(test1)),' GT ',tolerance
++    errors++
++endif
++if ABS(MIN(test2)) GT tolerance then begin
++    print, 'ABS(MIN(test2))=',ABS(MIN(test2)),' GT ',tolerance
++    errors++
++endif
++if ABS(MAX(test2)) GT tolerance then begin
++    print, 'ABS(MAX(test2))=',ABS(MAX(test2)),' GT ',tolerance
++    errors++
++endif
++if ABS(MIN(test3)) GT tolerance then begin
++    print, 'ABS(MIN(test3))=',ABS(MIN(test3)),' GT ',tolerance
++    errors++
++endif
++if ABS(MAX(test3)) GT tolerance then begin
++    print, 'ABS(MAX(test3))=',ABS(MAX(test3)),' GT ',tolerance
++    errors++
++endif
++if ABS(MIN(test4)) GT tolerance then begin
++    print, 'ABS(MIN(test4))=',ABS(MIN(test4)),' GT ',tolerance
++    errors++
++endif
++if ABS(MAX(test4)) GT tolerance then begin
++    print, 'ABS(MAX(test4))=',ABS(MAX(test4)),' GT ',tolerance
++    errors++
++endif
+ ;
+ if (errors GT 0) then begin
+     print, 'size of matrix : ', nbp

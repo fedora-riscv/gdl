@@ -28,6 +28,9 @@ Patch5:         gdl-python.patch
 # Fix datatype for use with gsl's permutation type
 # https://sourceforge.net/p/gnudatalanguage/bugs/570/
 Patch6:         gdl-gsl.patch
+# test_matrix_multiply fails - try to debug
+# https://sourceforge.net/p/gnudatalanguage/bugs/556/
+Patch7:         gdl-test.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -116,6 +119,7 @@ popd
 %patch4 -p1 -b .plwidth
 %patch5 -p1 -b .python
 %patch6 -p1 -b .gsl
+%patch7 -p1 -b .gsl
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
@@ -198,6 +202,7 @@ rm -rf $RPM_BUILD_ROOT
 - Update build patch - drop automake components
 - New python patch to fix python build
 - Add patch to fix gsl usage
+- Add patch for test debugging
 
 * Tue Aug 27 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-10.cvs20130804
 - Add patch to support new width() method in plplot
