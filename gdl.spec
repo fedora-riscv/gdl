@@ -119,7 +119,7 @@ popd
 %patch4 -p1 -b .plwidth
 %patch5 -p1 -b .python
 %patch6 -p1 -b .gsl
-%patch7 -p1 -b .gsl
+%patch7 -p1 -b .test
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
