@@ -28,9 +28,12 @@ Patch5:         gdl-python.patch
 # Fix datatype for use with gsl's permutation type
 # https://sourceforge.net/p/gnudatalanguage/bugs/570/
 Patch6:         gdl-gsl.patch
-# test_matrix_multiply fails - try to debug
+# Make proper use of dynamically sized matrices in eigen
 # https://sourceforge.net/p/gnudatalanguage/bugs/556/
-Patch7:         gdl-test.patch
+Patch7:         gdl-eigen.patch
+# Fix -Wreorder warnings
+# https://sourceforge.net/p/gnudatalanguage/patches/71/
+Patch8:         gdl-reorder.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -119,7 +122,8 @@ popd
 %patch4 -p1 -b .plwidth
 %patch5 -p1 -b .python
 %patch6 -p1 -b .gsl
-%patch7 -p1 -b .test
+%patch7 -p1 -b .eigen
+%patch8 -p1 -b .reorder
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
@@ -197,6 +201,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Oct 4 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-1
+- Add patch to fix use of dynamically sized matrices with Eigen3
+- Add patch to fix -Wreorder warnings
+- Update gsl patch to match current cvs
+
 * Mon Sep 30 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-1
 - Update to 0.9.4
 - Update build patch - drop automake components

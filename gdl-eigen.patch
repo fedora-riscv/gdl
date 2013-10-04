@@ -1,0 +1,50 @@
+diff -up gdl-0.9.4/src/basic_op.cpp.eigen gdl-0.9.4/src/basic_op.cpp
+--- gdl-0.9.4/src/basic_op.cpp.eigen	2013-09-21 21:09:10.000000000 -0600
++++ gdl-0.9.4/src/basic_op.cpp	2013-10-04 14:04:17.018256208 -0600
+@@ -1543,8 +1543,8 @@ Data_<Sp>* Data_<Sp>::MatrixOp( BaseGDL*
+       } 
+     } 
+     
+-    Map<Matrix<Ty,-1,-1>,Aligned> m0(&(*this)[0], NbCol0, NbRow0);
+-    Map<Matrix<Ty,-1,-1>,Aligned> m1(&(*par1)[0], NbCol1, NbRow1);
++    Map<Matrix<Ty,Dynamic,Dynamic>,Aligned> m0(&(*this)[0], NbCol0, NbRow0);
++    Map<Matrix<Ty,Dynamic,Dynamic>,Aligned> m1(&(*par1)[0], NbCol1, NbRow1);
+ 
+     if (at && bt)
+       {
+@@ -1560,7 +1560,7 @@ Data_<Sp>* Data_<Sp>::MatrixOp( BaseGDL*
+ 	Data_* res = new Data_(dim, BaseGDL::NOZERO);
+ 	// no guarding necessary: eigen only throws on memory allocation
+ 
+-	Map<Matrix<Ty,-1,-1>,Aligned> m2(&(*res)[0], NbCol2, NbRow2);
++	Map<Matrix<Ty,Dynamic,Dynamic>,Aligned> m2(&(*res)[0], NbCol2, NbRow2);
+ 	m2.noalias() = m0.transpose() * m1.transpose();
+ 	return res;
+       } 
+@@ -1576,7 +1576,7 @@ Data_<Sp>* Data_<Sp>::MatrixOp( BaseGDL*
+ 	dimension dim(NbCol2, NbRow2);
+ 
+ 	Data_* res = new Data_(dim, BaseGDL::NOZERO);
+-	Map<Matrix<Ty,-1,-1>,Aligned> m2(&(*res)[0], NbCol2, NbRow2);
++	Map<Matrix<Ty,Dynamic,Dynamic>,Aligned> m2(&(*res)[0], NbCol2, NbRow2);
+ 	m2.noalias() = m0 * m1.transpose();
+ 	return res;
+       } else if (at)
+@@ -1591,7 +1591,7 @@ Data_<Sp>* Data_<Sp>::MatrixOp( BaseGDL*
+ 	dimension dim(NbCol2, NbRow2);
+ 
+ 	Data_* res = new Data_(dim, BaseGDL::NOZERO);
+-	Map<Matrix<Ty,-1,-1>,Aligned> m2(&(*res)[0], NbCol2, NbRow2);
++	Map<Matrix<Ty,Dynamic,Dynamic>,Aligned> m2(&(*res)[0], NbCol2, NbRow2);
+ 	m2.noalias() = m0.transpose() * m1;
+ 	return res;
+       } else
+@@ -1606,7 +1606,7 @@ Data_<Sp>* Data_<Sp>::MatrixOp( BaseGDL*
+ 	dimension dim(NbCol2, NbRow2);
+ 
+ 	Data_* res = new Data_(dim, BaseGDL::NOZERO);
+-	Map<Matrix<Ty,-1,-1>,Aligned> m2(&(*res)[0], NbCol2, NbRow2);
++	Map<Matrix<Ty,Dynamic,Dynamic>,Aligned> m2(&(*res)[0], NbCol2, NbRow2);
+ 	m2.noalias() = m0*m1;
+ 	return res;
+       }
