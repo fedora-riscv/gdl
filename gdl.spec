@@ -130,6 +130,7 @@ popd
    -DUDUNITS=ON \\\
    -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
    -DGRIB=ON \\\
+   -DOPENMP=OFF \\\
 %{nil}
 # TODO - build an mpi version
 #           INCLUDES="-I/usr/include/mpich2" \
@@ -201,6 +202,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Oct 8 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-1
+- Disable openmp for now due to issues with eigen3 matrix multiply
+
 * Fri Oct 4 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-1
 - Add patch to fix use of dynamically sized matrices with Eigen3
 - Add patch to fix -Wreorder warnings
