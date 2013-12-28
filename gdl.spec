@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -202,6 +202,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Dec 28 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-2
+- Rebuild for hdf5 1.8.12
+
 * Tue Oct 8 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-1
 - Disable openmp for now due to issues with eigen3 matrix multiply
 
