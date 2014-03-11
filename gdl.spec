@@ -62,7 +62,7 @@ BuildRequires:  grib_api-devel
 BuildRequires:  grib_api-static
 %endif
 %endif
-BuildRequires:  eigen3-devel
+BuildRequires:  eigen3-static
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  pslib-devel
