@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -202,6 +202,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.4-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Sat Dec 28 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-2
 - Rebuild for hdf5 1.8.12
 
