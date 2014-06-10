@@ -1,0 +1,13 @@
+diff -up gdl-0.9.4/CMakeLists.txt.find_python gdl-0.9.4/CMakeLists.txt
+--- gdl-0.9.4/CMakeLists.txt.find_python	2014-06-09 09:53:24.687212183 -0600
++++ gdl-0.9.4/CMakeLists.txt	2014-06-09 09:58:17.226030715 -0600
+@@ -628,8 +628,8 @@ if(PYTHON OR PYTHON_MODULE)
+ 		else()
+ 			set(PythonLibs_FIND_VERSION 2)
+ 		endif()
++		find_package(PythonInterp)
+ 		find_package(PythonLibs)
+-		include(FindPythonInterp)
+ 	endif()
+ 	set(USE_PYTHON ${PYTHONLIBS_FOUND})
+ 	if(PYTHONLIBS_FOUND)

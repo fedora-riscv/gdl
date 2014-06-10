@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.4
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -34,6 +34,9 @@ Patch7:         gdl-eigen.patch
 # Fix -Wreorder warnings
 # https://sourceforge.net/p/gnudatalanguage/patches/71/
 Patch8:         gdl-reorder.patch
+# Fix python find_package usage
+# https://sourceforge.net/p/gnudatalanguage/patches/77/
+Patch9:         gdl-find_python.patch
 Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -124,6 +127,7 @@ popd
 %patch6 -p1 -b .gsl
 %patch7 -p1 -b .eigen
 %patch8 -p1 -b .reorder
+%patch9 -p1 -b .find_python
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
@@ -202,6 +206,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jun 9 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-4
+- Fix python find_package usage
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.4-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
