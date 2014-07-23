@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.4
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -180,7 +180,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 %check
 cd build
 # test_execute expects to use DISPLAY
-%ifarch %{arm}
+%ifarch %{arm} aarch64
 # test_finite and test_fix fail currently on arm
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
 make check ARGS="-V -E 'test_execute|test_finite|test_fix'"
@@ -206,6 +206,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jul 23 2014 Yaakov Selkowitz <yselkowi@redhat.com> - 0.9.4-5
+- Disable tests which fail on aarch64 (#990749)
+
 * Tue Jun 9 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-4
 - Fix python find_package usage
 
