@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.4
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -206,6 +206,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.4-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
 * Wed Jul 23 2014 Yaakov Selkowitz <yselkowi@redhat.com> - 0.9.4-5
 - Disable tests which fail on aarch64 (#990749)
 
