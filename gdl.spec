@@ -181,7 +181,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 %check
 cd build
 # test_execute expects to use DISPLAY
-%ifarch %{arm} aarch64
+%ifarch %{arm} aarch64 ppc64
 # test_finite and test_fix fail currently on arm
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
 make check ARGS="-V -E 'test_execute|test_finite|test_fix'"
