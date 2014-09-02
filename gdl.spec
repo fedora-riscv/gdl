@@ -1,20 +1,18 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9.4
-Release:        6%{?dist}
+Version:        0.9.5
+Release:        0.1.cvs20140902%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}-20140902.tar.bz2
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-# Build with system antlr library.  Request for upstream change here:
-# https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch1:         gdl-antlr-auto.patch
+Patch1:         gdl-format.patch
 # Force build of libgdl.so
 Patch2:         gdl-shared.patch
 # Patch to allow make check to work for out of tree builds
@@ -111,7 +109,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{version}-20140902
 rm -rf src/antlr
 %patch13 -p1 -b .antlr
 pushd src
@@ -120,14 +118,7 @@ do
   antlr $f
 done
 popd
-%patch2 -p1 -b .shared
-%patch3 -p1 -b .build
-%patch4 -p1 -b .plwidth
-%patch5 -p1 -b .python
-%patch6 -p1 -b .gsl
-%patch7 -p1 -b .eigen
-%patch8 -p1 -b .reorder
-%patch9 -p1 -b .find_python
+%patch1 -p1 -b .format
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
@@ -185,7 +176,7 @@ cd build
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
 make check ARGS="-V -E 'test_execute|test_finite|test_fix'"
 %else
-make check ARGS="-V -E 'test_execute'"
+make check ARGS="-V -E 'test_execute|test_bug_3147146'"
 %endif
 
 %clean

@@ -5,5 +5,11 @@ then
 else
    date=`date +%Y%m%d`
 fi
-cvs -z3 -d :pserver:anonymous@gnudatalanguage.cvs.sourceforge.net:/cvsroot/gnudatalanguage export -D ${date} -d gdl-0.9rc4-${date} gdl
-tar cjf gdl-0.9rc4-${date}.tar.bz2 gdl-0.9rc4-${date}
+if [ -n "$2" ]
+then
+   rel=$2
+else
+   rel=0.9.5
+fi
+cvs -z3 -d :pserver:anonymous@gnudatalanguage.cvs.sourceforge.net:/cvsroot/gnudatalanguage export -D ${date} -d gdl-${rel}-${date} gdl
+tar cjf gdl-${rel}-${date}.tar.bz2 gdl-${rel}-${date}
