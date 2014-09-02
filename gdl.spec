@@ -41,17 +41,18 @@ Patch13:        gdl-0.9-antlr-cmake.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
-%if 0%{?fedora} || 0%{?rhel} >= 6
- %if 0%{?fedora}
+%if 0%{?rhel} == 5
+%global plplot_config --enable-oldplplot
+%else
+%global plplot_config %{nil}
+%endif
+%if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
- %else
+%endif
+%if 0%{?rhel} == 6
 BuildRequires:  antlr
 BuildRequires:  java
- %endif
-%global plplot_config %{nil}
-%else
-%global plplot_config --enable-oldplplot
 %endif
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
