@@ -213,7 +213,7 @@ rm -rf $RPM_BUILD_ROOT
 * Wed Jul 23 2014 Yaakov Selkowitz <yselkowi@redhat.com> - 0.9.4-5
 - Disable tests which fail on aarch64 (#990749)
 
-* Tue Jun 9 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-4
+* Tue Jun 10 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-4
 - Fix python find_package usage
 
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.4-3
