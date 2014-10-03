@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.4
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -135,7 +135,7 @@ popd
    -DUDUNITS=ON \\\
    -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
    -DGRIB=ON \\\
-   -DOPENMP=OFF \\\
+   -DOPENMP=ON \\\
 %{nil}
 # TODO - build an mpi version
 #           INCLUDES="-I/usr/include/mpich2" \
@@ -207,6 +207,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Oct 3 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-7
+- Re-enable openmp.  Appears to be working now.
+
 * Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.4-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
