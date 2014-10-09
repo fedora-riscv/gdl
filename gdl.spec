@@ -1,8 +1,8 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9.4
-Release:        7%{?dist}
+Version:        0.9.5
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -14,30 +14,8 @@ Source2:        gdl.sh
 Source3:        makecvstarball
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch1:         gdl-antlr-auto.patch
-# Force build of libgdl.so
-Patch2:         gdl-shared.patch
-# Patch to allow make check to work for out of tree builds
-Patch3:         gdl-build.patch
-# Patch to support plplot's new width() function
-# https://sourceforge.net/p/gnudatalanguage/patches/70/
-Patch4:         gdl-plwidth.patch
-# Fix python build
-# https://sourceforge.net/p/gnudatalanguage/bugs/552/
-Patch5:         gdl-python.patch
-# Fix datatype for use with gsl's permutation type
-# https://sourceforge.net/p/gnudatalanguage/bugs/570/
-Patch6:         gdl-gsl.patch
-# Make proper use of dynamically sized matrices in eigen
-# https://sourceforge.net/p/gnudatalanguage/bugs/556/
-Patch7:         gdl-eigen.patch
-# Fix -Wreorder warnings
-# https://sourceforge.net/p/gnudatalanguage/patches/71/
-Patch8:         gdl-reorder.patch
-# Fix python find_package usage
-# https://sourceforge.net/p/gnudatalanguage/patches/77/
-Patch9:         gdl-find_python.patch
-Patch13:        gdl-0.9-antlr-cmake.patch
+Patch1:         gdl-0.9-antlr-cmake.patch
+
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
@@ -112,23 +90,15 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
 rm -rf src/antlr
-%patch13 -p1 -b .antlr
+%patch1 -p1 -b .antlr
 pushd src
 for f in *.g
 do
   antlr $f
 done
 popd
-%patch2 -p1 -b .shared
-%patch3 -p1 -b .build
-%patch4 -p1 -b .plwidth
-%patch5 -p1 -b .python
-%patch6 -p1 -b .gsl
-%patch7 -p1 -b .eigen
-%patch8 -p1 -b .reorder
-%patch9 -p1 -b .find_python
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
@@ -181,12 +151,15 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 %check
 cd build
 # test_execute expects to use DISPLAY
+# test_bug_3147146 failure
+# https://sourceforge.net/p/gnudatalanguage/bugs/619/
 %ifarch %{arm} aarch64 ppc64
-# test_finite and test_fix fail currently on arm
+# test_fix fails currently on arm
+# https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
-make check ARGS="-V -E 'test_execute|test_finite|test_fix'"
+make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix'"
 %else
-make check ARGS="-V -E 'test_execute'"
+make check ARGS="-V -E 'test_execute|test_bug_3147146'"
 %endif
 
 %clean
@@ -207,6 +180,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Oct 8 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-1
+- Update to 0.9.5
+
 * Fri Oct 3 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-7
 - Re-enable openmp.  Appears to be working now.
 
