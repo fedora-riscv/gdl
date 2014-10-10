@@ -50,7 +50,11 @@ BuildRequires:  eigen3-static
 BuildRequires:  pslib-devel
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
+%if 0%{?rhel} == 6
+BuildRequires:  cmake28
+%else
 BuildRequires:  cmake
+%endif
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
@@ -119,12 +123,20 @@ export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
 mkdir build build-python
 #Build the standalone executable
 pushd build
+%if 0%{?rhel} == 6
+%{cmake28} %{cmake_opts} ..
+%else
 %{cmake} %{cmake_opts} ..
+%endif
 make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=2.7 ..
+%if 0%{?rhel} == 6
+%{cmake28} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=%{python_version} ..
+%else
+%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=%{python_version} ..
+%endif
 make %{?_smp_mflags}
 popd
 
