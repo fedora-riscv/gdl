@@ -1,8 +1,8 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9.3
-Release:        10.cvs20130731%{?dist}
+Version:        0.9.5
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -12,32 +12,25 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
-Patch0:         gdl-cvs.patch
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch1:         gdl-antlr-auto.patch
-# Force build of libgdl.so
-Patch2:         gdl-shared.patch
-# Patch to allow make check to work for out of tree builds
-Patch3:         gdl-build.patch
-# Patch to support plplot's new width() function
-# https://sourceforge.net/p/gnudatalanguage/patches/70/
-Patch4:         gdl-plwidth.patch
-Patch13:        gdl-0.9-antlr-cmake.patch
+Patch1:         gdl-0.9-antlr-cmake.patch
+
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
-%if 0%{?fedora} || 0%{?rhel} >= 6
- %if 0%{?fedora}
+%if 0%{?rhel} == 5
+%global plplot_config --enable-oldplplot
+%else
+%global plplot_config %{nil}
+%endif
+%if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
- %else
+%endif
+%if 0%{?rhel} == 6
 BuildRequires:  antlr
 BuildRequires:  java
- %endif
-%global plplot_config %{nil}
-%else
-%global plplot_config --enable-oldplplot
 %endif
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
@@ -51,7 +44,7 @@ BuildRequires:  grib_api-devel
 BuildRequires:  grib_api-static
 %endif
 %endif
-BuildRequires:  eigen3-devel
+BuildRequires:  eigen3-static
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  pslib-devel
@@ -97,27 +90,22 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n %{name}-%{version}
-%patch0 -p1 -b .cvs
+%setup -q
 rm -rf src/antlr
-%patch13 -p1 -b .antlr
+%patch1 -p1 -b .antlr
 pushd src
 for f in *.g
 do
   antlr $f
 done
 popd
-%patch2 -p1 -b .shared
-%patch3 -p1 -b .build
-%patch4 -p1 -b .plwidth
-rm ltmain.sh
-rm -r CMakeFiles
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
    -DUDUNITS=ON \\\
    -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
    -DGRIB=ON \\\
+   -DOPENMP=ON \\\
 %{nil}
 # TODO - build an mpi version
 #           INCLUDES="-I/usr/include/mpich2" \
@@ -162,20 +150,16 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 %check
 cd build
-# test_bug_3104326 and test_execute expects to use DISPLAY
-# test_bug_3300626 - https://sourceforge.net/p/gnudatalanguage/bugs/557/
-# test_dicom - https://sourceforge.net/p/gnudatalanguage/bugs/558/ 
-# Known issues with test_memory
-# Known issues with str_sep
-# - https://sourceforge.net/p/gnudatalanguage/bugs/521/
-# test_matrix_multiply is causing problems - hangs
-# - https://sourceforge.net/p/gnudatalanguage/bugs/556/
-%ifarch %{arm}
-# test_finite and test_fix fail currently on arm
+# test_execute expects to use DISPLAY
+# test_bug_3147146 failure
+# https://sourceforge.net/p/gnudatalanguage/bugs/619/
+%ifarch %{arm} aarch64 ppc64
+# test_fix fails currently on arm
+# https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
-make check ARGS="-V -E 'test_bug_3104326|test_bug_3300626|test_dicom|test_execute|test_str_sep|test_matrix_multiply|test_finite|test_fix'"
+make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix'"
 %else
-make check ARGS="-V -E 'test_bug_3104326|test_bug_3300626|test_dicom|test_execute|test_str_sep|test_matrix_multiply'"
+make check ARGS="-V -E 'test_execute|test_bug_3147146'"
 %endif
 
 %clean
@@ -196,6 +180,42 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Oct 8 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-1
+- Update to 0.9.5
+
+* Fri Oct 3 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-7
+- Re-enable openmp.  Appears to be working now.
+
+* Sat Aug 16 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.4-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
+
+* Wed Jul 23 2014 Yaakov Selkowitz <yselkowi@redhat.com> - 0.9.4-5
+- Disable tests which fail on aarch64 (#990749)
+
+* Tue Jun 10 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-4
+- Fix python find_package usage
+
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.4-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
+* Sat Dec 28 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-2
+- Rebuild for hdf5 1.8.12
+
+* Tue Oct 8 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-1
+- Disable openmp for now due to issues with eigen3 matrix multiply
+
+* Fri Oct 4 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-1
+- Add patch to fix use of dynamically sized matrices with Eigen3
+- Add patch to fix -Wreorder warnings
+- Update gsl patch to match current cvs
+
+* Mon Sep 30 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.4-1
+- Update to 0.9.4
+- Update build patch - drop automake components
+- New python patch to fix python build
+- Add patch to fix gsl usage
+- Add patch for test debugging
+
 * Tue Aug 27 2013 Orion Poplawski <orion@cora.nwra.com> - 0.9.3-10.cvs20130804
 - Add patch to support new width() method in plplot
 
