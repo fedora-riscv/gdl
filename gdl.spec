@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -50,11 +50,7 @@ BuildRequires:  eigen3-static
 BuildRequires:  pslib-devel
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
-%if 0%{?rhel} == 6
-BuildRequires:  cmake28
-%else
 BuildRequires:  cmake
-%endif
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
@@ -123,20 +119,12 @@ export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
 mkdir build build-python
 #Build the standalone executable
 pushd build
-%if 0%{?rhel} == 6
-%{cmake28} %{cmake_opts} ..
-%else
 %{cmake} %{cmake_opts} ..
-%endif
 make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%if 0%{?rhel} == 6
-%{cmake28} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=%{python_version} ..
-%else
 %{cmake} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=%{python_version} ..
-%endif
 make %{?_smp_mflags}
 popd
 
@@ -192,6 +180,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Oct 31 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-2
+- No longer need cmake28 on RHEL6
+
 * Wed Oct 8 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-1
 - Update to 0.9.5
 
