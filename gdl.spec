@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -153,13 +153,14 @@ cd build
 # test_execute expects to use DISPLAY
 # test_bug_3147146 failure
 # https://sourceforge.net/p/gnudatalanguage/bugs/619/
+# test_zip - https://sourceforge.net/p/gnudatalanguage/bugs/632/
 %ifarch %{arm} aarch64 ppc64
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
-make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix'"
+make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix|test_zip'"
 %else
-make check ARGS="-V -E 'test_execute|test_bug_3147146'"
+make check ARGS="-V -E 'test_execute|test_bug_3147146|test_zip'"
 %endif
 
 %clean
@@ -180,6 +181,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 18 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-3
+- Exclude test_zip
+
 * Fri Oct 31 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-2
 - No longer need cmake28 on RHEL6
 
