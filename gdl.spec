@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.5
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -50,11 +50,7 @@ BuildRequires:  eigen3-static
 BuildRequires:  pslib-devel
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
-%if 0%{?rhel} == 6
-BuildRequires:  cmake28
-%else
 BuildRequires:  cmake
-%endif
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
@@ -124,20 +120,12 @@ export CXXFLAGS="$RPM_OPT_FLAGS -fPIC -I%{python_sitearch}/numpy/core/include"
 mkdir build build-python
 #Build the standalone executable
 pushd build
-%if 0%{?rhel} == 6
-%{cmake28} %{cmake_opts} ..
-%else
 %{cmake} %{cmake_opts} ..
-%endif
 make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%if 0%{?rhel} == 6
-%{cmake28} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=%{python_version} ..
-%else
 %{cmake} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=%{python_version} ..
-%endif
 make %{?_smp_mflags}
 popd
 
@@ -166,13 +154,14 @@ cd build
 # test_execute expects to use DISPLAY
 # test_bug_3147146 failure
 # https://sourceforge.net/p/gnudatalanguage/bugs/619/
+# test_zip - https://sourceforge.net/p/gnudatalanguage/bugs/632/
 %ifarch %{arm} aarch64 ppc64
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
-make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix'"
+make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix|test_zip'"
 %else
-make check ARGS="-V -E 'test_execute|test_bug_3147146'"
+make check ARGS="-V -E 'test_execute|test_bug_3147146|test_zip'"
 %endif
 
 %clean
@@ -193,6 +182,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 18 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-3
+- Exclude test_zip
+
+* Fri Oct 31 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-2
+- No longer need cmake28 on RHEL6
+
 * Wed Oct 8 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-1
 - Update to 0.9.5
 - Disable tests which fail on aarch64 (#990749)
