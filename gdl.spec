@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.5
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -181,6 +181,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Mar 09 2015 Rex Dieter <rdieter@fedoraproject.org> 0.9.5-5
+- rebuild (GraphicsMagick)
+
 * Wed Jan 07 2015 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-4
 - Rebuild for hdf5 1.8.4
 
