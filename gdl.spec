@@ -153,7 +153,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 cd build
 # It takes more stack to compile gdlffdicom__dictionary.pro
 # https://sourceforge.net/p/gnudatalanguage/discussion/338693/thread/6c1015e9/
-ulimit -s 10240
+ulimit -s 16384
 # test_execute expects to use DISPLAY
 # test_bug_3147146 failure
 # https://sourceforge.net/p/gnudatalanguage/bugs/619/
