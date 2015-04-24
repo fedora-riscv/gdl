@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.5
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -15,6 +15,9 @@ Source3:        makecvstarball
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-0.9-antlr-cmake.patch
+# Add plplot 5.11.0 support
+# https://sourceforge.net/p/gnudatalanguage/bugs/643/
+Patch2:         gdl-plplot.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -93,6 +96,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %setup -q
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
+%patch2 -p1 -b .plplot
 pushd src
 for f in *.g
 do
@@ -181,6 +185,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Apr 24 2015 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-6
+- Add patch for plplot 5.11.0 support
+
 * Mon Mar 09 2015 Rex Dieter <rdieter@fedoraproject.org> 0.9.5-5
 - rebuild (GraphicsMagick)
 
