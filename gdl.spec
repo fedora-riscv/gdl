@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.5
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -185,6 +185,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun May 17 2015 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-7
+- Rebuild for hdf5 1.8.15
+
 * Fri Apr 24 2015 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-6
 - Add patch for plplot 5.11.0 support
 
