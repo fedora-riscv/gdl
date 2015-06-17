@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.5
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -185,6 +185,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.5-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Sun May 17 2015 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-7
 - Rebuild for hdf5 1.8.15
 
