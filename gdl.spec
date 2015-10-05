@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.5
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -185,6 +185,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Oct 04 2015 Rex Dieter <rdieter@fedoraproject.org> - 0.9.5-10
+- rebuild (GraphicsMagick)
+
 * Wed Jul 15 2015 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-9
 - Rebuild for grib_api 1.14.0 soname bump
 
