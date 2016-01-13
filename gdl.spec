@@ -1,23 +1,26 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           gdl
-Version:        0.9.5
-Release:        10%{?dist}
+Version:        0.9.6
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}v2.tgz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-0.9-antlr-cmake.patch
-# Add plplot 5.11.0 support
-# https://sourceforge.net/p/gnudatalanguage/bugs/643/
-Patch2:         gdl-plplot.patch
+# Fix file_move test
+# https://sourceforge.net/p/gnudatalanguage/patches/97/
+Patch2:         gdl-file_move.patch
+# Fix test_formats
+# https://sourceforge.net/p/gnudatalanguage/bugs/684/
+Patch3:         gdl-formats.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -54,6 +57,9 @@ BuildRequires:  pslib-devel
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
 BuildRequires:  cmake
+# For tests
+BuildRequires:  xorg-x11-server-Xvfb
+BuildRequires:  metacity
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
@@ -96,7 +102,9 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %setup -q
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
-%patch2 -p1 -b .plplot
+%patch2 -p1 -b .file_move
+%patch3 -p1 -b .formats
+
 pushd src
 for f in *.g
 do
@@ -116,10 +124,9 @@ popd
 #           --with-mpich=%{_libdir}/mpich2 \
 
 %build
-export CPPFLAGS="-DH5_USE_16_API"
 # Build convenience .a libraries with -fPIC
-export CFLAGS="$RPM_OPT_FLAGS -fPIC"
-export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
+#export CFLAGS="$RPM_OPT_FLAGS -fPIC"
+#export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
 mkdir build build-python
 #Build the standalone executable
 pushd build
@@ -134,7 +141,6 @@ popd
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
 pushd build
 make install DESTDIR=$RPM_BUILD_ROOT
 popd
@@ -154,25 +160,34 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 %check
 cd build
-# test_execute expects to use DISPLAY
+# test_bug_3275334 and window_background appear to need to read from display
 # test_bug_3147146 failure
 # https://sourceforge.net/p/gnudatalanguage/bugs/619/
+# test_bug_3285659 failure
+# https://sourceforge.net/p/gnudatalanguage/bugs/387/
+# test_routine_names failure
+# https://sourceforge.net/p/gnudatalanguage/bugs/647/
 # test_zip - https://sourceforge.net/p/gnudatalanguage/bugs/632/
+cat > xrun.sh <<EOF
+metacity &
+sleep 2
 %ifarch %{arm} aarch64 ppc64
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
-make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix|test_zip'"
+make check ARGS="-V -E 'test_(bug_(3147146|3275334|3285659)|fix|routine_names|window_background|zip)'"
 %else
-make check ARGS="-V -E 'test_execute|test_bug_3147146|test_zip'"
+make check ARGS="-V -E 'test_(bug_(3147146|3275334|3285659)|routine_names|window_background|zip)'"
 %endif
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+EOF
+chmod +x xrun.sh
+xvfb-run ./xrun.sh
 
 
 %files
-%doc AUTHORS ChangeLog COPYING HACKING NEWS README TODO
+%{!?_licensedir:%global license %doc}
+%license COPYING
+%doc AUTHORS ChangeLog HACKING NEWS README TODO
 %config(noreplace) %{_sysconfdir}/profile.d/gdl.*sh
 %{_bindir}/gdl
 %{_mandir}/man1/gdl.1*
@@ -185,6 +200,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Jan 7 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-1
+- Update to 0.9.6
+- Drop setting -DH5_USE_16_API and -fPIC
+- Drop plplot patch applied upstream
+- Add patch to fix file_move test
+- Run tests with Xvfb and metacity
+- Use %%license
+
 * Sun Oct 04 2015 Rex Dieter <rdieter@fedoraproject.org> - 0.9.5-10
 - rebuild (GraphicsMagick)
 
