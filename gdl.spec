@@ -176,9 +176,9 @@ sleep 2
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
 # These fail on 32-bit: test_binfmt test_formats test_xdr
-make check ARGS="-V -E 'test_(binfmt|bug_(3147146|3275334|3285659)|fix|formats|routine_names|window_background|xdr|zip)'"
+make check ARGS="-V -E 'test_(binfmt|bug_(3147146|3275334|3285659)|fix|formats|routine_names|sem|window_background|xdr|zip)'"
 %else
-make check ARGS="-V -E 'test_(bug_(3147146|3275334|3285659)|routine_names|window_background|zip)'"
+make check ARGS="-V -E 'test_(bug_(3147146|3275334|3285659)|routine_names|sem|window_background|zip)'"
 %endif
 EOF
 chmod +x xrun.sh
