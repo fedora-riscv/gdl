@@ -171,7 +171,7 @@ cd build
 cat > xrun.sh <<EOF
 metacity &
 sleep 2
-%ifarch %{arm} aarch64 %{ix64} ppc64
+%ifarch %{arm} aarch64 %{ix86} ppc64
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
