@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.6
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -201,6 +201,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.6-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Fri Jan 22 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-2
 - Rebuild for netcdf 4.4.0
 
