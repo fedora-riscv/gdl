@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -184,6 +184,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Feb 12 2016 Rex Dieter <rdieter@fedoraproject.org> 0.9.5-3
+- rebuild (GraphicsMagick)
+
 * Fri Oct 31 2014 Orion Poplawski <orion@cora.nwra.com> - 0.9.5-2
 - No longer need cmake28 on RHEL6
 
