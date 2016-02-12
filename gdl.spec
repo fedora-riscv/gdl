@@ -164,6 +164,7 @@ make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix|test_matrix_multi
 %else
 make check ARGS="-V -E 'test_execute|test_bug_3147146'"
 %endif
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
