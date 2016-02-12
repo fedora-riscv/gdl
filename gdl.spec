@@ -159,6 +159,9 @@ cd build
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
 make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix'"
 %else
+%ifarch ppc64le
+make check ARGS="-V -E 'test_execute|test_bug_3147146|test_fix|test_matrix_multiply|test_spher_harm'"
+%else
 make check ARGS="-V -E 'test_execute|test_bug_3147146'"
 %endif
 
