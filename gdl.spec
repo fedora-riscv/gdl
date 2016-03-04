@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.6
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -21,6 +21,10 @@ Patch2:         gdl-file_move.patch
 # Fix test_formats
 # https://sourceforge.net/p/gnudatalanguage/bugs/684/
 Patch3:         gdl-formats.patch
+# Fix build with gcc 6
+# https://sourceforge.net/p/gnudatalanguage/bugs/686/
+# https://sourceforge.net/p/gnudatalanguage/bugs/688/
+Patch4:         gdl-gcc6.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -104,6 +108,7 @@ rm -rf src/antlr
 %patch1 -p1 -b .antlr
 %patch2 -p1 -b .file_move
 %patch3 -p1 -b .formats
+%patch4 -p1 -b .gcc6
 
 pushd src
 for f in *.g
@@ -201,6 +206,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Thu Mar 3 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-5
+- Add patch to build with gcc 6
+
 * Mon Feb 22 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-4
 - Rebuild for gsl 2.1
 
