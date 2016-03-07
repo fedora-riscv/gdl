@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -205,6 +205,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Mon Mar 7 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-2
+- rebuild (GraphicsMagick)
+
 * Tue Feb 16 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-1
 - Update to 0.9.6
 - Drop setting -DH5_USE_16_API and -fPIC
