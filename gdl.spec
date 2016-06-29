@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.6
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -206,6 +206,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Wed Jun 29 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-6
+- Rebuild for hdf5 1.8.17
+
 * Thu Mar 3 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-5
 - Add patch to build with gcc 6
 
