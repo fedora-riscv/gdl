@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.6
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -206,6 +206,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.6-7
+- https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
+
 * Wed Jun 29 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-6
 - Rebuild for hdf5 1.8.17
 
