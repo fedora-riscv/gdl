@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.6
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -173,18 +173,26 @@ cd build
 # test_routine_names failure
 # https://sourceforge.net/p/gnudatalanguage/bugs/647/
 # test_zip - https://sourceforge.net/p/gnudatalanguage/bugs/632/
-cat > xrun.sh <<EOF
+cat > xrun.sh <<'EOF'
 metacity &
 sleep 2
-%ifarch %{arm} aarch64 %{ix86} ppc64
+failing_tests='test_(bug_(3275334|3285659)|routine_names|sem|window_background)'
+%ifarch aarch64 ppc
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
-# These fail on 32-bit: test_binfmt test_formats test_xdr
-make check ARGS="-V -E 'test_(binfmt|bug_(3147146|3275334|3285659)|fix|formats|routine_names|sem|window_background|xdr|zip)'"
-%else
-make check ARGS="-V -E 'test_(bug_(3147146|3275334|3285659)|routine_names|sem|window_background|zip)'"
+failing_tests="$failing_tests|test_fix"
 %endif
+%ifarch %{arm}
+# These fail on 32-bit: test_formats test_xdr
+failing_tests="$failing_tests|test_(fix|formats|xdr)"
+%endif
+%ifarch %{ix86}
+# These fail on 32-bit: test_formats test_xdr
+failing_tests="$failing_tests|test_(formats|xdr)"
+%endif
+make check ARGS="-V -E '$failing_tests'"
+make check ARGS="-V -R '$failing_tests'" || :
 EOF
 chmod +x xrun.sh
 xvfb-run ./xrun.sh
@@ -206,6 +214,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Mon Sep 26 2016 Orion Poplawski <orion@cora.nwra.com> - 0.9.6-8
+- Keep tabs on failing tests
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.6-7
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
