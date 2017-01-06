@@ -1,26 +1,20 @@
-%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-
 Name:           gdl
-Version:        0.9.6
-Release:        10%{?dist}
+Version:        0.9.7
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}v2.tgz
+Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tgz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
-Patch1:         gdl-0.9-antlr-cmake.patch
-# Fix file_move test
-# https://sourceforge.net/p/gnudatalanguage/patches/97/
-Patch2:         gdl-file_move.patch
-# Fix test_formats
-# https://sourceforge.net/p/gnudatalanguage/bugs/684/
-Patch3:         gdl-formats.patch
+Patch1:         gdl-antlr.patch
+# Fix problem with arra generation
+Patch2:         gdl-array.patch
 # Fix build with gcc 6
 # https://sourceforge.net/p/gnudatalanguage/bugs/686/
 # https://sourceforge.net/p/gnudatalanguage/bugs/688/
@@ -45,7 +39,7 @@ BuildRequires:  java
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
-BuildRequires:  python-devel, numpy, python-matplotlib
+BuildRequires:  python2-devel, numpy, python-matplotlib
 BuildRequires:  fftw-devel, hdf-static
 %if 0%{?fedora} >= 21
 BuildRequires:  grib_api-devel
@@ -58,6 +52,11 @@ BuildRequires:  eigen3-static
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  pslib-devel
+# qhull too old on EPEL7
+%if 0%{?fedora} || 0%{?rhel} >= 8
+BuildRequires:  qhull-devel
+%global cmake_qhull -DQHULL=ON
+%endif
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
 BuildRequires:  cmake
@@ -103,11 +102,10 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
-%patch2 -p1 -b .file_move
-%patch3 -p1 -b .formats
+%patch2 -p1 -b .array
 %patch4 -p1 -b .gcc6
 
 pushd src
@@ -123,6 +121,7 @@ popd
    -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
    -DGRIB=ON \\\
    -DOPENMP=ON \\\
+   %{?cmake_qhull} \\\
 %{nil}
 # TODO - build an mpi version
 #           INCLUDES="-I/usr/include/mpich2" \
@@ -140,7 +139,7 @@ make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=%{python_version} ..
+%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=%{python2_version} ..
 make %{?_smp_mflags}
 popd
 
@@ -151,10 +150,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 popd
 pushd build-python
 make install DESTDIR=$RPM_BUILD_ROOT
-# Install the python module
-install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
-cp -p src/libgdl.so \
-      $RPM_BUILD_ROOT/%{python_sitearch}/GDL.so
+# Install the python module in the right location
+install -d -m 0755 $RPM_BUILD_ROOT/%{python2_sitearch}
+mv $RPM_BUILD_ROOT%{_prefix}/lib/site-python/GDL.so $RPM_BUILD_ROOT%{python2_sitearch}/GDL.so
 popd
 
 # Install the profile file to set GDL_PATH
@@ -176,7 +174,7 @@ cd build
 cat > xrun.sh <<'EOF'
 metacity &
 sleep 2
-failing_tests='test_(bug_(3275334|3285659)|routine_names|sem|window_background)'
+failing_tests='test_(bug_3275334|sem|window_background)'
 %ifarch aarch64 ppc
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
@@ -199,7 +197,6 @@ xvfb-run ./xrun.sh
 
 
 %files
-%{!?_licensedir:%global license %doc}
 %license COPYING
 %doc AUTHORS ChangeLog HACKING NEWS README TODO
 %config(noreplace) %{_sysconfdir}/profile.d/gdl.*sh
@@ -210,10 +207,13 @@ xvfb-run ./xrun.sh
 %{_datadir}/gnudatalanguage/
 
 %files python
-%{python_sitearch}/GDL.so
+%{python2_sitearch}/GDL.so
 
 
 %changelog
+* Wed Feb 1 2017 Orion Poplawski <orion@cora.nwra.com> - 0.9.7-1
+- Update to 0.9.7
+
 * Thu Jan 12 2017 Igor Gnatenko <ignatenko@redhat.com> - 0.9.6-10
 - Rebuild for readline 7.x
 

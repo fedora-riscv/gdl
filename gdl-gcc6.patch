@@ -18,14 +18,3 @@ diff -up gdl-0.9.6/src/specializations.hpp.gcc6 gdl-0.9.6/src/specializations.hp
  std::ostream& Data_<SpDLong>::ToStream(std::ostream& o, SizeT w, SizeT* actPosPtr); 
  template<>  
  std::ostream& Data_<SpDULong>::ToStream(std::ostream& o, SizeT w, SizeT* actPosPtr); 
---- gdl-0.9.6/src/typedefs.hpp.gcc6	2014/08/09 15:33:29	1.76
-+++ gdl-0.9.6/src/typedefs.hpp	2016/02/04 22:48:46	1.77
-@@ -235,7 +235,7 @@
-   
-   Guard& operator=( Guard& r)
-   {
--    if( &r == this) return;
-+    if( &r == this) return *this;
-     delete guarded;
-     guarded = r.guarded;
-     r.guarded = NULL;
