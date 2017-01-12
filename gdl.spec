@@ -2,7 +2,7 @@
 
 Name:           gdl
 Version:        0.9.6
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -214,6 +214,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Thu Jan 12 2017 Igor Gnatenko <ignatenko@redhat.com> - 0.9.6-10
+- Rebuild for readline 7.x
+
 * Wed Dec 28 2016 Rich Mattes <richmattes@gmail.com> - 0.9.6-9
 - Rebuild for eigen3-3.3.1
 
