@@ -1,0 +1,20 @@
+Author: Ole Streicher <olebole@debian.org>
+Description: Fix problems in the release candidate.
+--- a/src/dinterpreter.cpp
++++ b/src/dinterpreter.cpp
+@@ -1270,7 +1270,14 @@
+ void *inputThread(void*) {
+ #endif
+     while (1) {
+-        char ch = getchar(); if (ch==EOF) return NULL;
++        char ch = getchar();
++	if (ch==EOF) {
++#ifdef HAVE_CXX11THREAD
++	    return;
++#else
++	    return NULL;
++#endif
++	}
+         inputstr += ch;
+         if (ch == '\n')
+             break;
