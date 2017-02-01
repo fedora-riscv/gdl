@@ -52,8 +52,8 @@ BuildRequires:  eigen3-static
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  pslib-devel
-# qhull too old on EPEL7
-%if 0%{?fedora} || 0%{?rhel} >= 8
+# qhull too old on Fedora 24 and EPEL7
+%if 0%{?fedora} >= 25 || 0%{?rhel} >= 8
 BuildRequires:  qhull-devel
 %global cmake_qhull -DQHULL=ON
 %endif
