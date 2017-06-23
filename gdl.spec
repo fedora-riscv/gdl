@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9.7
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -211,6 +211,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Fri Jun 23 2017 Tom Callaway <spot@fedoraproject.org> - 0.9.7-4
+- rebuild for plplot 5.12.0
+
 * Mon May 15 2017 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.9.7-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_27_Mass_Rebuild
 
