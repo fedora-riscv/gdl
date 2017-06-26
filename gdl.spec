@@ -31,6 +31,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
+BuildRequires:  java
 %endif
 %if 0%{?rhel} == 6
 BuildRequires:  antlr
