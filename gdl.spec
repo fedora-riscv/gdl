@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9.7
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -90,7 +90,11 @@ BuildArch:      noarch
 Common files for GDL
 
 
-%package        python
+%package        -n python2-gdl
+%{?python_provide:%python_provide python2-gdl}
+# Remove before F30
+Provides: %{name}-python%{?_isa} = %{version}-%{release}
+Obsoletes: %{name}-python < %{version}-%{release}
 Summary:        GDL python module
 Group:          Applications/Engineering
 # Needed to pull in drivers
@@ -98,7 +102,7 @@ Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
 Provides:       %{name}-runtime = %{version}-%{release}
 
-%description    python
+%description    -n python2-gdl
 %{summary}.
 
 
@@ -207,11 +211,15 @@ xvfb-run ./xrun.sh
 %files common
 %{_datadir}/gnudatalanguage/
 
-%files python
+%files -n python2-gdl
 %{python2_sitearch}/GDL.so
 
 
 %changelog
+* Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 0.9.7-7
+- Python 2 binary package renamed to python2-gdl
+  See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
+
 * Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.7-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
