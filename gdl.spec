@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9.7
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -93,6 +93,7 @@ Common files for GDL
 %package        -n python2-gdl
 %{?python_provide:%python_provide python2-gdl}
 # Remove before F30
+Provides: %{name}-python = %{version}-%{release}
 Provides: %{name}-python%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-python < %{version}-%{release}
 Summary:        GDL python module
@@ -216,6 +217,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Sun Aug 20 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 0.9.7-8
+- Add Provides for the old name without %%_isa
+
 * Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 0.9.7-7
 - Python 2 binary package renamed to python2-gdl
   See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
