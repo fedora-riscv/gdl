@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9.7
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -217,6 +217,9 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.7-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Sun Aug 20 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 0.9.7-8
 - Add Provides for the old name without %%_isa
 
