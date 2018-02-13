@@ -20,7 +20,6 @@ Patch2:         gdl-array.patch
 # https://sourceforge.net/p/gnudatalanguage/bugs/688/
 Patch4:         gdl-gcc6.patch
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?rhel} == 5
