@@ -126,6 +126,7 @@ popd
    -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
    -DGRIB=ON \\\
    -DOPENMP=ON \\\
+   -DPYTHON_EXECUTABLE=%{_bindir}/python2 \\\
    %{?cmake_qhull} \\\
 %{nil}
 # TODO - build an mpi version
@@ -133,9 +134,8 @@ popd
 #           --with-mpich=%{_libdir}/mpich2 \
 
 %build
-# Build convenience .a libraries with -fPIC
-#export CFLAGS="$RPM_OPT_FLAGS -fPIC"
-#export CXXFLAGS="$RPM_OPT_FLAGS -fPIC"
+export CFLAGS="%{optflags} -I%{_includedir}/tirpc -ltirpc"
+export CXXFLAGS="%{optflags} -I%{_includedir}/tirpc -ltirpc"
 mkdir build build-python
 #Build the standalone executable
 pushd build
@@ -144,7 +144,7 @@ make %{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON -DPYTHON_VERSION=%{python2_version} ..
+%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON ..
 make %{?_smp_mflags}
 popd
 
@@ -216,6 +216,10 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Wed Feb 21 2018 Orion Poplawski <orion@cora.nwra.com> - 0.9.7-10
+- Explicitly use python2
+- Build with libtirpc
+
 * Tue Feb 20 2018 Orion Poplawski <orion@cora.nwra.com> - 0.9.7-10
 - Rebuild for hdf5 1.8.20
 
