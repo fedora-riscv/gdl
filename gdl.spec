@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9.7
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -39,7 +39,7 @@ BuildRequires:  java
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
-BuildRequires:  python2-devel, numpy, python-matplotlib
+BuildRequires:  python2-devel, python2-numpy, python2-matplotlib
 BuildRequires:  fftw-devel, hdf-static
 %if 0%{?fedora} >= 21
 BuildRequires:  grib_api-devel
@@ -216,6 +216,10 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Thu Mar 01 2018 Iryna Shcherbina <ishcherb@redhat.com> - 0.9.7-11
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Wed Feb 21 2018 Orion Poplawski <orion@cora.nwra.com> - 0.9.7-10
 - Explicitly use python2
 - Build with libtirpc
