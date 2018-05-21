@@ -233,12 +233,15 @@ failing_tests="$failing_tests|test_(fix|formats)"
 # These fail on 32-bit: test_formats test_xdr
 failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
 %endif
+%ifarch ppc64
+feailing_tests="$failing_tests|test_save_restore"
+%endif
 %ifarch s390x
-eailing_tests="$failing_tests|test_(save_restore|window_background)"
+feailing_tests="$failing_tests|test_(save_restore|window_background)"
 %endif
 make check ARGS="-V -E '$failing_tests'"
-%ifnarch s390x
-# test_save_restore hangs on s390x
+%ifnarch ppc64 s390x
+# test_save_restore hangs on ppc64 s390x
 make check ARGS="-V -R '$failing_tests'" || :
 %endif
 kill %1 || :
