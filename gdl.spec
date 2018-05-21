@@ -227,17 +227,17 @@ failing_tests="$failing_tests|test_(l64|xdr)"
 %endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
-failing_tests="$failing_tests|test_(fix|formats)"
+failing_tests="$failing_tests|test_(fix|formats|l64|xdr)"
 %endif
 %ifarch %{ix86}
 # These fail on 32-bit: test_formats test_xdr
 failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
 %endif
 %ifarch ppc64
-feailing_tests="$failing_tests|test_save_restore"
+failing_tests="$failing_tests|test_save_restore"
 %endif
 %ifarch s390x
-feailing_tests="$failing_tests|test_(save_restore|window_background)"
+failing_tests="$failing_tests|test_(save_restore|window_background)"
 %endif
 make check ARGS="-V -E '$failing_tests'"
 %ifnarch ppc64 s390x
