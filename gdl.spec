@@ -1,6 +1,6 @@
 Name:           gdl
-Version:        0.9.7
-Release:        11%{?dist}
+Version:        0.9.8
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -10,16 +10,30 @@ Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{versi
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source3:        makecvstarball
+Source4:        xorg.conf
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr.patch
-# Fix problem with arra generation
-Patch2:         gdl-array.patch
-# Fix build with gcc 6
-# https://sourceforge.net/p/gnudatalanguage/bugs/686/
-# https://sourceforge.net/p/gnudatalanguage/bugs/688/
-Patch4:         gdl-gcc6.patch
-
+# Catch by reference
+# https://github.com/gnudatalanguage/gdl/pull/5
+Patch2:         gdl-catch.patch
+# https://github.com/gnudatalanguage/gdl/pull/142
+Patch3:         gdl-std.patch
+# Silence some (harmless) warnings about return values
+Patch4:         gdl-return.patch
+# https://github.com/gnudatalanguage/gdl/pull/274
+Patch5:         gdl-sign.patch
+# https://github.com/gnudatalanguage/gdl/pull/275
+Patch6:         gdl-uninit.patch
+# Fix -Wstrict-aliasing warning
+# https://github.com/gnudatalanguage/gdl/pull/162
+Patch7:         gdl-alias.patch
+# https://github.com/gnudatalanguage/gdl/pull/276
+Patch8:         gdl-warnings.patch
+# 
+Patch9:         gdl-vector.patch
+# Fix test_save_restore segfault with gcc 8
+Patch10:        gdl-saverestore.patch
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?rhel} == 5
@@ -49,6 +63,7 @@ BuildRequires:  grib_api-static
 %endif
 %endif
 BuildRequires:  eigen3-static
+BuildRequires:  libtirpc-devel
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  pslib-devel
@@ -61,7 +76,7 @@ BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK-devel
 BuildRequires:  cmake
 # For tests
-BuildRequires:  xorg-x11-server-Xvfb
+BuildRequires:  xorg-x11-drv-dummy
 BuildRequires:  metacity
 # Needed to pull in drivers
 Requires:       plplot
@@ -110,8 +125,17 @@ Provides:       %{name}-runtime = %{version}-%{release}
 %setup -q -n %{name}-%{version}
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
-%patch2 -p1 -b .array
-%patch4 -p1 -b .gcc6
+%patch2 -p1 -b .catch
+%patch3 -p1 -b .std
+%patch4 -p1 -b .return
+%patch5 -p1 -b .sign
+%patch6 -p1 -b .uninit
+%patch7 -p1 -b .alias
+%patch8 -p1 -b .warnings
+%patch9 -p1 -b .vector
+%patch10 -p1 -b .saverestore
+# Stray link
+rm src/gdl
 
 pushd src
 for f in *.g
@@ -140,12 +164,12 @@ mkdir build build-python
 #Build the standalone executable
 pushd build
 %{cmake} %{cmake_opts} ..
-make %{?_smp_mflags}
+make #{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
 %{cmake} %{cmake_opts} -DPYTHON_MODULE=ON ..
-make %{?_smp_mflags}
+make #{?_smp_mflags}
 popd
 
 
@@ -168,37 +192,57 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 %check
 cd build
-# test_bug_3275334 and window_background appear to need to read from display
-# test_bug_3147146 failure
-# https://sourceforge.net/p/gnudatalanguage/bugs/619/
-# test_bug_3285659 failure
-# https://sourceforge.net/p/gnudatalanguage/bugs/387/
-# test_routine_names failure
-# https://sourceforge.net/p/gnudatalanguage/bugs/647/
-# test_zip - https://sourceforge.net/p/gnudatalanguage/bugs/632/
-cat > xrun.sh <<'EOF'
+cp %SOURCE4 .
+if [ -x /usr/libexec/Xorg ]; then
+   Xorg=/usr/libexec/Xorg
+elif [ -x /usr/libexec/Xorg.bin ]; then
+   Xorg=/usr/libexec/Xorg.bin
+else
+   Xorg=/usr/bin/Xorg
+fi
+$Xorg -noreset +extension GLX +extension RANDR +extension RENDER -logfile ./xorg.log -config ./xorg.conf -configdir . :99 &
+export DISPLAY=:99
+
 metacity &
 sleep 2
-failing_tests='test_(bug_3275334|sem|window_background)'
-%ifarch aarch64 ppc
+# fft_leak - https://github.com/gnudatalanguage/gdl/issues/147
+# file_delete - https://github.com/gnudatalanguage/gdl/issues/148
+# fix - https://github.com/gnudatalanguage/gdl/issues/149
+# formats - https://github.com/gnudatalanguage/gdl/issues/144
+# n_tags - https://github.com/gnudatalanguage/gdl/issues/150
+# obj_isa - https://github.com/gnudatalanguage/gdl/issues/151
+# parse_url - https://github.com/gnudatalanguage/gdl/issues/153
+# resolve_routine - https://github.com/gnudatalanguage/gdl/issues/146
+# rounding - https://github.com/gnudatalanguage/gdl/issues/154
+# total - https://github.com/gnudatalanguage/gdl/issues/155
+failing_tests='test_(fft_leak|file_delete|finite|fix|formats|idlneturl|make_dll|n_tags|obj_isa|parse_url|resolve_routine|rounding|total)'
+%ifarch aarch64 ppc %{power64}
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
 failing_tests="$failing_tests|test_fix"
 %endif
+%ifarch aarch64
+failing_tests="$failing_tests|test_(l64|xdr)"
+%endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
-failing_tests="$failing_tests|test_(fix|formats|xdr)"
+failing_tests="$failing_tests|test_(fix|formats)"
 %endif
 %ifarch %{ix86}
 # These fail on 32-bit: test_formats test_xdr
-failing_tests="$failing_tests|test_(formats|xdr)"
+failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
+%endif
+%ifarch s390x
+eailing_tests="$failing_tests|test_(save_restore|window_background)"
 %endif
 make check ARGS="-V -E '$failing_tests'"
+%ifnarch s390x
+# test_save_restore hangs on s390x
 make check ARGS="-V -R '$failing_tests'" || :
-EOF
-chmod +x xrun.sh
-xvfb-run ./xrun.sh
+%endif
+kill %1 || :
+cat xorg.log
 
 
 %files
@@ -216,6 +260,14 @@ xvfb-run ./xrun.sh
 
 
 %changelog
+* Sun May 20 2018 Orion Poplawski <orion@cora.nwra.com> - 0.9.8-1
+- Update to 0.9.8
+- Drop parallel make for now
+- Use libtirpc
+- Switch to Xorg dummy driver for tests, fail build on test failure
+- Add patch to fix ppc64 altivec vector usage
+- Add patches to fix various warnings
+
 * Thu Mar 01 2018 Iryna Shcherbina <ishcherb@redhat.com> - 0.9.7-11
 - Update Python 2 dependency declarations to new packaging standards
   (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)

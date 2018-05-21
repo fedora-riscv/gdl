@@ -1,0 +1,288 @@
+diff -up gdl-0.9.8/src/basic_fun.cpp.return gdl-0.9.8/src/basic_fun.cpp
+--- gdl-0.9.8/src/basic_fun.cpp.return	2018-04-11 16:33:39.117920749 -0600
++++ gdl-0.9.8/src/basic_fun.cpp	2018-04-11 16:33:39.124920716 -0600
+@@ -4420,6 +4420,7 @@ BaseGDL* where_fun(EnvT* e) {
+         }
+       }
+     }
++    return NULL; // should not reach
+   }
+ // uses MergeSort
+   // 2 parts in the code: without "width" or with "width" (limited to 1D and 2D)
+@@ -6249,6 +6250,7 @@ template <typename Ty, typename T2>  sta
+       }
+ 
+     } else e->Throw("Operand must be integer:" + e->GetParString(0));
++    return NULL; // should not reach
+   }
+   
+   BaseGDL* shift_fun( EnvT* e) {
+@@ -6544,6 +6546,7 @@ template <typename Ty, typename T2>  sta
+       }
+       return res;
+     } else e->Throw("Object reference type required in this context: " + e->GetParString(0));
++    return NULL; // should not reach
+   }
+ 
+   BaseGDL* n_tags( EnvT* e)
+@@ -8328,6 +8331,7 @@ template <typename Ty, typename T2>  sta
+ 	  } 
+       }
+     e->Throw("Expecting string or byte array as a first parameter");
++    return NULL; // should not reach
+   }
+ 
+   BaseGDL* get_drive_list(EnvT* e)
+@@ -8442,6 +8446,7 @@ template <typename Ty, typename T2>  sta
+       return res;
+ 
+     }
++    return NULL; // should not reach
+   }
+ 
+   // note: changes here MUST be reflected in scope_varfetch_reference() as well
+diff -up gdl-0.9.8/src/basic_pro_jmg.cpp.return gdl-0.9.8/src/basic_pro_jmg.cpp
+--- gdl-0.9.8/src/basic_pro_jmg.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/basic_pro_jmg.cpp	2018-04-11 19:20:07.670748377 -0600
+@@ -589,6 +589,7 @@ namespace lib {
+ 			break;
+     }
+     assert( false);
++    return NULL; // Silence warning
+   }
+ 
+ 
+diff -up gdl-0.9.8/src/graphicsdevice.hpp.return gdl-0.9.8/src/graphicsdevice.hpp
+--- gdl-0.9.8/src/graphicsdevice.hpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/graphicsdevice.hpp	2018-04-11 19:21:25.832376682 -0600
+@@ -220,8 +220,8 @@ public:
+   virtual void MaxXYSize(DLong *xsize, DLong *ysize) {
+ 							*xsize=1200, *ysize=800; return;}
+   virtual DLong GetDecomposed()                       { return -1;}
+-  virtual BaseGDL* GetFontnames()                     { ThrowGDLException("DEVICE: Keyword GET_FONTNAMES not allowed for call to: DEVICE" );}//{return NULL;}
+-  virtual DLong GetFontnum()                          { ThrowGDLException("DEVICE: Keyword GET_FONTNUM not allowed for call to: DEVICE" );}//{return -1;}
++  virtual BaseGDL* GetFontnames()                     { ThrowGDLException("DEVICE: Keyword GET_FONTNAMES not allowed for call to: DEVICE" ); return NULL;}
++  virtual DLong GetFontnum()                          { ThrowGDLException("DEVICE: Keyword GET_FONTNUM not allowed for call to: DEVICE" ); return -1;}
+   virtual bool SetFont(DString f)                 {static int warning_sent=1; if (warning_sent) {Warning("SET_FONT not active for this device (FIXME)."); warning_sent=0;} return true;}
+   virtual DString GetCurrentFont()                 {return NULL;}
+   virtual DLong GetGraphicsFunction()                 { return -1;}
+@@ -360,8 +360,8 @@ public:
+   bool UnsetFocus();
+   bool Decomposed(bool value);
+   DLong GetDecomposed();
+-  BaseGDL* GetFontnames(){ ThrowGDLException("DEVICE: Keyword GET_FONTNAMES not allowed for call to: DEVICE" );}//{return NULL;}
+-  DLong GetFontnum(){ ThrowGDLException("DEVICE: Keyword GET_FONTNUM not allowed for call to: DEVICE" );}//{return -1;}
++  BaseGDL* GetFontnames(){ ThrowGDLException("DEVICE: Keyword GET_FONTNAMES not allowed for call to: DEVICE" ); return NULL;}
++  DLong GetFontnum(){ ThrowGDLException("DEVICE: Keyword GET_FONTNUM not allowed for call to: DEVICE" ); return -1;}
+   bool SetFont(DString f) {fontname=f; return true;}
+   DString GetCurrentFont() {return fontname;}
+   bool SetBackingStore(int value);
+diff -up gdl-0.9.8/src/gzstream.hpp.return gdl-0.9.8/src/gzstream.hpp
+--- gdl-0.9.8/src/gzstream.hpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/gzstream.hpp	2018-04-11 16:33:39.125920711 -0600
+@@ -75,9 +75,9 @@ public:
+     std::streampos pubseekoff(std::streamoff off, std::ios_base::seekdir way, std::ios_base::openmode which=std::ios_base::in|std::ios_base::out);
+     //hacks for not being lost with input gzipped streams
+     std::streampos getPosition(){return position;}
+-    std::streampos setPosition(long pos){position=pos;} 
+-    std::streampos incrementPosition(long pos=1){position+=pos;}
+-    std::streampos decrementPosition(long pos=1){position-=pos;}
++    void setPosition(long pos){position=pos;} 
++    void incrementPosition(long pos=1){position+=pos;}
++    void decrementPosition(long pos=1){position-=pos;}
+ };
+ 
+ class gzstreambase : virtual public std::ios {
+diff -up gdl-0.9.8/src/hdf_fun.cpp.return gdl-0.9.8/src/hdf_fun.cpp
+--- gdl-0.9.8/src/hdf_fun.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/hdf_fun.cpp	2018-04-11 19:22:44.477002324 -0600
+@@ -106,6 +106,7 @@ namespace lib {
+       return new DLongGDL( Vattach(hdf_id, vg_ref, "r"));
+     else if (e->KeywordSet( writeIx ))
+       return new DLongGDL( Vattach(hdf_id, vg_ref, "w"));
++    return NULL;
+   }
+ 
+ 
+diff -up gdl-0.9.8/src/hdf_pro.cpp.return gdl-0.9.8/src/hdf_pro.cpp
+--- gdl-0.9.8/src/hdf_pro.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/hdf_pro.cpp	2018-04-11 16:33:39.126920706 -0600
+@@ -34,7 +34,7 @@ namespace lib {
+   using namespace std;
+ 
+   template< typename T>
+-  BaseGDL* hdf_sd_getdata_template( EnvT* e, dimension dim, int32 sds_id,
++  void hdf_sd_getdata_template( EnvT* e, dimension dim, int32 sds_id,
+ 				    int32 start[], int32 edges[], int32 stride[],
+ 				    DLongGDL* strideKW)
+   {
+@@ -622,7 +622,7 @@ namespace lib {
+   }
+ 
+   template< typename T>
+-  BaseGDL* hdf_sd_getdscl_template(EnvT* e, DLong dim_size, int32 dim_id)
++  void hdf_sd_getdscl_template(EnvT* e, DLong dim_size, int32 dim_id)
+   {
+     T* data = new T(dimension(dim_size), BaseGDL::NOZERO);
+     SDgetdimscale(dim_id, data->DataAddr());
+diff -up gdl-0.9.8/src/list.cpp.return gdl-0.9.8/src/list.cpp
+--- gdl-0.9.8/src/list.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/list.cpp	2018-04-11 19:24:14.900571515 -0600
+@@ -149,6 +149,7 @@
+     {
+       ThrowFromInternalUDSub( e, "SELF object ID <"+i2s(selfID)+"> not found.");      
+     }
++    return NULL;
+   }
+ 
+   void LIST__ToStream( DStructGDL* oStructGDL, std::ostream& o, SizeT w, SizeT* actPosPtr)
+diff -up gdl-0.9.8/src/magick_cl.cpp.return gdl-0.9.8/src/magick_cl.cpp
+--- gdl-0.9.8/src/magick_cl.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/magick_cl.cpp	2018-04-11 19:27:37.564602966 -0600
+@@ -125,6 +125,7 @@ namespace lib {
+     } catch (Exception &error_) {
+       e->Throw(error_.what());
+     }
++    return NULL;
+   }
+ 
+   BaseGDL * magick_ping(EnvT* e) {
+@@ -332,6 +333,7 @@ namespace lib {
+     } catch (Exception &error_) {
+       e->Throw(error_.what());
+     }
++    return NULL;
+   }
+   
+   //CLOSE, magic_id
+@@ -411,6 +413,7 @@ namespace lib {
+     } catch (Exception &error_) {
+       e->Throw(error_.what());
+     }
++    return NULL;
+   }
+ 
+   //MAGICK_READCOLORMAPRGB, mid, red, green, blue
+@@ -572,6 +575,7 @@ namespace lib {
+     } catch (Exception &error_) {
+       e->Throw(error_.what());
+     }
++    return NULL;
+   }
+ 
+   // MAGICK_WRITE, mid, gdlImageArray, rgb=rgb
+@@ -706,6 +710,7 @@ namespace lib {
+     } catch (Exception &error_) {
+       e->Throw(error_.what());
+     }
++    return NULL;
+   }
+ 
+   //magickNumber=MAGICK_MAGICK(mid [, "imageType"])
+@@ -727,6 +732,7 @@ namespace lib {
+     } catch (Exception &error_) {
+       e->Throw(error_.what());
+     }
++    return NULL;
+   }
+ 
+   //nrows=MAGICK_ROWS(mid)
+@@ -740,6 +746,7 @@ namespace lib {
+     } catch (Exception &error_) {
+       e->Throw(error_.what());
+     }
++    return NULL;
+   }
+ 
+   //ncols=MAGICK_COLUMNS(mid)
+@@ -753,6 +760,7 @@ namespace lib {
+     } catch (Exception &error_) {
+       e->Throw(error_.what());
+     }
++    return NULL;
+   }
+ //bool=MAGICK_INDEXEDCOLOR(mid)
+   BaseGDL* magick_IndexedColor(EnvT* e) {
+@@ -769,7 +777,7 @@ namespace lib {
+     } catch (Exception &error_) {
+       e->Throw(error_.what());
+     }
+-
++    return NULL;
+   }
+ 
+   //MAGICK_QUALITY, mid, quality
+diff -up gdl-0.9.8/src/math_fun_jmg.cpp.return gdl-0.9.8/src/math_fun_jmg.cpp
+--- gdl-0.9.8/src/math_fun_jmg.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/math_fun_jmg.cpp	2018-04-11 19:29:36.258031486 -0600
+@@ -288,6 +288,7 @@ extern "C" {
+ 	 return res;
+        }
+       assert( false);
++      return NULL;
+      }
+    };
+ 
+diff -up gdl-0.9.8/src/math_fun_ng.cpp.return gdl-0.9.8/src/math_fun_ng.cpp
+--- gdl-0.9.8/src/math_fun_ng.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/math_fun_ng.cpp	2018-04-11 19:30:57.610639792 -0600
+@@ -371,6 +371,7 @@ namespace lib {
+ 	  return Yout;
+       }
+     assert( false);	
++    return NULL;
+   }// RK4_fun
+ 
+ }//namespace
+diff -up gdl-0.9.8/src/plotting_convert_coord.cpp.return gdl-0.9.8/src/plotting_convert_coord.cpp
+--- gdl-0.9.8/src/plotting_convert_coord.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/plotting_convert_coord.cpp	2018-04-11 20:42:10.177037332 -0600
+@@ -368,6 +368,7 @@ namespace lib {
+       delete res;
+       return res1;
+     }
++    return NULL; // Should not reach
+   }
+ 
+   //THE FOLLOWING ARE POSSIBLY THE WORST WAY TO DO THE JOB. At least they are to be used *only*
+diff -up gdl-0.9.8/src/pythongdl.cpp.return gdl-0.9.8/src/pythongdl.cpp
+--- gdl-0.9.8/src/pythongdl.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/pythongdl.cpp	2018-04-11 16:33:39.127920702 -0600
+@@ -272,6 +272,7 @@ int GDLEventHandlerPy()
+   GDLEventHandler();
+   if( oldInputHook != NULL)
+     (*oldInputHook)();
++  return 0;
+ }
+   
+ // Execute a GDL subroutine
+diff -up gdl-0.9.8/src/triangulation.cpp.return gdl-0.9.8/src/triangulation.cpp
+--- gdl-0.9.8/src/triangulation.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/triangulation.cpp	2018-04-11 20:43:03.965777173 -0600
+@@ -1108,6 +1108,7 @@ namespace lib {
+   BaseGDL* qgrid3_fun ( EnvT* e)
+   {
+     e->Throw("Please Write this function in GDL.");
++    return NULL;
+   }
+ #endif  
+   }
+diff -up gdl-0.9.8/src/widget.cpp.return gdl-0.9.8/src/widget.cpp
+--- gdl-0.9.8/src/widget.cpp.return	2018-03-26 03:57:27.000000000 -0600
++++ gdl-0.9.8/src/widget.cpp	2018-04-11 20:45:36.447036861 -0600
+@@ -45,6 +45,7 @@ wxRealPoint GetRequestedUnitConversionFa
+   if (the_units==0) return wxRealPoint(1,1);
+   if (the_units==1) return wxRealPoint(sx*25.4,sy*25.4);
+   if (the_units==2) return wxRealPoint(sx*10.0,sy*10.0);
++  return wxRealPoint(0,0); // Should not reach
+ }
+ 
+ void GDLWidget::ChangeUnitConversionFactor( EnvT* e)
+@@ -2231,6 +2232,7 @@ endwait:
+       }
+     } while (infinity); 
+ #endif
++    return NULL; // Should not reach
+ }
+ 
+ void widget_control( EnvT* e ) {
