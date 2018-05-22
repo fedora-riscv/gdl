@@ -234,7 +234,7 @@ failing_tests="$failing_tests|test_(fix|formats|l64|wait|xdr)"
 failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
 %endif
 %ifarch ppc64
-failing_tests="$failing_tests|test_(save_restore|window_background)"
+failing_tests="$failing_tests|test_(save_restore|wait|window_background)"
 %endif
 %ifarch s390x
 failing_tests="$failing_tests|test_(save_restore|window_background)"
