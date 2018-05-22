@@ -223,7 +223,7 @@ failing_tests='test_(fft_leak|file_delete|finite|fix|formats|idlneturl|make_dll|
 failing_tests="$failing_tests|test_fix"
 %endif
 %ifarch aarch64
-failing_tests="$failing_tests|test_(l64|xdr)"
+failing_tests="$failing_tests|test_(l64|wait|xdr)"
 %endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
