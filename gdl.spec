@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9.8
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -74,7 +74,7 @@ BuildRequires:  qhull-devel
 %global cmake_qhull -DQHULL=ON
 %endif
 BuildRequires:  udunits2-devel
-BuildRequires:  wxGTK-devel
+BuildRequires:  wxGTK3-devel
 BuildRequires:  cmake
 # For tests
 BuildRequires:  xorg-x11-drv-dummy
@@ -264,6 +264,9 @@ cat xorg.log
 
 
 %changelog
+* Sat Jul 07 2018 Scott Talbert <swt@techie.net> - 0.9.8-3
+- Rebuild with wxWidgets 3.0
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.8-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
