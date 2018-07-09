@@ -42,6 +42,7 @@ Patch10:        gdl-saverestore.patch
 %global plplot_config %{nil}
 %endif
 %if 0%{?fedora} || 0%{?rhel} >= 7
+BuildRequires:  gcc-c++
 BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
 BuildRequires:  java-devel
