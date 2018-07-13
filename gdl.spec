@@ -1,6 +1,6 @@
 Name:           gdl
 Version:        0.9.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -264,6 +264,9 @@ cat xorg.log
 
 
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.8-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Sun May 20 2018 Orion Poplawski <orion@cora.nwra.com> - 0.9.8-1
 - Update to 0.9.8
 - Drop parallel make for now
