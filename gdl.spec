@@ -264,7 +264,7 @@ cat xorg.log
 
 
 %changelog
-* Sat Jul 07 2018 Scott Talbert <swt@techie.net> - 0.9.8-3
+* Sun Jul 22 2018 Scott Talbert <swt@techie.net> - 0.9.8-3
 - Rebuild with wxWidgets 3.0
 
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.8-2
