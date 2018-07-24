@@ -1,15 +1,16 @@
 %global commit f3b6e012ff645c93268cfb9da7f61792630c34ee
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           gdl
 Version:        0.9.8
-Release:        4%{?dist}.20180723gitf3b6e01
+Release:        4%{?dist}.20180723git%{shortcommit}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
 #Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tgz
-Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git.tar.gz
+Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git-%{shortcommit}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source4:        xorg.conf
