@@ -1,39 +1,21 @@
+%global commit f3b6e012ff645c93268cfb9da7f61792630c34ee
+
 Name:           gdl
 Version:        0.9.8
-Release:        3%{?dist}
+Release:        4%{?dist}.20180723gitf3b6e01
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tgz
+#Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tgz
+Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
-Source3:        makecvstarball
 Source4:        xorg.conf
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr.patch
-# Catch by reference
-# https://github.com/gnudatalanguage/gdl/pull/5
-Patch2:         gdl-catch.patch
-# https://github.com/gnudatalanguage/gdl/pull/142
-Patch3:         gdl-std.patch
-# Silence some (harmless) warnings about return values
-Patch4:         gdl-return.patch
-# https://github.com/gnudatalanguage/gdl/pull/274
-Patch5:         gdl-sign.patch
-# https://github.com/gnudatalanguage/gdl/pull/275
-Patch6:         gdl-uninit.patch
-# Fix -Wstrict-aliasing warning
-# https://github.com/gnudatalanguage/gdl/pull/162
-Patch7:         gdl-alias.patch
-# https://github.com/gnudatalanguage/gdl/pull/276
-Patch8:         gdl-warnings.patch
-# 
-Patch9:         gdl-vector.patch
-# Fix test_save_restore segfault with gcc 8
-Patch10:        gdl-saverestore.patch
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?rhel} == 5
@@ -56,20 +38,24 @@ BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 BuildRequires:  python2-devel, python2-numpy, python2-matplotlib
 BuildRequires:  fftw-devel, hdf-static
-%if 0%{?fedora} >= 21
+%if 0%{?fedora}
+%if 0%{?fedora} >= 28
+%else
+BuildRequires:  eccodes-devel
+%endif
 BuildRequires:  grib_api-devel
 %else
-%if 0%{?fedora} || 0%{?rhel} >= 6
 BuildRequires:  grib_api-static
 %endif
-%endif
 BuildRequires:  eigen3-static
+BuildRequires:  libgeotiff-devel
+BuildRequires:  libtiff-devel
 BuildRequires:  libtirpc-devel
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  pslib-devel
 # qhull too old on Fedora 24 and EPEL7
-%if 0%{?fedora} >= 25 || 0%{?rhel} >= 8
+%if 0%{?fedora} || 0%{?rhel} >= 8
 BuildRequires:  qhull-devel
 %global cmake_qhull -DQHULL=ON
 %endif
@@ -97,9 +83,7 @@ Systems Inc.
 Summary:        Common files for GDL
 Group:          Applications/Engineering
 Requires:       %{name}-runtime = %{version}-%{release}
-%if 0%{?fedora} || 0%{?rhel} >= 6
 BuildArch:      noarch
-%endif
 
 %description    common
 Common files for GDL
@@ -123,20 +107,9 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{name}-%{commit}
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
-%patch2 -p1 -b .catch
-%patch3 -p1 -b .std
-%patch4 -p1 -b .return
-%patch5 -p1 -b .sign
-%patch6 -p1 -b .uninit
-%patch7 -p1 -b .alias
-%patch8 -p1 -b .warnings
-%patch9 -p1 -b .vector
-%patch10 -p1 -b .saverestore
-# Stray link
-rm src/gdl
 
 pushd src
 for f in *.g
@@ -147,6 +120,7 @@ popd
 
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
+   -DGEOTIFF_INCLUDE_DIR=%{_includedir}/libgeotiff \\\
    -DUDUNITS=ON \\\
    -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
    -DGRIB=ON \\\
@@ -159,8 +133,6 @@ popd
 #           --with-mpich=%{_libdir}/mpich2 \
 
 %build
-export CFLAGS="%{optflags} -I%{_includedir}/tirpc -ltirpc"
-export CXXFLAGS="%{optflags} -I%{_includedir}/tirpc -ltirpc"
 mkdir build build-python
 #Build the standalone executable
 pushd build
@@ -206,17 +178,17 @@ export DISPLAY=:99
 
 metacity &
 sleep 2
+# bytscl - https://github.com/gnudatalanguage/gdl/issues/159
 # fft_leak - https://github.com/gnudatalanguage/gdl/issues/147
 # file_delete - https://github.com/gnudatalanguage/gdl/issues/148
 # fix - https://github.com/gnudatalanguage/gdl/issues/149
 # formats - https://github.com/gnudatalanguage/gdl/issues/144
 # n_tags - https://github.com/gnudatalanguage/gdl/issues/150
-# obj_isa - https://github.com/gnudatalanguage/gdl/issues/151
 # parse_url - https://github.com/gnudatalanguage/gdl/issues/153
 # resolve_routine - https://github.com/gnudatalanguage/gdl/issues/146
 # rounding - https://github.com/gnudatalanguage/gdl/issues/154
 # total - https://github.com/gnudatalanguage/gdl/issues/155
-failing_tests='test_(fft_leak|file_delete|finite|fix|formats|idlneturl|make_dll|n_tags|obj_isa|parse_url|resolve_routine|rounding|total)'
+failing_tests='test_(bytscl|fft_leak|file_delete|finite|fix|formats|idlneturl|make_dll|n_tags|parse_url|resolve_routine|rounding|total)'
 %ifarch aarch64 ppc %{power64}
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
@@ -231,19 +203,22 @@ failing_tests="$failing_tests|test_(l64|wait|xdr)"
 failing_tests="$failing_tests|test_(fix|formats|l64|wait|xdr)"
 %endif
 %ifarch %{ix86}
+# binfmt - https://github.com/gnudatalanguage/gdl/issues/332
 # These fail on 32-bit: test_formats test_xdr
 failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
 %endif
 %ifarch ppc64
+# new test failues - https://github.com/gnudatalanguage/gdl/issues/372
 failing_tests="$failing_tests|test_(save_restore|wait|window_background)"
 %endif
+# ppc64le - test_file_lines https://github.com/gnudatalanguage/gdl/issues/373
 %ifarch s390x
 failing_tests="$failing_tests|test_(save_restore|window_background)"
 %endif
-make check ARGS="-V -E '$failing_tests'"
+make check VERBOSE=1 ARGS="-V -E '$failing_tests'"
 %ifnarch ppc64 s390x
 # test_save_restore hangs on ppc64 s390x
-make check ARGS="-V -R '$failing_tests'" || :
+make check VERBOSE=1 ARGS="-V -R '$failing_tests'" || :
 %endif
 kill %1 || :
 cat xorg.log
@@ -251,7 +226,7 @@ cat xorg.log
 
 %files
 %license COPYING
-%doc AUTHORS ChangeLog HACKING NEWS README TODO
+%doc AUTHORS ChangeLog HACKING NEWS README
 %config(noreplace) %{_sysconfdir}/profile.d/gdl.*sh
 %{_bindir}/gdl
 %{_mandir}/man1/gdl.1*
@@ -264,6 +239,10 @@ cat xorg.log
 
 
 %changelog
+* Mon Jul 23 2018 Orion Poplawski <orion@nwra.com> - 0.9.8-4.20180723gitf3b6e01
+- Update to latest git
+- Switch to eccodes from grib_api for Fedora 28+
+
 * Sun Jul 22 2018 Scott Talbert <swt@techie.net> - 0.9.8-3
 - Rebuild with wxWidgets 3.0
 
