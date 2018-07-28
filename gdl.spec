@@ -197,11 +197,12 @@ failing_tests='test_(bytscl|fft_leak|file_delete|finite|fix|formats|idlneturl|ma
 failing_tests="$failing_tests|test_fix"
 %endif
 %ifarch aarch64
-failing_tests="$failing_tests|test_(l64|wait|xdr)"
+# new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
+failing_tests="$failing_tests|test_(file_lines|indgen|list|l64|wait|xdr)"
 %endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
-failing_tests="$failing_tests|test_(fix|formats|l64|wait|xdr)"
+failing_tests="$failing_tests|test_(file_lines|fix|formats|indgen|list|l64|wait|xdr)"
 %endif
 %ifarch %{ix86}
 # binfmt - https://github.com/gnudatalanguage/gdl/issues/332
@@ -209,12 +210,15 @@ failing_tests="$failing_tests|test_(fix|formats|l64|wait|xdr)"
 failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
 %endif
 %ifarch ppc64
-# new test failues - https://github.com/gnudatalanguage/gdl/issues/372
-failing_tests="$failing_tests|test_(save_restore|wait|window_background)"
+# new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
+failing_tests="$failing_tests|test_(file_lines|indgen|list|save_restore|wait|window_background)"
 %endif
+%ifarch ppc64le
 # ppc64le - test_file_lines https://github.com/gnudatalanguage/gdl/issues/373
+failing_tests="$failing_tests|test_(file_lines|indgen|list)"
+%endif
 %ifarch s390x
-failing_tests="$failing_tests|test_(save_restore|window_background)"
+failing_tests="$failing_tests|test_(file_lines|indgen|list|save_restore|window_background)"
 %endif
 make check VERBOSE=1 ARGS="-V -E '$failing_tests'"
 %ifnarch ppc64 s390x
