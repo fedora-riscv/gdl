@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.8
-Release:        4%{?dist}.20180723git%{shortcommit}
+Release:        5%{?dist}.20180723git%{shortcommit}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -244,6 +244,9 @@ cat xorg.log
 
 
 %changelog
+* Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 0.9.8-5.20180723gitf3b6e01
+- Rebuild with fixed binutils
+
 * Mon Jul 23 2018 Orion Poplawski <orion@nwra.com> - 0.9.8-4.20180723gitf3b6e01
 - Update to latest git
 - Switch to eccodes from grib_api for Fedora 28+
