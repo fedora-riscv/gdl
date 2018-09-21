@@ -1,9 +1,9 @@
-%global commit f3b6e012ff645c93268cfb9da7f61792630c34ee
+%global commit d892ee54b710c645ec0bc75d4a0cb3118813daa6
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           gdl
 Version:        0.9.8
-Release:        5%{?dist}.20180723git%{shortcommit}
+Release:        6%{?dist}.20180919git%{shortcommit}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -17,6 +17,8 @@ Source4:        xorg.conf
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr.patch
+# https://github.com/gnudatalanguage/gdl/pull/468
+Patch2:         gdl-python3.patch
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?rhel} == 5
@@ -37,7 +39,11 @@ BuildRequires:  java
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
+%if 0%{?fedora} >= 29
+BuildRequires:  python%{python3_pkgversion}-devel, python%{python3_pkgversion}-numpy, python%{python3_pkgversion}-matplotlib
+%else
 BuildRequires:  python2-devel, python2-numpy, python2-matplotlib
+%endif
 BuildRequires:  fftw-devel, hdf-static
 %if 0%{?fedora}
 %if 0%{?fedora} >= 28
@@ -90,6 +96,23 @@ BuildArch:      noarch
 Common files for GDL
 
 
+%if 0%{?fedora} >= 29
+%package        -n python%{python3_pkgversion}-gdl
+%{?python_provide:%python_provide python%{python3_pkgversion}-gdl}
+# Remove before F30
+Provides: %{name}-python = %{version}-%{release}
+Provides: %{name}-python%{?_isa} = %{version}-%{release}
+Obsoletes: %{name}-python < %{version}-%{release}
+Summary:        GDL python module
+Group:          Applications/Engineering
+# Needed to pull in drivers
+Requires:       plplot
+Requires:       %{name}-common = %{version}-%{release}
+Provides:       %{name}-runtime = %{version}-%{release}
+
+%description    -n python%{python3_pkgversion}-gdl
+%{summary}.
+%else
 %package        -n python2-gdl
 %{?python_provide:%python_provide python2-gdl}
 # Remove before F30
@@ -105,12 +128,14 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %description    -n python2-gdl
 %{summary}.
+%endif
 
 
 %prep
 %setup -q -n %{name}-%{commit}
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
+%patch2 -p1 -b .python3
 
 pushd src
 for f in *.g
@@ -119,6 +144,13 @@ do
 done
 popd
 
+%if 0%{?fedora} >= 29
+%global __python %{__python3}
+%global python_sitearch %{python3_sitearch}
+%else
+%global __python %{__python2}
+%global python_sitearch %{python2_sitearch}
+%endif
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
    -DGEOTIFF_INCLUDE_DIR=%{_includedir}/libgeotiff \\\
@@ -126,7 +158,7 @@ popd
    -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
    -DGRIB=ON \\\
    -DOPENMP=ON \\\
-   -DPYTHON_EXECUTABLE=%{_bindir}/python2 \\\
+   -DPYTHON_EXECUTABLE=%{__python} \\\
    %{?cmake_qhull} \\\
 %{nil}
 # TODO - build an mpi version
@@ -154,8 +186,13 @@ popd
 pushd build-python
 make install DESTDIR=$RPM_BUILD_ROOT
 # Install the python module in the right location
-install -d -m 0755 $RPM_BUILD_ROOT/%{python2_sitearch}
-mv $RPM_BUILD_ROOT%{_prefix}/lib/site-python/GDL.so $RPM_BUILD_ROOT%{python2_sitearch}/GDL.so
+install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
+%if 0%{?fedora} >= 29
+mv $RPM_BUILD_ROOT%{_prefix}/lib/python*/site-packages/GDL.so \
+%else
+mv $RPM_BUILD_ROOT%{_prefix}/lib/site-python/GDL.so \
+%endif
+  $RPM_BUILD_ROOT%{python_sitearch}/GDL.so
 popd
 
 # Install the profile file to set GDL_PATH
@@ -239,11 +276,19 @@ cat xorg.log
 %files common
 %{_datadir}/gnudatalanguage/
 
+%if 0%{?fedora} >= 29
+%files -n python%{python3_pkgversion}-gdl
+%else
 %files -n python2-gdl
-%{python2_sitearch}/GDL.so
+%endif
+%{python_sitearch}/GDL.so
 
 
 %changelog
+* Thu Sep 20 2018 Orion Poplawski <orion@nwra.com> - 0.9.8-6.20180919gitd892ee5
+- Update to latest git
+- Port to python 3
+
 * Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 0.9.8-5.20180723gitf3b6e01
 - Rebuild with fixed binutils
 
