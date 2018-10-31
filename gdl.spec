@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.8
-Release:        6%{?dist}.20180919git%{shortcommit}
+Release:        7%{?dist}.20180919git%{shortcommit}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
@@ -47,10 +47,10 @@ BuildRequires:  python2-devel, python2-numpy, python2-matplotlib
 BuildRequires:  fftw-devel, hdf-static
 %if 0%{?fedora}
 %if 0%{?fedora} >= 28
-%else
 BuildRequires:  eccodes-devel
-%endif
+%else
 BuildRequires:  grib_api-devel
+%endif
 %else
 BuildRequires:  grib_api-static
 %endif
@@ -288,6 +288,9 @@ cat xorg.log
 
 
 %changelog
+* Wed Oct 31 2018 Orion Poplawski <orion@nwra.com> - 0.9.8-7.20180919gitd892ee5
+- Really use eccodes by fixing typo (bug #1644928)
+
 * Thu Sep 20 2018 Orion Poplawski <orion@nwra.com> - 0.9.8-6.20180919gitd892ee5
 - Update to latest git
 - Port to python 3
