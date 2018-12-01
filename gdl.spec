@@ -2,15 +2,15 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           gdl
-Version:        0.9.8
-Release:        7%{?dist}.20180919git%{shortcommit}
+Version:        0.9.9
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-#Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tgz
-Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git-%{shortcommit}.tar.gz
+Source0:        https://github.com/gnudatalanguage/gdl/archive/v%{version}/gdl-%{version}.tar.gz
+#Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git-%{shortcommit}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source4:        xorg.conf
@@ -132,7 +132,7 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
 %patch2 -p1 -b .python3
@@ -288,6 +288,9 @@ cat xorg.log
 
 
 %changelog
+* Sat Dec 1 2018 Orion Poplawski <orion@nwra.com> - 0.9.9-1
+- Update to 0.9.9
+
 * Wed Oct 31 2018 Orion Poplawski <orion@nwra.com> - 0.9.8-7.20180919gitd892ee5
 - Really use eccodes by fixing typo (bug #1644928)
 
