@@ -6,7 +6,6 @@ Version:        0.9.9
 Release:        1%{?dist}
 Summary:        GNU Data Language
 
-Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
 Source0:        https://github.com/gnudatalanguage/gdl/archive/v%{version}/gdl-%{version}.tar.gz
@@ -88,7 +87,6 @@ Systems Inc.
 
 %package        common
 Summary:        Common files for GDL
-Group:          Applications/Engineering
 Requires:       %{name}-runtime = %{version}-%{release}
 BuildArch:      noarch
 
@@ -104,7 +102,6 @@ Provides: %{name}-python = %{version}-%{release}
 Provides: %{name}-python%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-python < %{version}-%{release}
 Summary:        GDL python module
-Group:          Applications/Engineering
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
@@ -120,7 +117,6 @@ Provides: %{name}-python = %{version}-%{release}
 Provides: %{name}-python%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-python < %{version}-%{release}
 Summary:        GDL python module
-Group:          Applications/Engineering
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
