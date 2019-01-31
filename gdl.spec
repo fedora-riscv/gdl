@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -284,6 +284,9 @@ cat xorg.log
 
 
 %changelog
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Sat Dec 1 2018 Orion Poplawski <orion@nwra.com> - 0.9.9-1
 - Update to 0.9.9
 
