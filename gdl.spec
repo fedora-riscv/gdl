@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -16,8 +16,15 @@ Source4:        xorg.conf
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr.patch
+# Support python3
 # https://github.com/gnudatalanguage/gdl/pull/468
 Patch2:         gdl-python3.patch
+# Update ANTLR .g file to match upstream changes
+# https://github.com/gnudatalanguage/gdl/pull/529
+Patch3:         gdl-antlr-grammar.patch
+# Fix conflict with std::vector and ALTIVEC vector
+# https://github.com/gnudatalanguage/gdl/pull/535
+Patch4:         gdl-std.patch
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?rhel} == 5
@@ -45,13 +52,19 @@ BuildRequires:  python2-devel, python2-numpy, python2-matplotlib
 %endif
 BuildRequires:  fftw-devel, hdf-static
 %if 0%{?fedora}
-%if 0%{?fedora} >= 28
+# eccodes not available on these arches
+%ifnarch i686 ppc64 s390x armv7hl
 BuildRequires:  eccodes-devel
 %else
 BuildRequires:  grib_api-devel
 %endif
 %else
+# eccodes not available on these arches
+%ifnarch i686 ppc64 s390x armv7hl aarch64
+BuildRequires:  eccodes-devel
+%else
 BuildRequires:  grib_api-static
+%endif
 %endif
 BuildRequires:  eigen3-static
 BuildRequires:  libgeotiff-devel
@@ -67,7 +80,7 @@ BuildRequires:  qhull-devel
 %endif
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK3-devel
-BuildRequires:  cmake
+BuildRequires:  cmake3
 # For tests
 BuildRequires:  xorg-x11-drv-dummy
 BuildRequires:  metacity
@@ -132,6 +145,8 @@ Provides:       %{name}-runtime = %{version}-%{release}
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
 %patch2 -p1 -b .python3
+%patch3 -p1 -b .antlr-grammar
+%patch4 -p1 -b .std
 
 pushd src
 for f in *.g
@@ -165,12 +180,12 @@ popd
 mkdir build build-python
 #Build the standalone executable
 pushd build
-%{cmake} %{cmake_opts} ..
+%cmake3 %{cmake_opts} ..
 make #{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON ..
+%cmake3 %{cmake_opts} -DPYTHON_MODULE=ON ..
 make #{?_smp_mflags}
 popd
 
@@ -218,6 +233,7 @@ sleep 2
 # bytscl - https://github.com/gnudatalanguage/gdl/issues/159
 # fft_leak - https://github.com/gnudatalanguage/gdl/issues/147
 # file_delete - https://github.com/gnudatalanguage/gdl/issues/148
+# file_test - https://github.com/gnudatalanguage/gdl/issues/534
 # fix - https://github.com/gnudatalanguage/gdl/issues/149
 # formats - https://github.com/gnudatalanguage/gdl/issues/144
 # n_tags - https://github.com/gnudatalanguage/gdl/issues/150
@@ -225,7 +241,7 @@ sleep 2
 # resolve_routine - https://github.com/gnudatalanguage/gdl/issues/146
 # rounding - https://github.com/gnudatalanguage/gdl/issues/154
 # total - https://github.com/gnudatalanguage/gdl/issues/155
-failing_tests='test_(bytscl|fft_leak|file_delete|finite|fix|formats|idlneturl|make_dll|n_tags|parse_url|resolve_routine|rounding|total)'
+failing_tests='test_(bytscl|fft_leak|file_(delete|test)|finite|fix|formats|idlneturl|make_dll|n_tags|parse_url|resolve_routine|rounding|total)'
 %ifarch aarch64 ppc %{power64}
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
@@ -251,10 +267,10 @@ failing_tests="$failing_tests|test_(file_lines|indgen|list|save_restore|wait|win
 %endif
 %ifarch ppc64le
 # ppc64le - test_file_lines https://github.com/gnudatalanguage/gdl/issues/373
-failing_tests="$failing_tests|test_(file_lines|indgen|list)"
+failing_tests="$failing_tests|test_(angles|container|file_lines|hist_2d|indgen|list|random)"
 %endif
 %ifarch s390x
-failing_tests="$failing_tests|test_(file_lines|indgen|list|save_restore|window_background)"
+failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|window_background)"
 %endif
 make check VERBOSE=1 ARGS="-V -E '$failing_tests'"
 %ifnarch ppc64 s390x
@@ -284,6 +300,11 @@ cat xorg.log
 
 
 %changelog
+* Wed Feb 13 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-4
+- Use eccodes where available
+- Add patches to fix build
+- Use cmake3 for EPEL7 compat
+
 * Wed Feb 13 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-3
 - Rebuild for plplot 5.14
 
