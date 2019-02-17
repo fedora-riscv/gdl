@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -300,6 +300,9 @@ cat xorg.log
 
 
 %changelog
+* Sun Feb 17 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 0.9.9-5
+- Rebuild for readline 8.0
+
 * Wed Feb 13 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-4
 - Use eccodes where available
 - Add patches to fix build
