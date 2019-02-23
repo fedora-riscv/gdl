@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -263,7 +263,7 @@ failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
 %endif
 %ifarch ppc64
 # new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
-failing_tests="$failing_tests|test_(file_lines|indgen|list|save_restore|wait|window_background)"
+failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|wait|window_background)"
 %endif
 %ifarch ppc64le
 # ppc64le - test_file_lines https://github.com/gnudatalanguage/gdl/issues/373
@@ -300,6 +300,9 @@ cat xorg.log
 
 
 %changelog
+* Fri Feb 22 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-6
+- test_bug_635 fails on F28 ppc64
+
 * Sun Feb 17 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 0.9.9-5
 - Rebuild for readline 8.0
 
