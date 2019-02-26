@@ -250,7 +250,8 @@ failing_tests="$failing_tests|test_fix"
 %endif
 %ifarch aarch64
 # new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
-failing_tests="$failing_tests|test_(file_lines|indgen|list|l64|wait|xdr)"
+# Bug tests hang on F28
+failing_tests="$failing_tests|test_(bug_(3104326|3147733)|file_lines|indgen|list|l64|wait|xdr)"
 %endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
@@ -275,7 +276,7 @@ failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|
 make check VERBOSE=1 ARGS="-V -E '$failing_tests'"
 %ifnarch ppc64 s390x
 # test_save_restore hangs on ppc64 s390x
-make check VERBOSE=1 ARGS="-V -R '$failing_tests'" || :
+make check VERBOSE=1 ARGS="-V -R '$failing_tests' --timeout 600" || :
 %endif
 kill %1 || :
 cat xorg.log
