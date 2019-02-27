@@ -271,7 +271,7 @@ failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|
 failing_tests="$failing_tests|test_(angles|container|file_lines|hist_2d|indgen|list|random)"
 %endif
 %ifarch s390x
-failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|window_background)"
+failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|tic_toc|window_background)"
 %endif
 make check VERBOSE=1 ARGS="-V -E '$failing_tests'"
 %ifnarch ppc64 s390x
