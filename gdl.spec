@@ -241,7 +241,7 @@ sleep 2
 # resolve_routine - https://github.com/gnudatalanguage/gdl/issues/146
 # rounding - https://github.com/gnudatalanguage/gdl/issues/154
 # total - https://github.com/gnudatalanguage/gdl/issues/155
-failing_tests='test_(bytscl|fft_leak|file_(delete|test)|finite|fix|formats|idlneturl|make_dll|n_tags|parse_url|resolve_routine|rounding|total)'
+failing_tests='test_(bytscl|fft_leak|file_(delete|test)|finite|fix|formats|idlneturl|make_dll|n_tags|parse_url|resolve_routine|rounding|total|wait)'
 %ifarch aarch64 ppc %{power64}
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
@@ -251,11 +251,11 @@ failing_tests="$failing_tests|test_fix"
 %ifarch aarch64
 # new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
 # Bug tests hang on F28
-failing_tests="$failing_tests|test_(bug_(3104326|3147733)|file_lines|indgen|list|l64|wait|xdr)"
+failing_tests="$failing_tests|test_(bug_(3104326|3147733)|file_lines|indgen|list|l64|xdr)"
 %endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
-failing_tests="$failing_tests|test_(file_lines|fix|formats|indgen|list|l64|wait|xdr)"
+failing_tests="$failing_tests|test_(file_lines|fix|formats|indgen|list|l64|xdr)"
 %endif
 %ifarch %{ix86}
 # binfmt - https://github.com/gnudatalanguage/gdl/issues/332
@@ -264,7 +264,7 @@ failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
 %endif
 %ifarch ppc64
 # new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
-failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|wait|window_background)"
+failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|window_background)"
 %endif
 %ifarch ppc64le
 # ppc64le - test_file_lines https://github.com/gnudatalanguage/gdl/issues/373
