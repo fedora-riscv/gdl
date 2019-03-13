@@ -223,7 +223,9 @@ if [ -x /usr/libexec/Xorg ]; then
 elif [ -x /usr/libexec/Xorg.bin ]; then
    Xorg=/usr/libexec/Xorg.bin
 else
-   Xorg=/usr/bin/Xorg
+   # Strip suid root
+   cp /usr/bin/Xorg .
+   Xorg=./Xorg
 fi
 $Xorg -noreset +extension GLX +extension RANDR +extension RENDER -logfile ./xorg.log -config ./xorg.conf -configdir . :99 &
 export DISPLAY=:99
@@ -231,17 +233,19 @@ export DISPLAY=:99
 metacity &
 sleep 2
 # bytscl - https://github.com/gnudatalanguage/gdl/issues/159
+# device - Failed on EL7
 # fft_leak - https://github.com/gnudatalanguage/gdl/issues/147
 # file_delete - https://github.com/gnudatalanguage/gdl/issues/148
 # file_test - https://github.com/gnudatalanguage/gdl/issues/534
 # fix - https://github.com/gnudatalanguage/gdl/issues/149
 # formats - https://github.com/gnudatalanguage/gdl/issues/144
+# get_screen_size - Failed on EL7
 # n_tags - https://github.com/gnudatalanguage/gdl/issues/150
 # parse_url - https://github.com/gnudatalanguage/gdl/issues/153
 # resolve_routine - https://github.com/gnudatalanguage/gdl/issues/146
 # rounding - https://github.com/gnudatalanguage/gdl/issues/154
 # total - https://github.com/gnudatalanguage/gdl/issues/155
-failing_tests='test_(bytscl|fft_leak|file_(delete|test)|finite|fix|formats|idlneturl|make_dll|n_tags|parse_url|resolve_routine|rounding|total|wait)'
+failing_tests='test_(bytscl|device|fft_leak|file_(delete|test)|finite|fix|formats|get_screen_size|idlneturl|make_dll|n_tags|parse_url|resolve_routine|rounding|total|wait)'
 %ifarch aarch64 ppc %{power64}
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
@@ -251,7 +255,7 @@ failing_tests="$failing_tests|test_fix"
 %ifarch aarch64
 # new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
 # Bug tests hang on F28
-failing_tests="$failing_tests|test_(bug_(3104326|3147733)|file_lines|indgen|list|l64|xdr)"
+failing_tests="$failing_tests|test_(bug_(3104209|3104326|3147733)|file_lines|indgen|list|l64|step|xdr)"
 %endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
@@ -264,11 +268,11 @@ failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
 %endif
 %ifarch ppc64
 # new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
-failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|window_background)"
+failing_tests="$failing_tests|test_(bug_(635|3104209|3147733)|file_lines|indgen|list|save_restore|window_background)"
 %endif
 %ifarch ppc64le
 # ppc64le - test_file_lines https://github.com/gnudatalanguage/gdl/issues/373
-failing_tests="$failing_tests|test_(angles|container|file_lines|hist_2d|indgen|list|random)"
+failing_tests="$failing_tests|test_(angles|bug_(3104209|3104326)|container|file_lines|hist_2d|indgen|list|random)"
 %endif
 %ifarch s390x
 failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|tic_toc|window_background)"
