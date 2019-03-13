@@ -1,39 +1,30 @@
+%global commit d892ee54b710c645ec0bc75d4a0cb3118813daa6
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+
 Name:           gdl
-Version:        0.9.8
-Release:        1%{?dist}
+Version:        0.9.9
+Release:        6%{?dist}
 Summary:        GNU Data Language
 
-Group:          Applications/Engineering
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gnudatalanguage/%{name}-%{version}.tgz
+Source0:        https://github.com/gnudatalanguage/gdl/archive/v%{version}/gdl-%{version}.tar.gz
+#Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git-%{shortcommit}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
-Source3:        makecvstarball
 Source4:        xorg.conf
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr.patch
-# Catch by reference
-# https://github.com/gnudatalanguage/gdl/pull/5
-Patch2:         gdl-catch.patch
-# https://github.com/gnudatalanguage/gdl/pull/142
-Patch3:         gdl-std.patch
-# Silence some (harmless) warnings about return values
-Patch4:         gdl-return.patch
-# https://github.com/gnudatalanguage/gdl/pull/274
-Patch5:         gdl-sign.patch
-# https://github.com/gnudatalanguage/gdl/pull/275
-Patch6:         gdl-uninit.patch
-# Fix -Wstrict-aliasing warning
-# https://github.com/gnudatalanguage/gdl/pull/162
-Patch7:         gdl-alias.patch
-# https://github.com/gnudatalanguage/gdl/pull/276
-Patch8:         gdl-warnings.patch
-# 
-Patch9:         gdl-vector.patch
-# Fix test_save_restore segfault with gcc 8
-Patch10:        gdl-saverestore.patch
+# Support python3
+# https://github.com/gnudatalanguage/gdl/pull/468
+Patch2:         gdl-python3.patch
+# Update ANTLR .g file to match upstream changes
+# https://github.com/gnudatalanguage/gdl/pull/529
+Patch3:         gdl-antlr-grammar.patch
+# Fix conflict with std::vector and ALTIVEC vector
+# https://github.com/gnudatalanguage/gdl/pull/535
+Patch4:         gdl-std.patch
 
 #RHEL5 doesn't have the needed antlr version/headers, has old plplot
 %if 0%{?rhel} == 5
@@ -42,6 +33,7 @@ Patch10:        gdl-saverestore.patch
 %global plplot_config %{nil}
 %endif
 %if 0%{?fedora} || 0%{?rhel} >= 7
+BuildRequires:  gcc-c++
 BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
 BuildRequires:  java-devel
@@ -53,28 +45,42 @@ BuildRequires:  java
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
-BuildRequires:  python2-devel, python2-numpy, python2-matplotlib
-BuildRequires:  fftw-devel, hdf-static
-%if 0%{?fedora} >= 21
-BuildRequires:  grib_api-devel
+%if 0%{?fedora} >= 29
+BuildRequires:  python%{python3_pkgversion}-devel, python%{python3_pkgversion}-numpy, python%{python3_pkgversion}-matplotlib
 %else
-%if 0%{?fedora} || 0%{?rhel} >= 6
+BuildRequires:  python2-devel, python2-numpy, python2-matplotlib
+%endif
+BuildRequires:  fftw-devel, hdf-static
+%if 0%{?fedora}
+# eccodes not available on these arches
+%ifnarch i686 ppc64 s390x armv7hl
+BuildRequires:  eccodes-devel
+%else
+BuildRequires:  grib_api-devel
+%endif
+%else
+# eccodes not available on these arches
+%ifnarch i686 ppc64 s390x armv7hl aarch64
+BuildRequires:  eccodes-devel
+%else
 BuildRequires:  grib_api-static
 %endif
 %endif
 BuildRequires:  eigen3-static
+BuildRequires:  libgeotiff-devel
+BuildRequires:  libtiff-devel
 BuildRequires:  libtirpc-devel
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
 BuildRequires:  pslib-devel
 # qhull too old on Fedora 24 and EPEL7
-%if 0%{?fedora} >= 25 || 0%{?rhel} >= 8
+%if 0%{?fedora} || 0%{?rhel} >= 8
 BuildRequires:  qhull-devel
 %global cmake_qhull -DQHULL=ON
 %endif
 BuildRequires:  udunits2-devel
-BuildRequires:  wxGTK-devel
-BuildRequires:  cmake
+BuildRequires:  wxGTK3-devel
+BuildRequires:  cmake3
 # For tests
 BuildRequires:  xorg-x11-drv-dummy
 BuildRequires:  metacity
@@ -94,16 +100,29 @@ Systems Inc.
 
 %package        common
 Summary:        Common files for GDL
-Group:          Applications/Engineering
 Requires:       %{name}-runtime = %{version}-%{release}
-%if 0%{?fedora} || 0%{?rhel} >= 6
 BuildArch:      noarch
-%endif
 
 %description    common
 Common files for GDL
 
 
+%if 0%{?fedora} >= 29
+%package        -n python%{python3_pkgversion}-gdl
+%{?python_provide:%python_provide python%{python3_pkgversion}-gdl}
+# Remove before F30
+Provides: %{name}-python = %{version}-%{release}
+Provides: %{name}-python%{?_isa} = %{version}-%{release}
+Obsoletes: %{name}-python < %{version}-%{release}
+Summary:        GDL python module
+# Needed to pull in drivers
+Requires:       plplot
+Requires:       %{name}-common = %{version}-%{release}
+Provides:       %{name}-runtime = %{version}-%{release}
+
+%description    -n python%{python3_pkgversion}-gdl
+%{summary}.
+%else
 %package        -n python2-gdl
 %{?python_provide:%python_provide python2-gdl}
 # Remove before F30
@@ -111,7 +130,6 @@ Provides: %{name}-python = %{version}-%{release}
 Provides: %{name}-python%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-python < %{version}-%{release}
 Summary:        GDL python module
-Group:          Applications/Engineering
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
@@ -119,23 +137,16 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 %description    -n python2-gdl
 %{summary}.
+%endif
 
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
-%patch2 -p1 -b .catch
-%patch3 -p1 -b .std
-%patch4 -p1 -b .return
-%patch5 -p1 -b .sign
-%patch6 -p1 -b .uninit
-%patch7 -p1 -b .alias
-%patch8 -p1 -b .warnings
-%patch9 -p1 -b .vector
-%patch10 -p1 -b .saverestore
-# Stray link
-rm src/gdl
+%patch2 -p1 -b .python3
+%patch3 -p1 -b .antlr-grammar
+%patch4 -p1 -b .std
 
 pushd src
 for f in *.g
@@ -144,13 +155,21 @@ do
 done
 popd
 
+%if 0%{?fedora} >= 29
+%global __python %{__python3}
+%global python_sitearch %{python3_sitearch}
+%else
+%global __python %{__python2}
+%global python_sitearch %{python2_sitearch}
+%endif
 %global cmake_opts \\\
    -DWXWIDGETS=ON \\\
+   -DGEOTIFF_INCLUDE_DIR=%{_includedir}/libgeotiff \\\
    -DUDUNITS=ON \\\
    -DUDUNITS_INCLUDE_DIR=%{_includedir}/udunits2 \\\
    -DGRIB=ON \\\
    -DOPENMP=ON \\\
-   -DPYTHON_EXECUTABLE=%{_bindir}/python2 \\\
+   -DPYTHON_EXECUTABLE=%{__python} \\\
    %{?cmake_qhull} \\\
 %{nil}
 # TODO - build an mpi version
@@ -158,17 +177,15 @@ popd
 #           --with-mpich=%{_libdir}/mpich2 \
 
 %build
-export CFLAGS="%{optflags} -I%{_includedir}/tirpc -ltirpc"
-export CXXFLAGS="%{optflags} -I%{_includedir}/tirpc -ltirpc"
 mkdir build build-python
 #Build the standalone executable
 pushd build
-%{cmake} %{cmake_opts} ..
+%cmake3 %{cmake_opts} ..
 make #{?_smp_mflags}
 popd
 #Build the python module
 pushd build-python
-%{cmake} %{cmake_opts} -DPYTHON_MODULE=ON ..
+%cmake3 %{cmake_opts} -DPYTHON_MODULE=ON ..
 make #{?_smp_mflags}
 popd
 
@@ -180,8 +197,16 @@ popd
 pushd build-python
 make install DESTDIR=$RPM_BUILD_ROOT
 # Install the python module in the right location
-install -d -m 0755 $RPM_BUILD_ROOT/%{python2_sitearch}
-mv $RPM_BUILD_ROOT%{_prefix}/lib/site-python/GDL.so $RPM_BUILD_ROOT%{python2_sitearch}/GDL.so
+install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
+%if 0%{?fedora} >= 29
+%if %{_lib} != "lib"
+mv $RPM_BUILD_ROOT%{_prefix}/lib/python*/site-packages/GDL.so \
+  $RPM_BUILD_ROOT%{python_sitearch}/GDL.so
+%endif
+%else
+mv $RPM_BUILD_ROOT%{_prefix}/lib/site-python/GDL.so \
+  $RPM_BUILD_ROOT%{python_sitearch}/GDL.so
+%endif
 popd
 
 # Install the profile file to set GDL_PATH
@@ -198,24 +223,29 @@ if [ -x /usr/libexec/Xorg ]; then
 elif [ -x /usr/libexec/Xorg.bin ]; then
    Xorg=/usr/libexec/Xorg.bin
 else
-   Xorg=/usr/bin/Xorg
+   # Strip suid root
+   cp /usr/bin/Xorg .
+   Xorg=./Xorg
 fi
 $Xorg -noreset +extension GLX +extension RANDR +extension RENDER -logfile ./xorg.log -config ./xorg.conf -configdir . :99 &
 export DISPLAY=:99
 
 metacity &
 sleep 2
+# bytscl - https://github.com/gnudatalanguage/gdl/issues/159
+# device - Failed on EL7
 # fft_leak - https://github.com/gnudatalanguage/gdl/issues/147
 # file_delete - https://github.com/gnudatalanguage/gdl/issues/148
+# file_test - https://github.com/gnudatalanguage/gdl/issues/534
 # fix - https://github.com/gnudatalanguage/gdl/issues/149
 # formats - https://github.com/gnudatalanguage/gdl/issues/144
+# get_screen_size - Failed on EL7
 # n_tags - https://github.com/gnudatalanguage/gdl/issues/150
-# obj_isa - https://github.com/gnudatalanguage/gdl/issues/151
 # parse_url - https://github.com/gnudatalanguage/gdl/issues/153
 # resolve_routine - https://github.com/gnudatalanguage/gdl/issues/146
 # rounding - https://github.com/gnudatalanguage/gdl/issues/154
 # total - https://github.com/gnudatalanguage/gdl/issues/155
-failing_tests='test_(fft_leak|file_delete|finite|fix|formats|idlneturl|make_dll|n_tags|obj_isa|parse_url|resolve_routine|rounding|total)'
+failing_tests='test_(bytscl|device|fft_leak|file_(delete|test)|finite|fix|formats|get_screen_size|idlneturl|make_dll|n_tags|parse_url|resolve_routine|rounding|total|wait)'
 %ifarch aarch64 ppc %{power64}
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
@@ -223,26 +253,34 @@ failing_tests='test_(fft_leak|file_delete|finite|fix|formats|idlneturl|make_dll|
 failing_tests="$failing_tests|test_fix"
 %endif
 %ifarch aarch64
-failing_tests="$failing_tests|test_(l64|wait|xdr)"
+# new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
+# Bug tests hang on F28
+failing_tests="$failing_tests|test_(bug_(3104209|3104326|3147733)|file_lines|indgen|list|l64|step|xdr)"
 %endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
-failing_tests="$failing_tests|test_(fix|formats|l64|wait|xdr)"
+failing_tests="$failing_tests|test_(file_lines|fix|formats|indgen|list|l64|xdr)"
 %endif
 %ifarch %{ix86}
+# binfmt - https://github.com/gnudatalanguage/gdl/issues/332
 # These fail on 32-bit: test_formats test_xdr
 failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
 %endif
 %ifarch ppc64
-failing_tests="$failing_tests|test_(save_restore|wait|window_background)"
+# new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
+failing_tests="$failing_tests|test_(bug_(635|3104209|3147733)|file_lines|indgen|list|save_restore|window_background)"
+%endif
+%ifarch ppc64le
+# ppc64le - test_file_lines https://github.com/gnudatalanguage/gdl/issues/373
+failing_tests="$failing_tests|test_(angles|bug_(3104209|3104326)|container|file_lines|hist_2d|indgen|list|random)"
 %endif
 %ifarch s390x
-failing_tests="$failing_tests|test_(save_restore|window_background)"
+failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|tic_toc|window_background)"
 %endif
-make check ARGS="-V -E '$failing_tests'"
+make check VERBOSE=1 ARGS="-V -E '$failing_tests'"
 %ifnarch ppc64 s390x
 # test_save_restore hangs on ppc64 s390x
-make check ARGS="-V -R '$failing_tests'" || :
+make check VERBOSE=1 ARGS="-V -R '$failing_tests' --timeout 600" || :
 %endif
 kill %1 || :
 cat xorg.log
@@ -250,7 +288,7 @@ cat xorg.log
 
 %files
 %license COPYING
-%doc AUTHORS ChangeLog HACKING NEWS README TODO
+%doc AUTHORS ChangeLog HACKING NEWS README
 %config(noreplace) %{_sysconfdir}/profile.d/gdl.*sh
 %{_bindir}/gdl
 %{_mandir}/man1/gdl.1*
@@ -258,11 +296,55 @@ cat xorg.log
 %files common
 %{_datadir}/gnudatalanguage/
 
+%if 0%{?fedora} >= 29
+%files -n python%{python3_pkgversion}-gdl
+%else
 %files -n python2-gdl
-%{python2_sitearch}/GDL.so
+%endif
+%{python_sitearch}/GDL.so
 
 
 %changelog
+* Fri Feb 22 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-6
+- test_bug_635 fails on F28 ppc64
+
+* Sun Feb 17 2019 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 0.9.9-5
+- Rebuild for readline 8.0
+
+* Wed Feb 13 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-4
+- Use eccodes where available
+- Add patches to fix build
+- Use cmake3 for EPEL7 compat
+
+* Wed Feb 13 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-3
+- Rebuild for plplot 5.14
+
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Sat Dec 1 2018 Orion Poplawski <orion@nwra.com> - 0.9.9-1
+- Update to 0.9.9
+
+* Wed Oct 31 2018 Orion Poplawski <orion@nwra.com> - 0.9.8-7.20180919gitd892ee5
+- Really use eccodes by fixing typo (bug #1644928)
+
+* Thu Sep 20 2018 Orion Poplawski <orion@nwra.com> - 0.9.8-6.20180919gitd892ee5
+- Update to latest git
+- Port to python 3
+
+* Tue Jul 31 2018 Florian Weimer <fweimer@redhat.com> - 0.9.8-5.20180723gitf3b6e01
+- Rebuild with fixed binutils
+
+* Mon Jul 23 2018 Orion Poplawski <orion@nwra.com> - 0.9.8-4.20180723gitf3b6e01
+- Update to latest git
+- Switch to eccodes from grib_api for Fedora 28+
+
+* Sun Jul 22 2018 Scott Talbert <swt@techie.net> - 0.9.8-3
+- Rebuild with wxWidgets 3.0
+
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.8-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Sun May 20 2018 Orion Poplawski <orion@cora.nwra.com> - 0.9.8-1
 - Update to 0.9.8
 - Drop parallel make for now

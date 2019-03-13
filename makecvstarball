@@ -1,5 +1,0 @@
-#!/bin/sh
-ver=$1
-date=`date +%Y%m%d`
-cvs -z3 -d :pserver:anonymous@gnudatalanguage.cvs.sourceforge.net:/cvsroot/gnudatalanguage export -D ${date} -d gdl-${ver}-${date} gdl
-tar caf gdl-${ver}-${date}.tar.xz gdl-${ver}-${date}
