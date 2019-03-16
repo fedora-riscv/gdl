@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -305,6 +305,9 @@ cat xorg.log
 
 
 %changelog
+* Sat Mar 16 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-7
+- Rebuild for hdf5 1.10.5
+
 * Fri Feb 22 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-6
 - test_bug_635 fails on F28 ppc64
 
