@@ -250,7 +250,7 @@ failing_tests='test_(bytscl|device|fft_leak|file_(delete|test)|finite|fix|format
 # test_fix fails currently on arm
 # https://sourceforge.net/p/gnudatalanguage/bugs/622/
 # https://bugzilla.redhat.com/show_bug.cgi?id=990749
-failing_tests="$failing_tests|test_fix"
+failing_tests="$failing_tests|test_(fix|hdf5)"
 %endif
 %ifarch aarch64
 # new test failues - indgen, list - https://github.com/gnudatalanguage/gdl/issues/372
@@ -259,7 +259,7 @@ failing_tests="$failing_tests|test_(bug_(3104209|3104326|3147733)|file_lines|ind
 %endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
-failing_tests="$failing_tests|test_(file_lines|fix|formats|indgen|list|l64|xdr)"
+failing_tests="$failing_tests|test_(file_lines|fix|formats|hdf5|indgen|list|l64|xdr)"
 %endif
 %ifarch %{ix86}
 # binfmt - https://github.com/gnudatalanguage/gdl/issues/332
@@ -272,10 +272,10 @@ failing_tests="$failing_tests|test_(bug_(635|3104209|3147733)|file_lines|indgen|
 %endif
 %ifarch ppc64le
 # ppc64le - test_file_lines https://github.com/gnudatalanguage/gdl/issues/373
-failing_tests="$failing_tests|test_(angles|bug_(3104209|3104326)|container|file_lines|hist_2d|indgen|list|random)"
+failing_tests="$failing_tests|test_(angles|bug_(3104209|3104326)|container|file_lines|hdf5|hist_2d|indgen|list|random)"
 %endif
 %ifarch s390x
-failing_tests="$failing_tests|test_(bug_635|file_lines|indgen|list|save_restore|tic_toc|window_background)"
+failing_tests="$failing_tests|test_(bug_635|file_lines|hdf5|indgen|list|save_restore|tic_toc|window_background)"
 %endif
 make check VERBOSE=1 ARGS="-V -E '$failing_tests'"
 %ifnarch ppc64 s390x
