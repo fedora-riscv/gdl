@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -305,6 +305,9 @@ cat xorg.log
 
 
 %changelog
+* Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 0.9.9-9
+- Rebuilt for Python 3.8
+
 * Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.9-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
