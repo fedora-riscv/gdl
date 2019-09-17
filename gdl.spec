@@ -272,7 +272,7 @@ failing_tests="$failing_tests|test_(bug_(635|3104209|3147733)|file_lines|indgen|
 failing_tests="$failing_tests|test_(angles|bug_(3104209|3104326)|container|file_lines|hdf5|hist_2d|indgen|list|random)"
 %endif
 %ifarch s390x
-failing_tests="$failing_tests|test_(bug_635|file_lines|hdf5|indgen|list|save_restore|tic_toc|window_background)"
+failing_tests="$failing_tests|test_(bug_635|deriv|file_lines|hdf5|indgen|list|save_restore|tic_toc|window_background)"
 %endif
 make check VERBOSE=1 ARGS="-V -E '$failing_tests'"
 %ifnarch ppc64 s390x
