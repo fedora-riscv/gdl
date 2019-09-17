@@ -1,15 +1,15 @@
-%global commit d892ee54b710c645ec0bc75d4a0cb3118813daa6
+%global commit 287007567ba3998b4b70119025c3def86bdef649
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           gdl
 Version:        0.9.9
-Release:        10%{?dist}
+Release:        11.20190915git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-Source0:        https://github.com/gnudatalanguage/gdl/archive/v%{version}/gdl-%{version}.tar.gz
-#Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git-%{shortcommit}.tar.gz
+#Source0:        https://github.com/gnudatalanguage/gdl/archive/v%{version}/gdl-%{version}.tar.gz
+Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git-%{shortcommit}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source4:        xorg.conf
@@ -19,9 +19,6 @@ Patch1:         gdl-antlr.patch
 # Support python3
 # https://github.com/gnudatalanguage/gdl/pull/468
 Patch2:         gdl-python3.patch
-# Update ANTLR .g file to match upstream changes
-# https://github.com/gnudatalanguage/gdl/pull/529
-Patch3:         gdl-antlr-grammar.patch
 # Fix conflict with std::vector and ALTIVEC vector
 # https://github.com/gnudatalanguage/gdl/pull/535
 Patch4:         gdl-std.patch
@@ -50,6 +47,7 @@ BuildRequires:  python%{python3_pkgversion}-devel, python%{python3_pkgversion}-n
 %else
 BuildRequires:  python2-devel, python2-numpy, python2-matplotlib
 %endif
+BuildRequires:  shapelib-devel
 BuildRequires:  fftw-devel, hdf-static
 %if 0%{?fedora}
 # eccodes not available on these arches
@@ -141,11 +139,10 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{commit}
 rm -rf src/antlr
 %patch1 -p1 -b .antlr
 %patch2 -p1 -b .python3
-%patch3 -p1 -b .antlr-grammar
 %patch4 -p1 -b .std
 
 pushd src
@@ -305,6 +302,9 @@ cat xorg.log
 
 
 %changelog
+* Tue Sep 17 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-11.20190915git2870075
+- Update to latest git
+
 * Tue Aug 20 2019 Susi Lehtola <jussilehtola@fedoraproject.org> - 0.9.9-10
 - Rebuilt for GSL 2.6.
 
