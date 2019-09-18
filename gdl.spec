@@ -23,12 +23,6 @@ Patch2:         gdl-python3.patch
 # https://github.com/gnudatalanguage/gdl/pull/535
 Patch4:         gdl-std.patch
 
-#RHEL5 doesn't have the needed antlr version/headers, has old plplot
-%if 0%{?rhel} == 5
-%global plplot_config --enable-oldplplot
-%else
-%global plplot_config %{nil}
-%endif
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  gcc-c++
 BuildRequires:  antlr-C++
@@ -42,14 +36,14 @@ BuildRequires:  java
 BuildRequires:  readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
-%if 0%{?fedora} >= 29
+%if 0%{?fedora} || 0%{?rhel} >= 8
 BuildRequires:  python%{python3_pkgversion}-devel, python%{python3_pkgversion}-numpy, python%{python3_pkgversion}-matplotlib
 %else
 BuildRequires:  python2-devel, python2-numpy, python2-matplotlib
 %endif
 BuildRequires:  shapelib-devel
 BuildRequires:  fftw-devel, hdf-static
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 8
 # eccodes not available on these arches
 %ifnarch i686 ppc64 s390x armv7hl
 BuildRequires:  eccodes-devel
@@ -105,7 +99,7 @@ BuildArch:      noarch
 Common files for GDL
 
 
-%if 0%{?fedora} >= 29
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
 %package        -n python%{python3_pkgversion}-gdl
 %{?python_provide:%python_provide python%{python3_pkgversion}-gdl}
 # Remove before F30
@@ -152,7 +146,7 @@ do
 done
 popd
 
-%if 0%{?fedora} >= 29
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
 %global __python %{__python3}
 %global python_sitearch %{python3_sitearch}
 %else
@@ -195,7 +189,7 @@ pushd build-python
 make install DESTDIR=$RPM_BUILD_ROOT
 # Install the python module in the right location
 install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
-%if 0%{?fedora} >= 29
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
 %if %{_lib} != "lib"
 mv $RPM_BUILD_ROOT%{_prefix}/lib/python*/site-packages/GDL.so \
   $RPM_BUILD_ROOT%{python_sitearch}/GDL.so
@@ -293,7 +287,7 @@ cat xorg.log
 %files common
 %{_datadir}/gnudatalanguage/
 
-%if 0%{?fedora} >= 29
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
 %files -n python%{python3_pkgversion}-gdl
 %else
 %files -n python2-gdl
