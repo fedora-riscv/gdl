@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        11.20190915git%{shortcommit}%{?dist}
+Release:        12.20190915git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -296,6 +296,9 @@ cat xorg.log
 
 
 %changelog
+* Sun Sep 29 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-12.20190915git2870075
+- Rebuild for plplot 5.15
+
 * Tue Sep 17 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-11.20190915git2870075
 - Update to latest git
 
