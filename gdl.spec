@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        12.20190915git%{shortcommit}%{?dist}
+Release:        13.20190915git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -296,6 +296,9 @@ cat xorg.log
 
 
 %changelog
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.9-13.20190915git2870075
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Sun Sep 29 2019 Orion Poplawski <orion@nwra.com> - 0.9.9-12.20190915git2870075
 - Rebuild for plplot 5.15
 
