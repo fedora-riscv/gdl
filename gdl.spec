@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        13.20190915git%{shortcommit}%{?dist}
+Release:        14.20190915git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -296,6 +296,9 @@ cat xorg.log
 
 
 %changelog
+* Thu Apr 02 2020 Björn Esser <besser82@fedoraproject.org> - 0.9.9-14.20190915git2870075
+- Fix string quoting for rpm >= 4.16
+
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.9-13.20190915git2870075
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
