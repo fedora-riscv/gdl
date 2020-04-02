@@ -190,7 +190,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 # Install the python module in the right location
 install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
 %if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
-%if %{_lib} != "lib"
+%if "%{_lib}" != "lib"
 mv $RPM_BUILD_ROOT%{_prefix}/lib/python*/site-packages/GDL.so \
   $RPM_BUILD_ROOT%{python_sitearch}/GDL.so
 %endif
