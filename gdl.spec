@@ -33,7 +33,7 @@ BuildRequires:  java-devel
 BuildRequires:  antlr
 BuildRequires:  java
 %endif
-BuildRequires:  readline-devel, ncurses-devel
+BuildRequires:  expat-devel, readline-devel, ncurses-devel
 BuildRequires:  gsl-devel, plplot-devel, GraphicsMagick-c++-devel
 BuildRequires:  netcdf-devel, hdf5-devel, libjpeg-devel
 %if 0%{?fedora} || 0%{?rhel} >= 8
@@ -298,6 +298,7 @@ cat xorg.log
 %changelog
 * Thu Apr 02 2020 Björn Esser <besser82@fedoraproject.org> - 0.9.9-14.20190915git2870075
 - Fix string quoting for rpm >= 4.16
+- Add BR: expat-devel
 
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.9-13.20190915git2870075
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
