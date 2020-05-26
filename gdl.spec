@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        14.20190915git%{shortcommit}%{?dist}
+Release:        15.20190915git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -296,6 +296,9 @@ cat xorg.log
 
 
 %changelog
+* Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 0.9.9-15.20190915git2870075
+- Rebuilt for Python 3.9
+
 * Thu Apr 02 2020 Björn Esser <besser82@fedoraproject.org> - 0.9.9-14.20190915git2870075
 - Fix string quoting for rpm >= 4.16
 - Add BR: expat-devel
