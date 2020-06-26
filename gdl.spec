@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        15.20190915git%{shortcommit}%{?dist}
+Release:        16.20190915git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -296,6 +296,9 @@ cat xorg.log
 
 
 %changelog
+* Fri Jun 26 2020 Orion Poplawski <orion@nwra.com> - 0.9.9-16.20190915git2870075
+- Rebuild for hdf5 1.10.6
+
 * Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 0.9.9-15.20190915git2870075
 - Rebuilt for Python 3.9
 
