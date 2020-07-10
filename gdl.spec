@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        16.20190915git%{shortcommit}%{?dist}
+Release:        17.20190915git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -296,6 +296,9 @@ cat xorg.log
 
 
 %changelog
+* Fri Jul 10 2020 Jiri Vanek <jvanek@redhat.com> - 0.9.9-17.20190915git2870075
+- Rebuilt for JDK-11, see https://fedoraproject.org/wiki/Changes/Java11
+
 * Fri Jun 26 2020 Orion Poplawski <orion@nwra.com> - 0.9.9-16.20190915git2870075
 - Rebuild for hdf5 1.10.6
 
