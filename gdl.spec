@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        17.20190915git%{shortcommit}%{?dist}
+Release:        18.20190915git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -183,10 +183,10 @@ popd
 
 %install
 pushd build
-make install DESTDIR=$RPM_BUILD_ROOT
+%make_install
 popd
 pushd build-python
-make install DESTDIR=$RPM_BUILD_ROOT
+%make_install
 # Install the python module in the right location
 install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
 %if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
@@ -296,6 +296,10 @@ cat xorg.log
 
 
 %changelog
+* Tue Jul 14 2020 Tom Stellard <tstellar@redhat.com> - 0.9.9-18.20190915git2870075
+- Use make macros
+- https://fedoraproject.org/wiki/Changes/UseMakeBuildInstallMacro
+
 * Fri Jul 10 2020 Jiri Vanek <jvanek@redhat.com> - 0.9.9-17.20190915git2870075
 - Rebuilt for JDK-11, see https://fedoraproject.org/wiki/Changes/Java11
 
