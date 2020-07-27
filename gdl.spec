@@ -3,7 +3,7 @@
 
 Name:           gdl
 Version:        0.9.9
-Release:        18.20190915git%{shortcommit}%{?dist}
+Release:        19.20190915git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -296,6 +296,9 @@ cat xorg.log
 
 
 %changelog
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.9-19.20190915git2870075
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Tue Jul 14 2020 Tom Stellard <tstellar@redhat.com> - 0.9.9-18.20190915git2870075
 - Use make macros
 - https://fedoraproject.org/wiki/Changes/UseMakeBuildInstallMacro
