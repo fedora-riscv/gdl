@@ -45,7 +45,7 @@ BuildRequires:  shapelib-devel
 BuildRequires:  fftw-devel, hdf-static
 %if 0%{?fedora} || 0%{?rhel} >= 8
 # eccodes not available on these arches
-%ifnarch i686 ppc64 s390x armv7hl
+%ifnarch i686 ppc64 s390x armv7hl aarch64
 BuildRequires:  eccodes-devel
 %else
 BuildRequires:  grib_api-devel
@@ -74,8 +74,11 @@ BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK3-devel
 BuildRequires:  cmake3
 # For tests
+# EL8 s390x missing xorg-x11-drv-dummy
+%ifnarch s390x
 BuildRequires:  xorg-x11-drv-dummy
 BuildRequires:  metacity
+%endif
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
@@ -206,6 +209,7 @@ install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 
+%ifnarch s390x
 %check
 cd build
 cp %SOURCE4 .
@@ -275,6 +279,7 @@ make check VERBOSE=1 ARGS="-V -R '$failing_tests' --timeout 600" || :
 %endif
 kill %1 || :
 cat xorg.log
+%endif
 
 
 %files
