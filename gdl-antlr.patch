@@ -1,0 +1,22 @@
+diff -up gdl-287007567ba3998b4b70119025c3def86bdef649/src/CMakeLists.txt.antlr gdl-287007567ba3998b4b70119025c3def86bdef649/src/CMakeLists.txt
+--- gdl-287007567ba3998b4b70119025c3def86bdef649/src/CMakeLists.txt.antlr	2019-09-16 03:51:53.000000000 -0600
++++ gdl-287007567ba3998b4b70119025c3def86bdef649/src/CMakeLists.txt	2019-09-16 21:13:52.240535555 -0600
+@@ -291,9 +291,7 @@ sax.cpp
+ )
+ endif(USE_EXPAT)
+ 
+-add_subdirectory(antlr)
+-
+-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/antlr ${CMAKE_BINARY_DIR})
++include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
+ link_directories(${LINK_DIRECTORIES})
+ 
+ if(PYTHON_MODULE) #GDL.so
+@@ -308,7 +306,6 @@ else(PYTHON_MODULE) #GDL.so
+ 	add_executable(gdl ${SOURCES})
+ endif(PYTHON_MODULE)
+ 
+-add_dependencies(gdl antlr) # be sure that antlr is built before gdl
+ target_link_libraries(gdl antlr) # link antlr against gdl
+ if (MINGW)
+ target_link_libraries(gdl ws2_32)
