@@ -79,6 +79,7 @@ BuildRequires:  cmake3
 BuildRequires:  xorg-x11-drv-dummy
 BuildRequires:  metacity
 %endif
+BuildRequires: make
 # Needed to pull in drivers
 Requires:       plplot
 Requires:       %{name}-common = %{version}-%{release}
