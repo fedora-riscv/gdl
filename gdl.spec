@@ -17,11 +17,6 @@ Source4:        xorg.conf
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr.patch
-# Fix multiple template instantiations with include guard
-Patch2:		gdl-guard.patch
-# Fix conflict with std::vector and ALTIVEC vector
-# https://github.com/gnudatalanguage/gdl/pull/535
-#Patch4:         gdl-std.patch
 
 # Build fails on armv7hl
 # https://bugzilla.redhat.com/show_bug.cgi?id=1919680
@@ -144,8 +139,6 @@ rm -rf src/antlr
 # Not yet possible to build with external dSFMT
 #rm -r src/dSFMT
 %patch1 -p1 -b .antlr
-#patch2 -p1 -b .guard
-#patch4 -p1 -b .std
 
 pushd src
 for f in *.g
