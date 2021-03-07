@@ -4,7 +4,7 @@
 
 Name:           gdl
 Version:        1.0.0
-Release:        0.2.20210123git%{shortcommit}%{?dist}
+Release:        0.3.20210123git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -281,6 +281,9 @@ cat xorg.log
 
 
 %changelog
+* Sun Mar 07 2021 Sandro Mani <manisandro@gmail.com> - 1.0.0-0.3.20210123git4892c96
+- Rebuild (proj)
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-0.2.20210123git4892c96
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
