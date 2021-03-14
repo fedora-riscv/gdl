@@ -17,6 +17,9 @@ Source4:        xorg.conf
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr.patch
+# Support for PROJ 8
+# https://github.com/gnudatalanguage/gdl/pull/898
+Patch2:         gdl-proj.patch
 
 # Build fails on armv7hl
 # https://bugzilla.redhat.com/show_bug.cgi?id=1919680
@@ -139,6 +142,7 @@ rm -rf src/antlr
 # Not yet possible to build with external dSFMT
 #rm -r src/dSFMT
 %patch1 -p1 -b .antlr
+%patch2 -p1 -b .PROJ
 
 pushd src
 for f in *.g
@@ -281,6 +285,9 @@ cat xorg.log
 
 
 %changelog
+* Sat Mar 13 2021 Orion Poplawski <orion@nwra.com> - 1.0.0-0.3.20210123git4892c96
+- Add patch for PROJ 8 support
+
 * Sun Mar 07 2021 Sandro Mani <manisandro@gmail.com> - 1.0.0-0.3.20210123git4892c96
 - Rebuild (proj)
 

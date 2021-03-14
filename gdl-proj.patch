@@ -1,0 +1,1875 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index da7ea329..396d0d5c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -113,8 +113,8 @@ set(HDF5DIR "" CACHE PATH "GDL: Specifiy the HDF5 directory tree")
+ set(FFTW ON CACHE BOOL "GDL: Enable FFTW ?")
+ set(FFTWDIR "" CACHE PATH "GDL: Specifiy the FFTW directory tree")
+ 
+-set(LIBPROJ4 ON CACHE BOOL "GDL: Enable LIBPROJ4 ?")
+-set(LIBPROJ4DIR "" CACHE PATH "GDL: Specifiy the LIBPROJ4 directory tree")
++set(LIBPROJ ON CACHE BOOL "GDL: Enable PROJ ?")
++set(LIBPROJDIR "" CACHE PATH "GDL: Specifiy the PROJ directory tree")
+ 
+ set(MPI OFF CACHE BOOL "GDL: Enable MPI ?")
+ set(MPIDIR "" CACHE PATH "GDL: Specify the MPI (experimental) directory tree")
+@@ -717,55 +717,26 @@ if(FFTW)
+     endif(FFTW_FOUND)
+ endif(FFTW)
+ 
+-# libproj4
+-# -DLIBPROJ4=ON|OFF
+-# -DLIBPROJ4DIR=DIR
+-if(LIBPROJ4)
+-    set(CMAKE_PREFIX_PATH ${LIBPROJ4DIR})
+-    find_package(Libproj4)
+-    if(LIBPROJ4_FOUND)  
+-    else(LIBPROJ4_FOUND)
+-    find_package(Libproj4new)
+-    endif(LIBPROJ4_FOUND)   
+-
+-    if(LIBPROJ4_FOUND)  
+-        set(CMAKE_REQUIRED_LIBRARIES ${LIBPROJ4_LIBRARIES} ${GSL_LIBRARIES} m)
+-
+-        check_library_exists("${LIBPROJ4_LIBRARIES}" pj_init "" USE_LIBPROJ4_NEW)
+-        if(USE_LIBPROJ4_NEW)
+-#       check_library_exists("${LIBPROJ4_LIBRARIES}" proj_init "" USE_LIBPROJ4)
+-#       if(USE_LIBPROJ4)
+-
+-                        # define USE_LIB_PROJ4 in any case
+-            set(USE_LIBPROJ4 1)
+-
+-        else(USE_LIBPROJ4_NEW)
+-            check_library_exists("${LIBPROJ4_LIBRARIES}" proj_init "" USE_LIBPROJ4)
+-            if(NOT USE_LIBPROJ4)
+-#       else(USE_LIBPROJ4)
+-#           check_library_exists("${LIBPROJ4_LIBRARIES}" pj_init "" USE_LIBPROJ4_NEW)
+-#           if(NOT USE_LIBPROJ4_NEW)
+-
+-                message(FATAL_ERROR "Libproj4 is required but was not found.\n"
+-                "Use -DLIBPROJ4DIR=DIR to specify the Libproj4 directory tree.\n"
+-                "Use -DLIBPROJ4=OFF to not use it.\n"
+-                "(suitable Debian/Ubuntu package: libproj-dev)\n"
+-                "(suitable Fedora/CentOS package: proj-devel)")
+-
+-            endif(NOT USE_LIBPROJ4)
+-        endif(USE_LIBPROJ4_NEW)
+-#           endif(NOT USE_LIBPROJ4_NEW)
+-#       endif(USE_LIBPROJ4)
+-
+-        include_directories(${LIBPROJ4_INCLUDE_DIR})
+-        set(LIBRARIES ${LIBRARIES} ${LIBPROJ4_LIBRARIES})
+-        set(CMAKE_REQUIRED_LIBRARIES)
+-    else(LIBPROJ4_FOUND)
+-        message(FATAL_ERROR "Libproj4 is required but was not found.\n"
+-        "Use -DLIBPROJ4DIR=DIR to specify the Libproj4 directory tree.\n"
+-        "Use -DLIBPROJ4=OFF to not use it.")
+-    endif(LIBPROJ4_FOUND)   
+-endif(LIBPROJ4)
++# PROJ
++# -DLIBPROJ=ON|OFF
++# -DLIBPROJDIR=DIR
++if(LIBPROJ)
++    set(CMAKE_PREFIX_PATH ${LIBPROJDIR})
++    find_package(LIBPROJ)
++    set(USE_LIBPROJ ${LIBPROJ_FOUND})
++
++    if(LIBPROJ_FOUND)  
++        set(LIBRARIES ${LIBRARIES} ${LIBPROJ_LIBRARIES})
++        include_directories(${LIBPROJ_INCLUDE_DIR})
++        set(LIBPROJ_MAJOR_VERSION ${LIBPROJ_MAJOR_VERSION})
++    else(LIBPROJ_FOUND)
++        message(FATAL_ERROR "PROJ is required but was not found.\n"
++        "Use -DLIBPROJDIR=DIR to specify the PROJ directory tree.\n"
++        "Use -DLIBPROJ=OFF to not use it.\n"
++        "(suitable Debian/Ubuntu package: libproj-dev)\n"
++        "(suitable Fedora/CentOS package: proj-devel)")
++    endif(LIBPROJ_FOUND)   
++endif(LIBPROJ)
+ 
+ # MPI (experimental)
+ # -DMPI=ON|OFF
+@@ -1128,9 +1099,9 @@ module(NETCDF    "NetCDF        ")
+ module(HDF       "HDF4          ")
+ module(HDF5      "HDF5          ")
+ module(FFTW      "FFTW          ")
+-module(LIBPROJ4  "Libproj4      ")
+ set(MPI_LIBRARIES ${MPI_LIBRARIES})
+ module(MPI       "MPI           ")
++module(LIBPROJ   "PROJ          ")
+ module(PYTHON    "Python        ")
+ module(UDUNITS2  "UDUNITS-2     ")
+ module(EIGEN3    "EIGEN3        ")
+diff --git a/CMakeModules/FindLIBPROJ.cmake b/CMakeModules/FindLIBPROJ.cmake
+new file mode 100644
+index 00000000..65705a79
+--- /dev/null
++++ b/CMakeModules/FindLIBPROJ.cmake
+@@ -0,0 +1,67 @@
++find_path(LIBPROJ_INCLUDE_DIR
++  NAMES proj_api.h proj.h
++  DOC "libproj include directories")
++mark_as_advanced(LIBPROJ_INCLUDE_DIR)
++
++find_library(LIBPROJ_LIBRARY_RELEASE
++  NAMES proj
++  DOC "libproj release library")
++mark_as_advanced(LIBPROJ_LIBRARY_RELEASE)
++
++find_library(LIBPROJ_LIBRARY_DEBUG
++  NAMES projd
++  DOC "libproj debug library")
++mark_as_advanced(LIBPROJ_LIBRARY_DEBUG)
++
++include(SelectLibraryConfigurations)
++select_library_configurations(LIBPROJ)
++
++if (LIBPROJ_INCLUDE_DIR)
++  if (EXISTS "${LIBPROJ_INCLUDE_DIR}/proj.h")
++    file(STRINGS "${LIBPROJ_INCLUDE_DIR}/proj.h" _libproj_version_lines REGEX "#define[ \t]+PROJ_VERSION_(MAJOR|MINOR|PATCH)")
++    string(REGEX REPLACE ".*PROJ_VERSION_MAJOR *\([0-9]*\).*" "\\1" _libproj_version_major "${_libproj_version_lines}")
++    string(REGEX REPLACE ".*PROJ_VERSION_MINOR *\([0-9]*\).*" "\\1" _libproj_version_minor "${_libproj_version_lines}")
++    string(REGEX REPLACE ".*PROJ_VERSION_PATCH *\([0-9]*\).*" "\\1" _libproj_version_patch "${_libproj_version_lines}")
++  else ()
++    file(STRINGS "${LIBPROJ_INCLUDE_DIR}/proj_api.h" _libproj_version_lines REGEX "#define[ \t]+PJ_VERSION")
++    string(REGEX REPLACE ".*PJ_VERSION *\([0-9]*\).*" "\\1" _libproj_version "${_libproj_version_lines}")
++    math(EXPR _libproj_version_major "${_libproj_version} / 100")
++    math(EXPR _libproj_version_minor "(${_libproj_version} % 100) / 10")
++    math(EXPR _libproj_version_patch "${_libproj_version} % 10")
++  endif ()
++  set(LIBPROJ_VERSION "${_libproj_version_major}.${_libproj_version_minor}.${_libproj_version_patch}")
++  set(LIBPROJ_MAJOR_VERSION "${_libproj_version_major}")
++  unset(_libproj_version_major)
++  unset(_libproj_version_minor)
++  unset(_libproj_version_patch)
++  unset(_libproj_version)
++  unset(_libproj_version_lines)
++endif ()
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(LIBPROJ
++  REQUIRED_VARS LIBPROJ_LIBRARY LIBPROJ_INCLUDE_DIR
++  VERSION_VAR LIBPROJ_VERSION)
++
++if (LIBPROJ_FOUND)
++  set(LIBPROJ_INCLUDE_DIRS "${LIBPROJ_INCLUDE_DIR}")
++  set(LIBPROJ_LIBRARIES "${LIBPROJ_LIBRARY}")
++
++  if (NOT TARGET LIBPROJ::LIBPROJ)
++    add_library(LIBPROJ::LIBPROJ UNKNOWN IMPORTED)
++    set_target_properties(LIBPROJ::LIBPROJ PROPERTIES
++      INTERFACE_INCLUDE_DIRECTORIES "${LIBPROJ_INCLUDE_DIR}")
++    if (LIBPROJ_LIBRARY_RELEASE)
++      set_property(TARGET LIBPROJ::LIBPROJ APPEND PROPERTY
++        IMPORTED_CONFIGURATIONS RELEASE)
++      set_target_properties(LIBPROJ::LIBPROJ PROPERTIES
++        IMPORTED_LOCATION_RELEASE "${LIBPROJ_LIBRARY_RELEASE}")
++    endif ()
++    if (LIBPROJ_LIBRARY_DEBUG)
++      set_property(TARGET LIBPROJ::LIBPROJ APPEND PROPERTY
++        IMPORTED_CONFIGURATIONS DEBUG)
++      set_target_properties(LIBPROJ::LIBPROJ PROPERTIES
++        IMPORTED_LOCATION_DEBUG "${LIBPROJ_LIBRARY_DEBUG}")
++    endif ()
++  endif ()
++endif ()
+diff --git a/CMakeModules/FindLibproj4.cmake b/CMakeModules/FindLibproj4.cmake
+deleted file mode 100644
+index 4cb0edb1..00000000
+--- a/CMakeModules/FindLibproj4.cmake
++++ /dev/null
+@@ -1,21 +0,0 @@
+-#
+-# copyright : (c) 2010 Maxime Lenoir, Alain Coulais,
+-#                      Sylwester Arabas and Orion Poplawski
+-#
+-#  This program is free software; you can redistribute it and/or modify
+-#  it under the terms of the GNU General Public License as published by
+-#  the Free Software Foundation; either version 2 of the License, or
+-#  (at your option) any later version.
+-#
+-# for use of version from:
+-# http://home.comcast.net/~gevenden56/proj/
+-
+-find_library(LIBPROJ4_LIBRARIES NAMES proj4)
+-find_path(LIBPROJ4_INCLUDE_DIR NAMES lib_proj.h)
+-include(FindPackageHandleStandardArgs)
+-find_package_handle_standard_args(LIBPROJ4 DEFAULT_MSG LIBPROJ4_LIBRARIES LIBPROJ4_INCLUDE_DIR)
+-
+-mark_as_advanced(
+-LIBPROJ4_LIBRARIES
+-LIBPROJ4_INCLUDE_DIR
+-)
+diff --git a/CMakeModules/FindLibproj4new.cmake b/CMakeModules/FindLibproj4new.cmake
+deleted file mode 100644
+index d8082763..00000000
+--- a/CMakeModules/FindLibproj4new.cmake
++++ /dev/null
+@@ -1,21 +0,0 @@
+-#
+-# copyright : (c) 2010 Maxime Lenoir, Alain Coulais,
+-#                      Sylwester Arabas and Orion Poplawski
+-#
+-#  This program is free software; you can redistribute it and/or modify
+-#  it under the terms of the GNU General Public License as published by
+-#  the Free Software Foundation; either version 2 of the License, or
+-#  (at your option) any later version.
+-#
+-# for use of version from: 
+-# http://trac.osgeo.org/proj/
+-
+-find_library(LIBPROJ4_LIBRARIES NAMES proj)
+-find_path(LIBPROJ4_INCLUDE_DIR NAMES proj_api.h)
+-include(FindPackageHandleStandardArgs)
+-find_package_handle_standard_args(LIBPROJ4 DEFAULT_MSG LIBPROJ4_LIBRARIES LIBPROJ4_INCLUDE_DIR)
+-
+-mark_as_advanced(
+-LIBPROJ4_LIBRARIES
+-LIBPROJ4_INCLUDE_DIR
+-)
+diff --git a/INSTALL.CMake b/INSTALL.CMake
+index 2b3e9fb0..ab02c9fb 100644
+--- a/INSTALL.CMake
++++ b/INSTALL.CMake
+@@ -70,14 +70,14 @@ of targets and `make edit_cache' to edit cache results
+ examples:
+ mkdir gdl-clang
+ cd gdl-clang
+-cmake -DCMAKE_CXX_COMPILER=clang++  -DCMAKE_BUILD_TYPE=Release -DPYTHON=NO -DCMAKE_CXX_FLAGS_RELEASE=" -Wno-return-type -Wno-switch -Wno-format -O3 " -DPLPLOTDIR="somewhere"  -DLIBPROJ4=YES -DHDF=YES -DUDUNITS=YES  -DUDUNITSDIR=/usr/include/udunits2 -DGLPK=OFF  ../gdl-lastversionfromcvs
++cmake -DCMAKE_CXX_COMPILER=clang++  -DCMAKE_BUILD_TYPE=Release -DPYTHON=NO -DCMAKE_CXX_FLAGS_RELEASE=" -Wno-return-type -Wno-switch -Wno-format -O3 " -DPLPLOTDIR="somewhere"  -DLIBPROJ=YES -DHDF=YES -DUDUNITS=YES  -DUDUNITSDIR=/usr/include/udunits2 -DGLPK=OFF  ../gdl-lastversionfromcvs
+ make -j 4
+ sudo make install
+ 
+ or
+ mkdir gdl-gcc
+ cd gdl-gcc
+-cmake -DCMAKE_BUILD_TYPE=Release -DPYTHON=YES -DCMAKE_CXX_FLAGS_RELEASE=" -Wno-return-type -Wno-switch -Wno-format " -DPLPLOTDIR="somewhere"  -DLIBPROJ4=YES -DHDF=YES -DUDUNITS=YES  -DUDUNITSDIR=/usr/include/udunits2 -DGLPK=OFF ../gdl-lastversionfromcvs
++cmake -DCMAKE_BUILD_TYPE=Release -DPYTHON=YES -DCMAKE_CXX_FLAGS_RELEASE=" -Wno-return-type -Wno-switch -Wno-format " -DPLPLOTDIR="somewhere"  -DLIBPROJ=YES -DHDF=YES -DUDUNITS=YES  -DUDUNITSDIR=/usr/include/udunits2 -DGLPK=OFF ../gdl-lastversionfromcvs
+ make -j 4
+ sudo make install
+ 
+diff --git a/MAP_INSTALL b/MAP_INSTALL
+index ee5341d8..e2df4570 100644
+--- a/MAP_INSTALL
++++ b/MAP_INSTALL
+@@ -9,8 +9,8 @@ To provide map projections support your first need to make sure the
+ proj library available at https://proj.org (formerly proj4.org)
+ It is probably already installed on your computer.
+ 
+-If GDL does not find (lib)proj4 files automatically, use 
+-"-DLIBPROJ4=YES" "-DLIBPROJ4DIR=DIR" as arguments for cmake. 
++If GDL does not find (lib)PROJ files automatically, use 
++"-DLIBPROJ=YES" "-DLIBPROJDIR=DIR" as arguments for cmake. 
+ (were 'DIR' is the location of the compiled library.
+ 
+ ==============================MAP_* COMMANDS in GDL=======================
+@@ -18,13 +18,13 @@ If GDL does not find (lib)proj4 files automatically, use
+ The complete suite of projection-related commands is available with GDL
+ (map_set, map_proj_init, map_horizon, map_continents...). The main difference
+ with IDL is that GDL provides the same interface, but for all of the 150 or so projections
+-of the proj library!
++of the PROJ library!
+ 
+ This is done, at a cost: projections are internally represented in a compact(!) 
+ form in IDL via the !MAP structure. We maintain a minimum compatibility with
+ the original IDL structure, that is, a !MAP structure made with IDL that would
+ be passed 'as is' in GDL using, e.g., a save file, would still "work". The contrary
+-is impossible, as the GDL structure encodes more projections. Proj4 aficionados will quickly
++is impossible, as the GDL structure encodes more projections. PROJ aficionados will quickly
+ realize that they can define projections in GDL as easily as with the 'proj' program.
+ 
+ MAP_CONTINENTS is now implemented in GDL as a procedure using maintly the Natural Earth 
+@@ -51,15 +51,15 @@ see "test_map.pro" in the testsuite/
+ 
+ ============================TWEAKING NEW PROJECTIONS==========================
+ 
+-The file resource/map/projections.ods is made to keep all the info about proj's projections needed by
++The file resource/map/projections.ods is made to keep all the info about PROJ's projections needed by
+ GDL, however GDL procedures use a digested version of this file, "projDefinitions.sav" also present in
+ resource/map/.
+ 
+-projections.ods is the file to update to add more projections when they are available in proj.
+-the format is very simple: proj4 little name, commonly accepted name, one possible alias,
++projections.ods is the file to update to add more projections when they are available in PROJ.
++the format is very simple: PROJ little name, commonly accepted name, one possible alias,
+ hints about projection type, required parameters, accepted parameters.
+ Pay attention to the hints. the general projection type (conic, cylindric ...) is used to guess the horizons.
+-noRot is crucial to avoid problems with the rare projections that crashes when used with proj4's general oblique
++noRot is crucial to avoid problems with the rare projections that crashes when used with PROJ's general oblique
+ transformation (the way GDL copes with non-null center latitude when the projection does not accept lat_0 keyword. aitoff is an example). 
+  
+ Once projections.ods has been updated, make a copy as a CSV file (projections.csv) and use the following commands:
+@@ -71,5 +71,5 @@ done using the "map_proj_auxiliary_read_csv" procedure hidden in the map_proj_in
+ The procedure produces a new "projDefinitions.sav" that must be installed in resource/map/. 
+ The new projections.ods should be reported here (GitHub). the csv files can be deleted.
+ 
+-Incidentally, this projections.ods file is apparently also the one and only place on the Net where all the proj4 projections
++Incidentally, this projections.ods file is apparently also the one and only place on the Net where all the PROJ projections
+ and their associated parameters happens to be available at a glance...
+diff --git a/README b/README
+index 259c209c..fc5e0cfa 100644
+--- a/README
++++ b/README
+@@ -91,7 +91,7 @@ HDF4 *)     ftp://ftp.ncsa.uiuc.edu/HDF/HDF/HDF_Current
+ HDF5        ftp://ftp.ncsa.uiuc.edu/HDF/HDF5/current
+ FFTW        http://www.fftw.org/download.html
+ python      http://www.python.org
+-libproj4    (consult the MAP_INSTALL file)
++PROJ        (consult the MAP_INSTALL file)
+ UDUNITS2    http://www.unidata.ucar.edu/software/udunits/
+ GRIB API    http://www.ecmwf.int/products/data/software/grib_api.html        
+ shapelib    http://shapelib.maptools.org/ (consult the MAP_INSTALL file)
+@@ -256,7 +256,7 @@ DATA FORMATS:
+ MAP PROJECTIONS and GEOPHYSICS:
+ ----------------
+   GDL contains now a complete support to MAP projection,
+-  using the proj library (www.proj.org). Please see MAP_INSTALL file.
++  using the PROJ library (www.proj.org). Please see MAP_INSTALL file.
+   Note that GDL gives access to all proj.org projections instead of the 20 or so of IDL.
+ 
+   GDL uses libshp (shapelib) to implement MAP_CONTINENTS - see MAP_INSTALL.
+diff --git a/README.md b/README.md
+index 2ae9e6e0..08d274b3 100644
+--- a/README.md
++++ b/README.md
+@@ -68,7 +68,7 @@ GDL has numerous dependencies, most of the optional (buth highly recommended):
+ - [HDF4](https://support.hdfgroup.org/products/hdf4/) 
+ - [HDF5](https://support.hdfgroup.org/HDF5/)  
+ - [FFTW](http://www.fftw.org/) 
+-- [PROJ.4](http://proj4.org/)
++- [PROJ](https://proj.org/)
+ - [Shapelib](http://shapelib.maptools.org/) 
+ - [Expat](https://libexpat.github.io/)
+ - [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) 
+diff --git a/config.h.cmake b/config.h.cmake
+index f71c34b1..38a9ee1b 100644
+--- a/config.h.cmake
++++ b/config.h.cmake
+@@ -68,8 +68,8 @@
+ #cmakedefine USE_EXPAT 1
+ #cmakedefine USE_HDF 1
+ #cmakedefine USE_HDF5 1
+-#cmakedefine USE_LIBPROJ4 1
+-#cmakedefine USE_LIBPROJ4_NEW 1
++#cmakedefine USE_LIBPROJ 1
++#define LIBPROJ_MAJOR_VERSION @LIBPROJ_MAJOR_VERSION@
+ #cmakedefine USE_MAGICK 1
+ #cmakedefine USE_MPI 1
+ #cmakedefine USE_NETCDF 1
+diff --git a/doc/gdl.1 b/doc/gdl.1
+index cb734882..52968e98 100644
+--- a/doc/gdl.1
++++ b/doc/gdl.1
+@@ -58,7 +58,7 @@ http://idlastro.gsfc.nasa.gov/idl_html_help/home.html
+ 
+ A vast part of GDL library routines is implemented using open\-source
+ libraries including GSL, plPlot, and optionally: readline, FFTW, Eigen3,
+-ImageMagick, netCDF, HDF4, HDF5, libproj4, UDUNITS\-2, libps and
++ImageMagick, netCDF, HDF4, HDF5, PROJ, UDUNITS\-2, libps and
+ others.
+ .SH OPTIONS
+ .TP
+diff --git a/obsolete/ChangeLog-till-0.9.6 b/obsolete/ChangeLog-till-0.9.6
+index f396ad1b..a72fbca2 100644
+--- a/obsolete/ChangeLog-till-0.9.6
++++ b/obsolete/ChangeLog-till-0.9.6
+@@ -8503,7 +8503,7 @@ GDL 0.9:
+ 
+ 	* src/libinit.cpp, src/libinit_jmg.cpp:
+ 	moving new SA declarations from "libinit.cpp" to "libinit_jmg.cpp" to keep map_* together and protected by
+-	the optionnal block for LIBPROJ4  #if defined(USE_LIBPROJ4)
++	the optionnal block for LIBPROJ4  #if defined(USE_LIBPROJ)
+ 
+ 	* src/pro/ludc.pro:
+ 	LUDC.pro: initial import of a fake one to be able to run the full time_test3 suite
+diff --git a/obsolete/config.h.in b/obsolete/config.h.in
+index 2ba68b46..026ebb2f 100644
+--- a/obsolete/config.h.in
++++ b/obsolete/config.h.in
+@@ -164,10 +164,10 @@
+ #undef USE_HDF5
+ 
+ /* Define if you want to use LIBPROJ4 */
+-#undef USE_LIBPROJ4
++#undef USE_LIBPROJ
+ 
+ /* Define if you want to use new LIBPROJ4 */
+-#undef USE_LIBPROJ4_NEW
++#undef USE_LIBPROJ_NEW
+ 
+ /* Define if you want to use GraphicsMagick */
+ #undef USE_MAGICK
+diff --git a/obsolete/configure.in b/obsolete/configure.in
+index 15014c1f..487bda07 100644
+--- a/obsolete/configure.in
++++ b/obsolete/configure.in
+@@ -778,13 +778,13 @@ if test "x$with_libproj4" != "xno"; then
+     LIBS="$LIBS -lproj4"
+   fi
+ 
+-  AC_CHECK_LIB(proj4, proj_init, [AC_DEFINE([USE_LIBPROJ4], [1], 
++  AC_CHECK_LIB(proj4, proj_init, [AC_DEFINE([USE_LIBPROJ], [1], 
+   [Define if you want to use LIBPROJ4])], [])
+ 
+-  AC_CHECK_LIB(proj4, proj_init, [AC_DEFINE([USE_LIBPROJ4_NEW], [1], 
++  AC_CHECK_LIB(proj4, proj_init, [AC_DEFINE([USE_LIBPROJ_NEW], [1], 
+   [Define if you want to use new LIBPROJ4])], [
+ 
+-     AC_CHECK_LIB(proj4, pj_init, [AC_DEFINE([USE_LIBPROJ4], [1], 
++     AC_CHECK_LIB(proj4, pj_init, [AC_DEFINE([USE_LIBPROJ], [1], 
+      [Define if you want to use LIBPROJ4])], [
+        echo ""
+        echo "Error! LIBPROJ4 is required but was not found"
+diff --git a/obsolete/gshhs.cpp b/obsolete/gshhs.cpp
+index ce31cc91..478575c8 100644
+--- a/obsolete/gshhs.cpp
++++ b/obsolete/gshhs.cpp
+@@ -24,7 +24,7 @@
+ #define USE_GSHHG 1
+ #endif
+ 
+-#if defined(USE_LIBPROJ4)||defined(USE_LIBPROJ4_NEW)
++#if defined(USE_LIBPROJ)||defined(USE_LIBPROJ_NEW)
+ 
+ #include "includefirst.hpp"
+ #include "plotting.hpp"
+@@ -81,7 +81,7 @@ namespace lib {
+       if ( ref == NULL ) {
+ 	e->Throw( "Projection initialization failed." );
+       }
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       LPTYPE idata;
+       XYTYPE odata;
+ #endif
+@@ -344,7 +344,7 @@ namespace lib {
+   }; // class definition
+ 
+   void map_continents( EnvT* e ) {
+-#if defined(USE_LIBPROJ4) || defined(USE_LIBPROJ4_NEW)
++#if defined(USE_LIBPROJ) || defined(USE_LIBPROJ_NEW)
+     map_continents_call map_continents;
+     map_continents.call( e, 0 );
+ #else
+diff --git a/resource/maps/README b/resource/maps/README
+index 52e88af2..e0c40fbb 100644
+--- a/resource/maps/README
++++ b/resource/maps/README
+@@ -1,7 +1,7 @@
+ This folder contains projections.ods and projDefinitions.sav
+ low/ and high/ subfolders contain Shapefiles used by, e.g., MAP_CONTINENTS.
+ 
+-projection.ods describes the projections currently known by proj4 (https://proj4.org/operations/projections) with their short name, full name, peculiarities, required parameters, optional parameters, projection scale.
++projection.ods describes the projections currently known by PROJ (https://proj.org/operations/projections) with their short name, full name, peculiarities, required parameters, optional parameters, projection scale.
+ 
+ One can update projections.ods each time a new projection comes available, and submit a PR for GDL at Github.
+ 
+@@ -20,7 +20,7 @@ the csv.sav file is then converted to adequate structures with  'map_proj_auxili
+ 
+ At that moment, projDefintions.sav has been updated and all the projection related procedures (map_set, etc) are aware of the new projection(s). Of course, these files should be installed properly (by a "make install"), in gnudatalanguage/resource/maps.
+ 
+-It is important to note in the "hints" column the type of projection (for correct clips or horizon) and also if they support rotation of coordinates (some do not and that would probably result in a crash of the proj4 library.)
++It is important to note in the "hints" column the type of projection (for correct clips or horizon) and also if they support rotation of coordinates (some do not and that would probably result in a crash of the PROJ library.)
+ 
+ Specifics for interrupted projections (where are the splits) must be added in map_proj_init.pro and map_horizon.pro (nothing is ever easy). 
+ 
+diff --git a/src/exists_fun.cpp b/src/exists_fun.cpp
+index 0dbc8eaa..54c5368b 100644
+--- a/src/exists_fun.cpp
++++ b/src/exists_fun.cpp
+@@ -160,24 +160,15 @@ namespace lib {
+ #endif
+   }
+ 
+-  BaseGDL* proj4_exists( EnvT* e )
++  BaseGDL* proj_exists( EnvT* e )
+   {
+-#if defined(USE_LIBPROJ4)
++#if defined(USE_LIBPROJ)
+     return new DIntGDL(1);
+ #else
+     return new DIntGDL(0);
+ #endif
+   }
+   
+-  BaseGDL* proj4new_exists( EnvT* e )
+-  {
+-#if defined(USE_LIBPROJ4_NEW)
+-    return new DIntGDL(1);
+-#else
+-    return new DIntGDL(0);
+-#endif
+-  }
+-
+   BaseGDL* python_exists( EnvT* e )
+   {
+ #if defined(USE_PYTHON)
+diff --git a/src/exists_fun.hpp b/src/exists_fun.hpp
+index c927bb45..8f811b48 100644
+--- a/src/exists_fun.hpp
++++ b/src/exists_fun.hpp
+@@ -32,8 +32,7 @@ namespace lib {
+  BaseGDL* ncdf4_exists(EnvT *e);
+  BaseGDL* openmp_exists(EnvT *e);
+  BaseGDL* pnglib_exists(EnvT *e);
+- BaseGDL* proj4_exists(EnvT *e);
+- BaseGDL* proj4new_exists(EnvT *e);
++ BaseGDL* proj_exists(EnvT *e);
+  BaseGDL* pslib_exists(EnvT *e);
+  BaseGDL* python_exists(EnvT *e);
+  BaseGDL* tiff_exists(EnvT *e);
+diff --git a/src/libinit_exists.cpp b/src/libinit_exists.cpp
+index 15d23edd..24f6bdd7 100644
+--- a/src/libinit_exists.cpp
++++ b/src/libinit_exists.cpp
+@@ -62,8 +62,7 @@ void LibInit_exists()
+   new DLibFunRetNew(lib::ncdf4_exists,string("NCDF4_EXISTS"));
+   new DLibFunRetNew(lib::openmp_exists,string("OPENMP_EXISTS"));
+   new DLibFunRetNew(lib::pnglib_exists,string("PNGLIB_EXISTS"));
+-  new DLibFunRetNew(lib::proj4_exists,string("PROJ4_EXISTS"));
+-  new DLibFunRetNew(lib::proj4new_exists,string("PROJ4NEW_EXISTS"));
++  new DLibFunRetNew(lib::proj_exists,string("PROJ_EXISTS"));
+   new DLibFunRetNew(lib::python_exists,string("PYTHON_EXISTS"));
+   new DLibFunRetNew(lib::tiff_exists,string("TIFF_EXISTS"));
+   new DLibFunRetNew(lib::geotiff_exists,string("GEOTIFF_EXISTS"));
+diff --git a/src/libinit_jmg.cpp b/src/libinit_jmg.cpp
+index 7375915e..70044fd1 100644
+--- a/src/libinit_jmg.cpp
++++ b/src/libinit_jmg.cpp
+@@ -143,7 +143,7 @@ void LibInit_jmg()
+   const string macharKey[]={"DOUBLE",KLISTEND};
+   new DLibFunRetNew(lib::machar_fun,string("MACHAR"),0,macharKey);
+ 
+-#if defined(USE_LIBPROJ4)||defined(USE_LIBPROJ4_NEW)
++#if defined(USE_LIBPROJ)
+   const string map_proj_forwardKey[]={"MAP_STRUCTURE","RADIANS","POLYGONS","POLYLINES","CONNECTIVITY","FILL",KLISTEND};  //WARNING FIXED ORDER for GetMapAsMapStructureKeyword()
+   new DLibFunRetNew(lib::map_proj_forward_fun,
+ 	      string("MAP_PROJ_FORWARD"),2,map_proj_forwardKey,NULL);
+diff --git a/src/plotting.cpp b/src/plotting.cpp
+index a984ca61..895ea8a7 100644
+--- a/src/plotting.cpp
++++ b/src/plotting.cpp
+@@ -1620,7 +1620,7 @@ namespace lib
+     }    
+     SetUsym(n, do_fill, x, y, do_color, thecolor, do_thick, thethick);
+   }
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+ void GDLgrProjectedPolygonPlot( GDLGStream * a, PROJTYPE ref, DStructGDL* map,
+   DDoubleGDL *lons_donottouch, DDoubleGDL *lats_donottouch, bool isRadians, bool const doFill, DLongGDL *conn ) {
+     DDoubleGDL *lons,*lats;
+diff --git a/src/plotting.hpp b/src/plotting.hpp
+index f723fe83..8863fe86 100644
+--- a/src/plotting.hpp
++++ b/src/plotting.hpp
+@@ -61,7 +61,7 @@
+ #include "graphicsdevice.hpp"
+ #include "initsysvar.hpp"
+ 
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+ #include "projections.hpp"
+ #endif 
+ 
+@@ -207,7 +207,7 @@ namespace lib {
+   // Map stuff
+   void get_mapset(bool &mapset);
+   void set_mapset(bool mapset);
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+   void GDLgrProjectedPolygonPlot(GDLGStream * a, PROJTYPE ref, DStructGDL* map, 
+ 				 DDoubleGDL *lons, DDoubleGDL *lats, bool isRadians,
+ 				 bool const doFill, DLongGDL *conn=NULL);
+diff --git a/src/plotting_axis.cpp b/src/plotting_axis.cpp
+index 35bd92aa..8ad7e701 100644
+--- a/src/plotting_axis.cpp
++++ b/src/plotting_axis.cpp
+@@ -229,7 +229,7 @@ namespace lib {
+     else //DATA
+     {
+ 
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       // Map Stuff (xtype = 3)
+       LPTYPE idata;
+       XYTYPE odata;
+@@ -243,11 +243,19 @@ namespace lib {
+         {
+           e->Throw("Projection initialization failed.");
+         }
++#if PROJ_VERSION_MAJOR >= 5
++        idata.lam=xVal * DEG_TO_RAD;
++        idata.phi=yVal * DEG_TO_RAD;
++        odata=protect_proj_fwd_lp(idata, ref);
++        xVal=odata.x;
++        yVal=odata.y;
++#else
+         idata.u=xVal * DEG_TO_RAD;
+         idata.v=yVal * DEG_TO_RAD;
+         odata=PJ_FWD(idata, ref);
+         xVal=odata.u;
+         yVal=odata.v;
++#endif
+         DDouble *sx, *sy;
+         GetSFromPlotStructs( &sx, &sy );
+ 
+diff --git a/src/plotting_contour.cpp b/src/plotting_contour.cpp
+index c5cf328b..616e4128 100644
+--- a/src/plotting_contour.cpp
++++ b/src/plotting_contour.cpp
+@@ -340,7 +340,7 @@ namespace lib
+ 
+       //projection: would work only with 2D X and Y.
+       bool mapSet=false;
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       static LPTYPE idata;
+       static XYTYPE odata;
+       get_mapset ( mapSet );
+@@ -672,18 +672,26 @@ namespace lib
+           //This is going to work in a very restricted case.
+           //One MUST instead plot the contours as for map_continents, i.e., using gdlPolygonPlot.
+           //this will be feasible as soon as we use our  own contour-making algorithm, not plplot's.
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+ 	      if ( mapSet )
+ 		{
+ 		  for ( SizeT i=0; i<xEl; i++ )
+ 		    {
+ 		      for ( SizeT j=0; j<yEl; j++ )
+ 			{
++#if LIBPROJ_MAJOR_VERSION >= 5
++			  idata.lam= cgrid2.xg[i][j] * DEG_TO_RAD;
++			  idata.phi= cgrid2.yg[i][j] * DEG_TO_RAD;
++			  odata=protect_proj_fwd_lp( idata, ref );
++			  cgrid2.xg[i][j]=odata.x;
++			  cgrid2.yg[i][j]=odata.y;
++#else
+ 			  idata.u= cgrid2.xg[i][j] * DEG_TO_RAD;
+ 			  idata.v= cgrid2.yg[i][j] * DEG_TO_RAD;
+ 			  odata=PJ_FWD ( idata, ref );
+ 			  cgrid2.xg[i][j]=odata.u;
+ 			  cgrid2.yg[i][j]=odata.v;
++#endif
+ 			}
+ 		    }
+ 		}
+diff --git a/src/plotting_convert_coord.cpp b/src/plotting_convert_coord.cpp
+index e7f91818..a62aca2e 100644
+--- a/src/plotting_convert_coord.cpp
++++ b/src/plotting_convert_coord.cpp
+@@ -106,7 +106,7 @@ namespace lib {
+     
+     //projection?
+       bool mapSet=false;
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       static LPTYPE idata;
+       static XYTYPE odata;
+       get_mapset ( mapSet );
+@@ -122,7 +122,7 @@ namespace lib {
+     {
+       case DATA:
+         // to u,v
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       if ( mapSet )
+       {
+ #ifdef PROJ_IS_THREADSAFE
+@@ -131,11 +131,19 @@ namespace lib {
+ #pragma omp for private(idata,odata)
+ #endif
+             for (SizeT i = 0; i < nrows; i++) {
++#if LIBPROJ_MAJOR_VERSION >= 5
++              idata.lam = (*xVal)[i] * DEG_TO_RAD;
++              idata.phi = (*yVal)[i] * DEG_TO_RAD;
++              odata = protect_proj_fwd_lp(idata, ref);
++              (*xVal)[i] = odata.x;
++              (*yVal)[i] = odata.y;
++#else
+               idata.u = (*xVal)[i] * DEG_TO_RAD;
+               idata.v = (*yVal)[i] * DEG_TO_RAD;
+               odata = PJ_FWD(idata, ref);
+               (*xVal)[i] = odata.u;
+               (*yVal)[i] = odata.v;
++#endif
+             }
+ #ifdef PROJ_IS_THREADSAFE
+           }
+@@ -183,7 +191,7 @@ namespace lib {
+       }
+       
+       // from u,v
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       if ( mapSet )
+       {
+ #ifdef PROJ_IS_THREADSAFE
+@@ -192,11 +200,19 @@ namespace lib {
+ #pragma omp for private(idata,odata)
+ #endif
+             for (SizeT i = 0; i < nrows; i++) {
++#if LIBPROJ_MAJOR_VERSION >= 5
++              odata.x = (*xVal)[i];
++              odata.y = (*yVal)[i];
++              idata = protect_proj_inv_xy(odata, ref);
++              (*xVal)[i] = idata.lam * RAD_TO_DEG;
++              (*yVal)[i] = idata.phi * RAD_TO_DEG;
++#else
+               odata.u = (*xVal)[i];
+               odata.v = (*yVal)[i];
+               idata = PJ_INV(odata, ref);
+               (*xVal)[i] = idata.u * RAD_TO_DEG;
+               (*yVal)[i] = idata.v * RAD_TO_DEG;
++#endif
+             }
+ #ifdef PROJ_IS_THREADSAFE
+           }
+diff --git a/src/plotting_cursor.cpp b/src/plotting_cursor.cpp
+index 5a1b418b..61d0f0e0 100644
+--- a/src/plotting_cursor.cpp
++++ b/src/plotting_cursor.cpp
+@@ -82,17 +82,28 @@ void tvcrs( EnvT* e)
+     get_mapset(mapSet);
+     if (mapSet)
+     {
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       if (ref == NULL) e->Throw("Projection initialization failed.");
+       LPTYPE idataN;
++#if LIBPROJ_MAJOR_VERSION >= 5
++      idataN.lam = tempx* DEG_TO_RAD;
++      idataN.phi = tempy* DEG_TO_RAD;
++      XYTYPE odata = protect_proj_fwd_lp(idataN, ref);
++#else
+       idataN.u = tempx* DEG_TO_RAD;
+       idataN.v = tempy* DEG_TO_RAD;
+       XYTYPE odata = PJ_FWD(idataN, ref);
++#endif
+       // norm to world invalid since projection. use !x.s and !y.s directly
+       DDouble *sx, *sy;
+       GetSFromPlotStructs( &sx, &sy );
++#if LIBPROJ_MAJOR_VERSION >= 5
++      tempx= sx[0] +odata.x * sx[1];
++      tempy= sy[0] +odata.y * sy[1]; //normed values
++#else
+       tempx= sx[0] +odata.u * sx[1];
+       tempy= sy[0] +odata.v * sy[1]; //normed values
++#endif
+       actStream->NormedDeviceToDevice(tempx,tempy,ix,iy);
+       DLong iix=ix;
+       DLong iiy=iy;
+@@ -217,31 +228,44 @@ void cursor(EnvT* e){
+     else
+     { // default (/data)
+       DDouble tempx,tempy;
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       bool mapSet = false;
+       get_mapset(mapSet);
+       if (!mapSet)
+       {
+ #endif
+         actStream->NormToWorld((DDouble)gin.dX, (DDouble)gin.dY, tempx, tempy);
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       }
+       else
+       {
+         ref = map_init();
+         if (ref == NULL) e->Throw("Projection initialization failed.");
+         XYTYPE idata, idataN;
++#if LIBPROJ_MAJOR_VERSION >= 5
++        idataN.x = gin.dX;
++        idataN.y = gin.dY;
++#else
+         idataN.u = gin.dX;
+         idataN.v = gin.dY;
++#endif
+         DDouble *sx, *sy;
+         // norm to world invalid since projection. use !x.s and !y.s directly
+         // was: actStream->NormToWorld(idataN.u, idataN.v, idata.u, idata.v);
+         GetSFromPlotStructs( &sx, &sy );
++#if LIBPROJ_MAJOR_VERSION >= 5
++        idata.x = (idataN.x - sx[0])/sx[1];
++        idata.y = (idataN.y - sy[0])/sy[1];
++        LPTYPE odata = protect_proj_inv_xy(idata, ref);
++        tempx = odata.lam * RAD_TO_DEG;
++        tempy = odata.phi * RAD_TO_DEG;
++#else
+         idata.u = (idataN.u - sx[0])/sx[1];
+         idata.v = (idataN.v - sy[0])/sy[1];
+         LPTYPE odata = PJ_INV(idata, ref);
+         tempx = odata.u * RAD_TO_DEG;
+         tempy = odata.v * RAD_TO_DEG;
++#endif
+       }
+ #endif
+       bool xLog, yLog;
+diff --git a/src/plotting_image.cpp b/src/plotting_image.cpp
+index 6d709966..92eca9ba 100644
+--- a/src/plotting_image.cpp
++++ b/src/plotting_image.cpp
+@@ -167,7 +167,7 @@ namespace lib {
+ 
+       bool mapSet = false;
+       
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       // Map Stuff (xtype = 3)
+ 
+       get_mapset(mapSet);
+diff --git a/src/plotting_oplot.cpp b/src/plotting_oplot.cpp
+index 06282e84..f305fa5f 100644
+--- a/src/plotting_oplot.cpp
++++ b/src/plotting_oplot.cpp
+@@ -203,7 +203,7 @@ private:
+     actStream->setSymbolSizeConversionFactors();
+ 
+     bool mapSet=false;
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+     get_mapset(mapSet);
+     if ( mapSet )
+     {
+@@ -272,7 +272,7 @@ private:
+         }
+         actStream->stransform(gdl3dTo2dTransform, &Data3d);
+     }
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+         if ( mapSet && psym < 1) {
+           GDLgrProjectedPolygonPlot(actStream, ref, NULL, xVal, yVal, false, false, NULL);
+           psym=-psym;
+diff --git a/src/plotting_plots.cpp b/src/plotting_plots.cpp
+index bf09f15b..0cf961b7 100644
+--- a/src/plotting_plots.cpp
++++ b/src/plotting_plots.cpp
+@@ -240,7 +240,7 @@ namespace lib
+       restorelayout=true;
+ 
+       mapSet=false;
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       get_mapset(mapSet);
+       mapSet=(mapSet && coordinateSystem==DATA);
+       if ( mapSet )
+@@ -400,7 +400,7 @@ namespace lib
+         
+         ///TODO: Get proper USerSymSize in 3D.
+         
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+         if ( mapSet && psym < 1) {
+           GDLgrProjectedPolygonPlot(actStream, ref, NULL, xValou, yValou, false, false, NULL);
+           psym=-psym;
+diff --git a/src/plotting_polyfill.cpp b/src/plotting_polyfill.cpp
+index efd685fc..c01a16ce 100644
+--- a/src/plotting_polyfill.cpp
++++ b/src/plotting_polyfill.cpp
+@@ -206,7 +206,7 @@ namespace lib
+       restorelayout=true;
+ 
+       mapSet=false;
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       get_mapset(mapSet);
+       mapSet=(mapSet && coordinateSystem==DATA);
+       if ( mapSet )
+@@ -380,7 +380,7 @@ namespace lib
+         
+         ///TODO: Get proper USerSymSize in 3D.
+         
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+         if (mapSet) 
+           GDLgrProjectedPolygonPlot(actStream, ref, NULL, xVal, yVal, false, true, NULL);
+         else  actStream->fill(xEl, static_cast<PLFLT*>(&(*xValou)[0]), static_cast<PLFLT*>(&(*yValou)[0]));
+diff --git a/src/plotting_xyouts.cpp b/src/plotting_xyouts.cpp
+index 3198147e..41142b42 100644
+--- a/src/plotting_xyouts.cpp
++++ b/src/plotting_xyouts.cpp
+@@ -206,7 +206,7 @@ namespace lib
+       restorelayout=true;
+       
+       bool mapSet=false;
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+       get_mapset(mapSet);
+       mapSet=(mapSet && coordinateSystem==DATA);
+       if ( mapSet )
+@@ -371,16 +371,24 @@ namespace lib
+         x=static_cast<PLFLT>((*xVal)[i%xVal->N_Elements ( )]); //insure even 1 parameter, string array
+         y=static_cast<PLFLT>((*yVal)[i%xVal->N_Elements ( )]);
+ 
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+         if ( mapSet )
+         {
+           LPTYPE idata;
+           XYTYPE odata;
++#if LIBPROJ_MAJOR_VERSION >= 5
++          idata.lam=x * DEG_TO_RAD;
++          idata.phi=y * DEG_TO_RAD;
++          odata=protect_proj_fwd_lp(idata, ref);
++          x=odata.x;
++          y=odata.y;
++#else
+           idata.u=x * DEG_TO_RAD;
+           idata.v=y * DEG_TO_RAD;
+           odata=PJ_FWD(idata, ref);
+           x=odata.u;
+           y=odata.v;
++#endif
+         }
+ #endif
+  
+diff --git a/src/pro/map/gdl_map_proj_init_common.pro b/src/pro/map/gdl_map_proj_init_common.pro
+index a0fb3546..845d8218 100644
+--- a/src/pro/map/gdl_map_proj_init_common.pro
++++ b/src/pro/map/gdl_map_proj_init_common.pro
+@@ -1,10 +1,10 @@
+ ; the purpose of all this is to translate IDL-like commands to define
+-; a specific projection to the osgeo/proj4 equivalent commandline,
++; a specific projection to the osgeo/PROJ equivalent commandline,
+ ; e.g., translate
+ ; proj=map_proj_init(127,CENTER_LON=28.1336,FALSE_EASTING=-70,FALSE_NORTHING=12,SPHERE_RADIUS=1)
+ ; into
+ ; "+proj=hammer +R=1 +lon_0=28.1336 +x_0=-70 +y_0=12"
+-; passing this expression to proj4 will set up all the projections
++; passing this expression to PROJ will set up all the projections
+ ; parameters and thus the coordinates transformation.
+ ; This is not finished however. One has to define ancillary values
+ ; such as the limits in lat,lon  and u,v of the projection and the
+@@ -28,8 +28,8 @@ doInitMapProjectionCommon=1b;
+ ; find either system or (eventually) current file. impotant to keep
+ ; this as is for easy use of program updating the file projection definition.
+ if file_test("projDefinitions.sav") then restore,"projDefinitions.sav" else begin
+-proj4definitionFile=FILEPATH("projDefinitions.sav", ROOT_DIR=!GDL_MAPS_DIR)
+-restore,proj4definitionFile
++projdefinitionFile=FILEPATH("projDefinitions.sav", ROOT_DIR=!GDL_MAPS_DIR)
++restore,projdefinitionFile
+ endelse
+ 
+ ; create compressed uppercase namestring for easy comparison:
+@@ -46,7 +46,7 @@ ellipsoid_proj=['clrk66','clrk80','bessel','new_intl','intl','WGS72','evrst30','
+ ; the options that need to be translated
+ ;; IS_ZONES=  +n=4 +m=  zone num see https://modis-land.gsfc.nasa.gov/MODLAND_grid.html
+ ;; IS_JUSTIFY=i++              ;see above
+-;; SOM_INCLINATION=i++         ; unknown with proj4
++;; SOM_INCLINATION=i++         ; unknown with PROJ
+ ;; SOM_LONGITUDE=i++           ;
+ ;; SOM_PERIOD=i++              ;
+ ;; SOM_RATIO=i++               ;
+@@ -78,7 +78,7 @@ dictionary=hash($
+ "SOM_LANDSAT_PATH","+path=",$
+ "OEA_SHAPEM","+m=",$
+ "OEA_SHAPEN","+n=",$
+-"OEA_ANGLE","+theta=",$ ; and all the proj4 equivalent keywords:
++"OEA_ANGLE","+theta=",$ ; and all the PROJ equivalent keywords:
+ "LAT_1","+lat_1=",$
+ "LON_1","+lon_1=",$
+ "LAT_2","+lat_2=",$
+diff --git a/src/pro/map/gdl_set_map_limits.pro b/src/pro/map/gdl_set_map_limits.pro
+index 42a569a1..500ef671 100644
+--- a/src/pro/map/gdl_set_map_limits.pro
++++ b/src/pro/map/gdl_set_map_limits.pro
+@@ -28,8 +28,8 @@ pro gdl_set_map_limits, myMap, limits
+ ; range of values
+        lonrange = lonmax - lonmin
+        latrange = latmax - latmin
+-; is there another way (proj4) to get ranges except brute force on a grid of possible points?
+-; epsilon useful as projections are not precise (see #define EPS in proj4 c files: apparently < 1e-6)
++; is there another way (PROJ) to get ranges except brute force on a grid of possible points?
++; epsilon useful as projections are not precise (see #define EPS in PROJ c files: apparently < 1e-6)
+        epsx = 1d-6*ABS(lonrange)
+        epsy = 1d-6*ABS(latrange)
+        
+diff --git a/src/pro/map/map_adjlon.pro b/src/pro/map/map_adjlon.pro
+index f680278f..42ae6e3f 100644
+--- a/src/pro/map/map_adjlon.pro
++++ b/src/pro/map/map_adjlon.pro
+@@ -1,6 +1,6 @@
+ ; ancillary procedure for MAP_* .
+ ; insures lon is always btw -180 and 180
+-; based on proj4 source file of same name.
++; based on PROJ source file of same name.
+ pro map_adjlon,lon
+   TWOPI=360d
+   ONEPI=180d
+diff --git a/src/pro/map/map_proj_info.pro b/src/pro/map/map_proj_info.pro
+index 0aeda6de..79db1ba9 100644
+--- a/src/pro/map/map_proj_info.pro
++++ b/src/pro/map/map_proj_info.pro
+@@ -32,8 +32,8 @@ p4name=p4n ; special for GDL
+    if rindex lt 1 or rindex gt nproj then message, 'Projection number must be within range of 1 to'+ strtrim(nproj-1,2)
+ 
+    name = proj[index].fullname
+-   p4n=proj[index].proj4name
+-   ; need to keep ony the real proj4 name if perchance there was additional commands already set in the name
++   p4n=proj[index].projname
++   ; need to keep ony the real PROJ name if perchance there was additional commands already set in the name
+    p4n=(strsplit(strtrim(p4n,2),' ',/extract))[0] 
+    property=proj_properties[index]
+    conic=(property.CONIC eq 1 and property.ELL eq 0 and property.SPH eq 0) ; only true conics (ex: not Bonne)
+diff --git a/src/pro/map/map_proj_init.pro b/src/pro/map/map_proj_init.pro
+index 566f2d88..2bb75851 100644
+--- a/src/pro/map/map_proj_init.pro
++++ b/src/pro/map/map_proj_init.pro
+@@ -1,7 +1,7 @@
+ ; MAP_PROJ_INIT
+ ; Documentation in progress
+ ; equivalent to the original procedure, except that instead of 40 or
+-; so projections here we give access to all the proj4 projections (120+)
++; so projections here we give access to all the PROJ projections (120+)
+ ; Note: the structure of the resulting mapstruct is not compatible with
+ ; IDL, i.e., one cannot use a GDL-defined mapstruct in IDL (if passed
+ ; within a save file), (but one can use an IDL-defined mapstruct in GDL).
+@@ -53,8 +53,8 @@ pro gdl_compute_map_limits, myMap
+   lonmin=-180.0d & lonmax=180.0d & latmin=-90.0d & latmax=90.0d
+   lonrange = lonmax - lonmin
+   latrange = latmax - latmin
+-; is there another way (proj4) to get ranges except brute force on a grid of possible points?
+-; epsilon useful as projections are not precise (see #define EPS in proj4 c files: apparently < 1e-6)
++; is there another way (PROJ) to get ranges except brute force on a grid of possible points?
++; epsilon useful as projections are not precise (see #define EPS in PROJ c files: apparently < 1e-6)
+   epsx = 1d-6*ABS(lonrange)
+   epsy = 1d-6*ABS(latrange)
+ 
+@@ -103,7 +103,7 @@ function map_proj_init, pindex, p4number=p4number, relaxed=relaxed, rotation=rot
+     ON_ERROR, 2  ; return to caller
+ 
+ ; NOTE: We are always "relaxed".
+-; p4num bool indicates pindex is a number and refers to the internal proj4 table of proj4 properties line and not an IDL number for which an equivalent must be found 
++; p4num bool indicates pindex is a number and refers to the internal PROJ table of PROJ properties line and not an IDL number for which an equivalent must be found 
+ 
+ ; define limit
+ if n_elements(passed_limit) lt 4 then limit=dblarr(4) else limit=double(passed_limit)
+@@ -121,7 +121,7 @@ nproj=n_elements(proj)
+ sindex=pindex
+ ; find projection index, by index:
+ if (N_ELEMENTS(pindex) le 0) then begin 
+-   index=where(proj.proj4name eq 'stere') ; stereo is default
++   index=where(proj.projname eq 'stere') ; stereo is default
+ ; this is a drawback: projection number is always an IDL number 
+ endif else if (SIZE(pindex, /TYPE) ne 7) then begin
+    if keyword_set(p4number) then sindex=proj[pindex].fullname else sindex=idl_ids[pindex]
+@@ -135,9 +135,9 @@ w = strcmp(idl_ids,shortname,strlen(shortname)) & count=total(w)
+ if count gt 1 then message, /noname, 'Ambiguous Projection abbreviation: ' + sindex
+ if count eq 1 then begin
+    name4=idl_equiv[(where(w eq 1))[0]]
+-   index=where(proj.proj4name eq name4, count) & if count eq 0 then message, 'Projection ' + sindex + ' apparently does not exist in Proj4 library, fixme.' 
++   index=where(proj.projname eq name4, count) & if count eq 0 then message, 'Projection ' + sindex + ' apparently does not exist in PROJ library, fixme.' 
+ endif else begin
+-   ; next, proj4 projections
++   ; next, PROJ projections
+    w = strcmp(compressed_ids1,shortname,strlen(shortname)) & count=total(w)
+    if count eq 0 then begin w = strcmp(compressed_ids2,shortname,strlen(shortname)) & count=total(w) & end ; alternative
+    if count eq 0 then message, /noname, 'Invalid Projection name: ' + sindex
+@@ -158,9 +158,9 @@ endelse
+ if index ge nproj then message, /noname,   'Invalid Projection number: ' + strtrim(sindex)
+ 
+ ; useful strings:
+-; get base proj4 name!
+-p4n=proj[index].proj4name
+-; need to keep ony the real proj4 name if perchance there was additional commands already set in the name
++; get base PROJ name!
++p4n=proj[index].projname
++; need to keep ony the real PROJ name if perchance there was additional commands already set in the name
+ p4n=(strsplit(strtrim(p4n,2),' ',/extract))[0] 
+ 
+ ; required parameters, filled.
+@@ -226,8 +226,8 @@ if n_elements(extra) gt 0 then begin
+       w = strcmp(possible_params,passed_params[i],strlen(passed_params[i])) & count=total(w) & j=(where(w eq 1))[0]
+       if count eq 1 then begin
+          passed_params[i]=possible_params[j] ; make passed_params normalized.
+-         proj4kw=dictionary[possible_params[j]]
+-         list_of_passed_params= (n_elements(list_of_passed_params) eq 0)? proj4kw : [list_of_passed_params,proj4kw]
++         projkw=dictionary[possible_params[j]]
++         list_of_passed_params= (n_elements(list_of_passed_params) eq 0)? projkw : [list_of_passed_params,projkw]
+          passed_values= (n_elements(passed_values) eq 0)? strtrim(extra.(i),2) : [passed_values,strtrim(extra.(i),2)]
+       endif else if count gt 1 then message,"Ambiguous keyword abbreviation: "+passed_params[i]
+    endfor
+@@ -237,7 +237,7 @@ endif
+ if n_passed gt 0 and n_passed ge n_required then begin
+ ; do we have required values for projection?
+    if n_required gt 0 then begin
+-; needed params: get individual proj4 keywords, find if equivalent is
++; needed params: get individual PROJ keywords, find if equivalent is
+ ; existing in passed_params. Based on equivalence list above.
+ 
+ ; sort in alphabetic order
+@@ -295,17 +295,17 @@ if n_passed gt 0 and n_passed ge n_required then begin
+       endif
+    endif
+ endif else begin                ; or not...
+-   if strlen(required_opt) gt 0 then  message, "Absent (proj4) parameter(s): "+required_opt
++   if strlen(required_opt) gt 0 then  message, "Absent (PROJ) parameter(s): "+required_opt
+ endelse
+ 
+ ; main string (will need special treatment for rotation etc.)
+-proj4command="+proj="+proj[index].proj4name+" "
++projcommand="+proj="+proj[index].projname+" "
+ 
+-proj4options=filled_required_parameter_string+filled_optional_parameter_string
++projoptions=filled_required_parameter_string+filled_optional_parameter_string
+ 
+-; ok, proj4options contains all relevant AND permitted parameters. Try to assemble
++; ok, projoptions contains all relevant AND permitted parameters. Try to assemble
+ ; all these into valid elements of !map. Up to now we have only
+-; translated from idl to proj4. now is time to interpret things a bit.
++; translated from idl to PROJ. now is time to interpret things a bit.
+ 
+ ; define useful defaults values
+ p0lon = 0d                      ; center longitude
+@@ -317,9 +317,9 @@ satheight=0
+ alpha=90 ; 
+ lonc=0 ; see f.e. oblique mercator in proj.org 
+ 
+-if strlen(proj4options) gt 0 then begin
+-; convert proj4options to hash
+-   s=strsplit(strtrim(proj4options,2),"= ",/extract)
++if strlen(projoptions) gt 0 then begin
++; convert projoptions to hash
++   s=strsplit(strtrim(projoptions,2),"= ",/extract)
+    x=where(strpos(s,'+') eq 0, comp=y)
+    a=hash(s[x],s[y])
+ ; if a contains "+lon_0" this is p0lon, etc.
+@@ -350,14 +350,14 @@ if (rotPossible) then begin
+       if count gt 0 then begin  ; try general oblique
+          p0lat=extra.(w[0])
+          if p0lat ne 0 then begin 
+-            if p0lat gt 89.9 then p0lat = 89.9 ;take some precautions as PROJ.4 is not protected!!! 
++            if p0lat gt 89.9 then p0lat = 89.9 ;take some precautions as PROJ is not protected!!! 
+             if p0lat lt -89.9 then p0lat = -89.9 ;
+             ; compute pole of transformed projection
+-            proj4command="+proj=ob_tran +o_proj="+proj[index].proj4name
+-            ; remove '+lat_0=xxx +lon_0=xxx' from proj4options
+-            a=strsplit(proj4options,"\+lat_0=[0-9.]*",/regex,/extract)
+-            a=strsplit(proj4options,"\+lon_0=[0-9.]*",/regex,/extract)
+-            proj4options=strjoin(a)
++            projcommand="+proj=ob_tran +o_proj="+proj[index].projname
++            ; remove '+lat_0=xxx +lon_0=xxx' from projoptions
++            a=strsplit(projoptions,"\+lat_0=[0-9.]*",/regex,/extract)
++            a=strsplit(projoptions,"\+lon_0=[0-9.]*",/regex,/extract)
++            projoptions=strjoin(a)
+          endif else rotPossible=0B
+       endif
+    endif else rotPossible=0B
+@@ -372,7 +372,7 @@ if noRot eq 1 then p0lat=0 else begin
+       if count gt 0 then begin
+          val=passed_values[w[0]]
+          p0lat=double(val)
+-         proj4options+=" +lat_0="+val
++         projoptions+=" +lat_0="+val
+       endif
+    endif
+ endelse
+@@ -433,8 +433,8 @@ myMap.pole=[pole_lon*deg2rad,pole_lat*deg2rad,psinlat,pcoslat,xyzpole] ; need to
+ ; now that pole is computed correctly, add pole position to
+ ; generalized oblique
+ if rotPossible then begin
+-   proj4command+=" +o_alpha=90 +o_lat_c="+strtrim(p0lat,2)+" +o_lon_c=180"
+-   if (p0lat gt 0) then proj4command+=" +lon_0="+strtrim(p0lon,2) else  proj4command+=" +lon_0="+strtrim(180+p0lon,2)
++   projcommand+=" +o_alpha=90 +o_lat_c="+strtrim(p0lat,2)+" +o_lon_c=180"
++   if (p0lat gt 0) then projcommand+=" +lon_0="+strtrim(p0lon,2) else  projcommand+=" +lon_0="+strtrim(180+p0lon,2)
+ endif
+ 
+ 
+@@ -513,7 +513,7 @@ if (interrupted or p4n eq 'bipc' or p4n eq "bertin1953" or p4n eq "qsc" ) then b
+           theta = deg2rad * splits[i]
+           MAP_CLIP_SET, map=myMap, SPLIT=[splits[i], 0, -sin(theta), cos(theta), 0., 0.]
+        endfor 
+-       myMap.up_flags=1000 ; redefine "epsilon" due to precision problems in proj4!!!!
++       myMap.up_flags=1000 ; redefine "epsilon" due to precision problems in PROJ!!!!
+ 
+          END
+ 
+@@ -537,7 +537,7 @@ if (interrupted or p4n eq 'bipc' or p4n eq "bertin1953" or p4n eq "qsc" ) then b
+        endfor 
+        map_clip_set, map=myMap, SPLIT=[0,90,0,0,1d,-2d/3d]
+        map_clip_set, map=myMap, SPLIT=[0,-90,0,0,-1d,-2d/3d]
+-       myMap.up_flags=10000 ; redefine "epsilon" due to precision problems in proj4!!!!
++       myMap.up_flags=10000 ; redefine "epsilon" due to precision problems in PROJ!!!!
+     END
+ 
+     "healpix": BEGIN
+@@ -547,7 +547,7 @@ if (interrupted or p4n eq 'bipc' or p4n eq "bertin1953" or p4n eq "qsc" ) then b
+           theta = deg2rad * splits[i]
+           MAP_CLIP_SET, map=myMap, SPLIT=[splits[i], 0, -sin(theta), cos(theta), 0., 0.]
+        endfor 
+-       myMap.up_flags=10000 ; redefine "epsilon" due to precision problems in proj4!!!!
++       myMap.up_flags=10000 ; redefine "epsilon" due to precision problems in PROJ!!!!
+     END
+  ELSE: print,"Interrupted projection "+p4n+" is not yet properly taken into account in map_proj_init, please FIXME!"
+  endcase
+@@ -597,10 +597,10 @@ endif else begin ; not interrupted
+    endelse                      ; end azim projs
+ endelse                         ; not interrupted
+ 
+-if ellipticalusagerequired then proj4Options+=' +ellps=GRS80 '
+-if south then proj4Options+=' +south'
++if ellipticalusagerequired then projOptions+=' +ellps=GRS80 '
++if south then projOptions+=' +south'
+ ; finalize projection to be used in finding limits:
+-myMap.up_name=proj4command+" "+proj4Options
++myMap.up_name=projcommand+" "+projOptions
+ 
+ if (hasDefinedEll) then begin
+ myMap.up_name+=" +a="+strtrim(SEMIMAJOR_AXIS[0],2)+" +b="+strtrim(SEMIMINOR_AXIS[0],2)
+@@ -628,7 +628,7 @@ pro map_proj_auxiliary_read_csv
+     ON_ERROR, 2  ; return to caller
+  restore,"csv.sav"
+  nproj=n_elements(csv_proj.field1)
+- names={PROJ4NAME:"",FULLNAME:"",OTHERNAME:""}
++ names={PROJNAME:"",FULLNAME:"",OTHERNAME:""}
+  proj_property={EXIST:1B,SPH:0B,CONIC:0B,AZI:0B,ELL:0B,CYL:0B,MISC:0B,NOINV:0B,NOROT:0B,INTER:0b} ; note uppercase
+ ; fill the sorted, uniq, list of REQUIRED values
+  t=strtrim(csv_proj.field5,2) & s=strjoin(t) & t=strsplit(s,"= ",/extract) 
+@@ -636,7 +636,7 @@ pro map_proj_auxiliary_read_csv
+  for i=0,n_elements(required_template_list)-1 do map_struct_append, required_template, required_template_list[i], 0b
+ 
+  proj=replicate(names,nproj)
+- proj.PROJ4NAME=csv_proj.FIELD1
++ proj.PROJNAME=csv_proj.FIELD1
+  proj.FULLNAME=csv_proj.FIELD2
+  proj.OTHERNAME=csv_proj.FIELD3
+ 
+@@ -679,7 +679,7 @@ save,filen="projDefinitions.sav",proj,proj_properties,required,optional,proj_sca
+ for i=0,nproj-1 do begin
+    catch,absent
+    if absent ne 0 then begin
+-      print,'i was',i,' projection was ',proj[i].PROJ4NAME
++      print,'i was',i,' projection was ',proj[i].PROJNAME
+       proj_properties[i].exist=0b
+       continue
+    endif
+@@ -690,7 +690,7 @@ endfor
+ for i=0,nproj-1 do begin
+    catch,absent
+    if absent ne 0 then begin
+-      print,'(known?) problem with projection '+proj[i].PROJ4NAME
++      print,'(known?) problem with projection '+proj[i].PROJNAME
+       continue
+    endif
+ 
+diff --git a/src/pro/map/map_set.pro b/src/pro/map/map_set.pro
+index ba7c3160..d658877f 100644
+--- a/src/pro/map/map_set.pro
++++ b/src/pro/map/map_set.pro
+@@ -2,7 +2,7 @@
+ ; Documentation in progress
+ ; One major difference with IDL's one is that, using
+ ; name="xxxx", one can use any of the ~120 currently defined
+-; projections in proj.4 library
++; projections in PROJ library
+ ; The structure of the !MAP system variable is not compatible with
+ ; IDL, i.e., one cannot use a GDL-defined !MAP in IDL, but one can use
+ ; and IDL-defined !MAP (or mapstruct) in GDL.
+diff --git a/src/pro/utilities/gdl_status.pro b/src/pro/utilities/gdl_status.pro
+index 024dbc47..461c281f 100644
+--- a/src/pro/utilities/gdl_status.pro
++++ b/src/pro/utilities/gdl_status.pro
+@@ -41,7 +41,7 @@ pro GDL_STATUS, missing=missing, only_off=only_off, $
+ FORWARD_FUNCTION DSFMT_EXISTS, EIGEN_EXISTS, FFTW_EXISTS, GEOTIFF_EXISTS, $
+    GLPK_EXISTS, GRIB_EXISTS, GSHHG_EXISTS, HDF5_EXISTS, HDF_EXISTS, $
+    MAGICK_EXISTS, NCDF4_EXISTS, NCDF_EXISTS, OPENMP_EXISTS, PNGLIB_EXISTS, $
+-   PROJ4NEW_EXISTS, PROJ4_EXISTS, PYTHON_EXISTS, $
++   PROJ_EXISTS, PYTHON_EXISTS, $
+    TIFF_EXISTS, UDUNITS_EXISTS, WXWIDGETS_EXISTS, X11_EXISTS
+ ;
+ ON_ERROR, 2
+@@ -75,8 +75,7 @@ IPRINT, i, 'NetCDF ? : ', NCDF_EXISTS(), skip
+ IPRINT, i, 'NetCDF4 ?: ', NCDF4_EXISTS(), skip
+ IPRINT, i, 'OpenMP ? : ', OPENMP_EXISTS(), skip
+ IPRINT, i, 'PNGLIB ? : ', PNGLIB_EXISTS(), skip
+-IPRINT, i, 'Proj4 ?  : ', PROJ4_EXISTS(), skip
+-IPRINT, i, 'Proj4 new: ', PROJ4NEW_EXISTS(), skip
++IPRINT, i, 'PROJ ?   : ', PROJ_EXISTS(), skip
+ IPRINT, i, 'Python ? : ', PYTHON_EXISTS(), skip
+ IPRINT, i, 'ShapeLib : ', SHAPELIB_EXISTS(), skip
+ IPRINT, i, 'TIFF ?   : ', TIFF_EXISTS(), skip
+diff --git a/src/projections.cpp b/src/projections.cpp
+index 23be1d47..4ed9c9b8 100644
+--- a/src/projections.cpp
++++ b/src/projections.cpp
+@@ -49,7 +49,7 @@ namespace lib {
+   
+   BaseGDL* map_proj_forward_fun(EnvT* e)
+   {
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+     BaseGDL* p0;
+     BaseGDL* p1;
+ 
+@@ -155,7 +155,7 @@ namespace lib {
+ 
+   BaseGDL* map_proj_inverse_fun(EnvT* e)
+   {
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+     // xy -> lonlat
+     SizeT nParam = e->NParam();
+     if (nParam < 1 || nParam > 2)
+@@ -201,12 +201,12 @@ namespace lib {
+         res = new DDoubleGDL(dim, BaseGDL::NOZERO);
+       }
+       
+-      //protect against projections that have no inverse in proj.4 (and inverse in libproj) (silly, is'nt it?) (I guess I'll copy all
++      //protect against projections that have no inverse in PROJ (and inverse in libproj) (silly, is'nt it?) (I guess I'll copy all
+       //this code one day and make our own certified version!
+       if (noInv) {
+         //return Nans --- hoping it is sufficient 
+         for (OMPInt i = 0; i < p0->N_Elements() ; ++i) (*res)[i]=std::numeric_limits<double>::quiet_NaN();
+-        return res; //e->Throw("The proj4 library version you use unfortunately defines no inverse for this projection!");
++        return res; //e->Throw("The PROJ library version you use unfortunately defines no inverse for this projection!");
+       }
+       
+       SizeT nEl = p0->N_Elements() / 2;
+@@ -216,11 +216,19 @@ namespace lib {
+ #pragma omp for
+ #endif
+         for (OMPInt i = 0; i < nEl; ++i) {
++#if LIBPROJ_MAJOR_VERSION >= 5
++          idata.x = (*xy)[2 * i];
++          idata.y = (*xy)[2 * i + 1];
++          odata = protect_proj_inv_xy(idata, ref);
++          (*res)[2 * i] = odata.lam * ((radians) ? 1.0 : RAD_TO_DEG);
++          (*res)[2 * i + 1] = odata.phi * ((radians) ? 1.0 : RAD_TO_DEG);
++#else
+           idata.u = (*xy)[2 * i];
+           idata.v = (*xy)[2 * i + 1];
+           odata = PJ_INV(idata, ref);
+           (*res)[2 * i] = odata.u * ((radians) ? 1.0 : RAD_TO_DEG);
+           (*res)[2 * i + 1] = odata.v * ((radians) ? 1.0 : RAD_TO_DEG);
++#endif
+         }
+ #ifdef PROJ_IS_THREADSAFE
+       }
+@@ -242,12 +250,12 @@ namespace lib {
+       dims[1] = nEl;
+       dimension dim((DLong *) dims, 2);
+       res = new DDoubleGDL(dim, BaseGDL::NOZERO);
+-      //protect against projections that have no inverse in proj.4 (and inverse in libproj) (silly, is'nt it?) (I guess I'll copy all
++      //protect against projections that have no inverse in PROJ (and inverse in libproj) (silly, is'nt it?) (I guess I'll copy all
+       //this code one day and make our own certified version!
+       if (noInv) {
+         //return Nans --- hoping it is sufficient 
+         for (OMPInt i = 0; i < p0->N_Elements() ; ++i) (*res)[i]=std::numeric_limits<double>::quiet_NaN();
+-        return res; //e->Throw("The proj4 library version you use unfortunately defines no inverse for this projection!");
++        return res; //e->Throw("The PROJ library version you use unfortunately defines no inverse for this projection!");
+       }
+ #ifdef PROJ_IS_THREADSAFE
+ #pragma omp parallel if (nEl >= CpuTPOOL_MIN_ELTS && (CpuTPOOL_MAX_ELTS == 0 || CpuTPOOL_MAX_ELTS <= nEl))
+@@ -255,11 +263,19 @@ namespace lib {
+ #pragma omp for 
+ #endif
+         for (OMPInt i = 0; i < nEl; ++i) {
++#if LIBPROJ_MAJOR_VERSION >= 5
++          idata.x = (*x)[i];
++          idata.y = (*y)[i];
++          odata = protect_proj_inv_xy(idata, ref);
++          (*res)[2 * i] = odata.lam * ((radians) ? 1.0 : RAD_TO_DEG);
++          (*res)[2 * i + 1] = odata.phi * ((radians) ? 1.0 : RAD_TO_DEG);
++#else
+           idata.u = (*x)[i];
+           idata.v = (*y)[i];
+           odata = PJ_INV(idata, ref);
+           (*res)[2 * i] = odata.u * ((radians) ? 1.0 : RAD_TO_DEG);
+           (*res)[2 * i + 1] = odata.v * ((radians) ? 1.0 : RAD_TO_DEG);
++#endif
+         }
+ #ifdef PROJ_IS_THREADSAFE
+       }
+@@ -275,7 +291,7 @@ namespace lib {
+ #endif
+   }
+ 
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+     //enum all the projections
+ 
+     enum {
+@@ -365,7 +381,7 @@ namespace lib {
+       HOM_LATITUDE1,           //+lat_1
+       HOM_LATITUDE2,           //+lat_2
+       OEA_ANGLE,               //+theta
+-//      SOM_INCLINATION,         // unknown with proj4
++//      SOM_INCLINATION,         // unknown with PROJ
+ //      SOM_LONGITUDE,           //
+ //      SOM_PERIOD,              //
+ //      SOM_RATIO,               //
+@@ -399,8 +415,8 @@ namespace lib {
+     } projCoding;
+ 
+     static projCoding projectionOptions[] = {
+-      // pidx, proj. Number as in doc, Name, Proj.4 litle name, number of projElements to read, 
+-      // Values as index in projElements (options for proj.4), idem for variant.
++      // pidx, proj. Number as in doc, Name, PROJ litle name, number of projElements to read, 
++      // Values as index in projElements (options for PROJ), idem for variant.
+       //pidx|pnum|ptyp|pnam                          |p4nam         |nopt|                     code                           |vcode
+       { 0, 0, 0, "Invalid Projection", "none", 0,
+         {0},
+@@ -460,11 +476,7 @@ namespace lib {
+         {SEMIMAJOR_AXIS, SEMIMINOR_AXIS, STANDARD_PAR1, STANDARD_PAR2, CENTER_LONGITUDE, CENTER_LATITUDE, 0},
+         {0}},
+       { 19, 19, 4, "GoodesHomolosine",
+-#ifdef USE_LIBPROJ4_NEW
+         "igh"
+-#else
+-        "goode"
+-#endif
+         , 5,
+         {SPHERE_RADIUS, 0, 0, 0, CENTER_LONGITUDE, 0, 0},
+         {0}},
+@@ -534,7 +546,7 @@ namespace lib {
+       {41, 121, 4, "GCTP_Robinson", "robin", 9,
+         {SPHERE_RADIUS, 0, 0, 0, CENTER_LONGITUDE, 0, FALSE_EASTING, FALSE_NORTHING,0},
+         {0}},
+-      {42, 122, 2, "GCTP_SpaceObliqueMercator", "lsat", 13,  //only variant implemented in proj4.
++      {42, 122, 2, "GCTP_SpaceObliqueMercator", "lsat", 13,  //only variant implemented in PROJ.
+         //{SEMIMAJOR_AXIS, SEMIMINOR_AXIS, 0, SOM_INCLINATION, SOM_LONGITUDE, 0, FALSE_EASTING, FALSE_NORTHING, SOM_PERIOD, SOM_RATIO, SOM_FLAG},
+         {SEMIMAJOR_AXIS, SEMIMINOR_AXIS, SOM_LANDSAT_NUMBER, SOM_LANDSAT_PATH, 0, 0, FALSE_EASTING, FALSE_NORTHING, 0, 0, 0, 0, 0},
+         {SEMIMAJOR_AXIS, SEMIMINOR_AXIS, SOM_LANDSAT_NUMBER, SOM_LANDSAT_PATH, 0, 0, FALSE_EASTING, FALSE_NORTHING, 0, 0, 0, 0, 1}},
+@@ -620,19 +632,20 @@ static double epsilon = std::numeric_limits<float>::epsilon(); //say, 5e-7
+     unsigned epsilonTag = map->Desc()->TagIndex("UP_FLAGS");
+     DLong epsilonvalue = (*static_cast<DLongGDL*> (map->GetTag(epsilonTag, 0)))[0];
+     if (epsilonvalue != 0) epsilon=1.0/double(epsilonvalue); else epsilon=std::numeric_limits<float>::epsilon();
+-    //Trick for using ALL the libproj.4 projections.
++    //Trick for using ALL the PROJ projections.
+     if (map_projection == 999) { //our special code
+-#ifdef USE_LIBPROJ4_NEW
++#if LIBPROJ_MAJOR_VERSION >= 5
++      prev_ref = proj_create(PJ_DEFAULT_CTX, projName.c_str());
++#else
+       prev_ref = pj_init_plus(projName.c_str());
++#endif
+       if (!prev_ref) {
+-        ThrowGDLException("LIBPROJ.4 returned error message: "+std::string(pj_strerrno(pj_errno)));
+-      }
++#if LIBPROJ_MAJOR_VERSION >= 5
++        ThrowGDLException("PROJ returned error message: "+std::string(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX))));
+ #else
+-      prev_ref = proj_initstr((char*) projName.c_str());
+-      if (!prev_ref) {
+-        ThrowGDLException("LIBPROJ.4 returned error message: "+std::string(proj_strerrno(proj_errno)));
+-      }
++        ThrowGDLException("PROJ returned error message: "+std::string(pj_strerrno(pj_errno)));
+ #endif
++      }
+       noInv=false ; //((void*)(static_cast<PJ*>(prev_ref)->inv) == NULL);
+       return prev_ref;
+     }    
+@@ -750,24 +763,25 @@ static double epsilon = std::numeric_limits<float>::epsilon(); //say, 5e-7
+          break;
+         }
+       cout<<projCommand<<endl;
+-#ifdef USE_LIBPROJ4_NEW
++#if LIBPROJ_MAJOR_VERSION >= 5
++        prev_ref = proj_create(PJ_DEFAULT_CTX, projCommand.c_str());
++#else
+         prev_ref = pj_init_plus(projCommand.c_str());
++#endif
+         if (!prev_ref) {
+-          ThrowGDLException("LIBPROJ.4 returned error message: " + std::string(pj_strerrno(pj_errno)));
+-        }
++#if LIBPROJ_MAJOR_VERSION >= 5
++          ThrowGDLException("PROJ returned error message: " + std::string(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX))));
+ #else
+-        prev_ref = proj_initstr((char*) projCommand.c_str());
+-      if (!prev_ref) {
+-        ThrowGDLException("LIBPROJ.4 returned error message: "+std::string(proj_strerrno(proj_errno)));
+-      }
++          ThrowGDLException("PROJ returned error message: " + std::string(pj_strerrno(pj_errno)));
+ #endif
++        }
+         return prev_ref;
+       }
+ 
+       //for classical projections here [1..19] we still use an older way to call pj_init (and not projcommand). This is probably bad... 
+       if (trans) { //use rotation variant, a killer with some projections
+         //        if (map_p0lon==180.0) map_p0lon=179.999992;
+-        if (map_p0lat > 89.999) map_p0lat = 89.999; //take some precautions as PROJ.4 is not proetected!!! 
++        if (map_p0lat > 89.999) map_p0lat = 89.999; //take some precautions as PROJ is not proetected!!! 
+         if (map_p0lat < -89.999) map_p0lat = -89.999;
+         sprintf(ob_lon, "o_lon_p=%lf", proj_p0lon);
+         proj_p0lat = 90.0 - map_p0lat; //ADD CENTRAL_AZIMUTH!!
+@@ -792,13 +806,11 @@ static double epsilon = std::numeric_limits<float>::epsilon(); //say, 5e-7
+ 
+       if (trans //CHECK THIS FOR GCTP projections!
+           //      && map_projection != Satellite
+-          && map_projection != GCTP_WagnerVII //no invert in old and new libproj4.
+-#ifdef USE_LIBPROJ4_NEW
++          && map_projection != GCTP_WagnerVII //no invert in old and new PROJ.
+           //      && map_projection != Mercator  //crashes with map_grid!!!
+           && map_projection != TransverseMercator //idem!!
+           //      && map_projection != Orthographic //idem!!
+           //      && map_projection != Aitoff //idem!!
+-#endif
+           ) {
+         strcpy(ob_proj, "proj=ob_tran");
+         parms[nparms++] = &ob_proj[0];
+@@ -848,63 +860,83 @@ static double epsilon = std::numeric_limits<float>::epsilon(); //say, 5e-7
+ //      fprintf(stderr, "nparms=%d:", nparms);
+ //      for (SizeT i = 0; i < nparms; ++i) fprintf(stderr, "+%s ", parms[i]);
+ //      fprintf(stderr, "\n");
+-#ifdef USE_LIBPROJ4_NEW
+-      prev_ref = PJ_INIT(nparms, parms);
+-      if (!prev_ref) {
+-        ThrowGDLException("LIBPROJ.4 returned error message: " + std::string(pj_strerrno(pj_errno)));
+-      }
++#if PROJ_VERSION_MAJOR >= 5
++      prev_ref = proj_create_argv(PJ_DEFAULT_CTX, nparms, parms);
+ #else
+-      prev_ref = PJ_INIT(nparms, parms);
++      prev_ref = pj_init(nparms, parms);
++#endif
+       if (!prev_ref) {
+-        ThrowGDLException("LIBPROJ.4 returned error message: "+std::string(proj_strerrno(proj_errno)));
++#if LIBPROJ_MAJOR_VERSION >= 5
++        ThrowGDLException("PROJ returned error message: " + std::string(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX))));
++#else
++        ThrowGDLException("PROJ returned error message: " + std::string(pj_strerrno(pj_errno)));
++#endif
+       }
+-#endif      
+     }
+     return prev_ref;
+   }
+ 
+-#ifdef USE_LIBPROJ4_NEW
++#if LIBPROJ_MAJOR_VERSION >= 5
++  PJ_XY protect_proj_fwd_lp(PJ_LP idata, PJ *proj)
++  {
++    PJ_COORD c, c_out;
++    DDouble x, y;
++    if (isfinite((idata.lam)*(idata.phi))) {
++      c.lp = idata;
++      c_out = proj_trans(proj, PJ_FWD, c);
++      if (isfinite(c_out.xy.x) && c_out.xy.y != HUGE_VAL) {
++        if (isRot) {
++          x = c_out.xy.x;
++          y = c_out.xy.y;
++          c_out.xy.x = x * cRot + y*sRot;
++          c_out.xy.y = -x * sRot + y*cRot;
++        }
++        return c_out.xy;
++      }
++    }
++    return badProjXY;
++  }
+ 
+-  PROJDATA protect_proj_fwd(PROJDATA idata, PROJTYPE proj)
++  PJ_XY protect_proj_fwd_xy(PJ_XY idata, PJ *proj)
+   {
+-    XYTYPE odata;
+-    DDouble u, v;
+-    if (isfinite((idata.u)*(idata.v))) {
+-      odata = LIB_PJ_FWD(idata, proj);
+-      if (isfinite(odata.u) && odata.u != HUGE_VAL) {
++    PJ_COORD c, c_out;
++    DDouble x, y;
++    if (isfinite((idata.x)*(idata.y))) {
++      c.xy = idata;
++      c_out = proj_trans(proj, PJ_FWD, c);
++      if (isfinite(c_out.xy.x) && c_out.xy.x != HUGE_VAL) {
+         if (isRot) {
+-          u = odata.u;
+-          v = odata.v;
+-          odata.u = u * cRot + v*sRot;
+-          odata.v = -u * sRot + v*cRot;
++          x = c_out.xy.x;
++          y = c_out.xy.y;
++          c_out.xy.x = x * cRot + y*sRot;
++          c_out.xy.y = -x * sRot + y*cRot;
+         }
+-        return odata;
++        return c_out.xy;
+       }
+     }
+-    return badProj;
++    return badProjXY;
+   }
+ 
+-  PROJDATA protect_proj_inv(PROJDATA idata, PROJTYPE proj)
++  PJ_LP protect_proj_inv_xy(PJ_XY idata, PJ *proj)
+   {
+-    if (noInv) return badProj;
+-    //  throw GDLException("The proj4 library version you use unfortunately defines no inverse for this projection!");
+-    LPTYPE odata;
+-    DDouble u, v;
++    if (noInv) return badProjLP;
++    //  throw GDLException("The PROJ library version you use unfortunately defines no inverse for this projection!");
++    PJ_COORD c, c_out;
++    DDouble x, y;
+     if (isRot) {
+-      u = idata.u;
+-      v = idata.v;
+-      idata.u = u * cRot - v*sRot;
+-      idata.v = u * sRot + v*cRot;
++      x = idata.x;
++      y = idata.y;
++      c.xy.x = x * cRot - y*sRot;
++      c.xy.y = x * sRot + y*cRot;
+     }
+-    if (isfinite((idata.u)*(idata.v))) {
+-      odata = LIB_PJ_INV(idata, proj);
+-      return odata;
++    if (isfinite((c.xy.x)*(c.xy.y))) {
++      c_out = proj_trans(proj, PJ_INV, c);
++      return c_out.lp;
+     }
+-    return badProj;
++    return badProjLP;
+   }
+ #else
+-
+-PROJDATA protect_proj_fwd(PROJDATA idata, PROJTYPE proj)
++  PROJDATA protect_proj_fwd(PROJDATA idata, PROJTYPE proj)
+   {
+     XYTYPE odata;
+     DDouble u, v;
+@@ -926,19 +958,18 @@ PROJDATA protect_proj_fwd(PROJDATA idata, PROJTYPE proj)
+   PROJDATA protect_proj_inv(PROJDATA idata, PROJTYPE proj)
+   {
+     if (noInv) return badProj;
+-    XYTYPE odata;
++    //  throw GDLException("The PROJ library version you use unfortunately defines no inverse for this projection!");
++    LPTYPE odata;
+     DDouble u, v;
++    if (isRot) {
++      u = idata.u;
++      v = idata.v;
++      idata.u = u * cRot - v*sRot;
++      idata.v = u * sRot + v*cRot;
++    }
+     if (isfinite((idata.u)*(idata.v))) {
+       odata = LIB_PJ_INV(idata, proj);
+-      if (isfinite(odata.u) && odata.u != HUGE_VAL) {
+-        if (isRot) {
+-          u = odata.u;
+-          v = odata.v;
+-          odata.u = u * cRot - v*sRot;
+-          odata.v = u * sRot + v*cRot;
+-        }
+-        return odata;
+-      }
++      return odata;
+     }
+     return badProj;
+   }
+@@ -1440,11 +1471,19 @@ bool isInvalid (const Polygon& pol) { return (!pol.valid); }
+ #pragma omp for
+ #endif
+       for (OMPInt i = 0; i < nEl; ++i) {
++#if LIBPROJ_MAJOR_VERSION >= 5
++        idata.lam = lons[i];
++        idata.phi = lats[i];
++        odata = protect_proj_fwd_lp(idata, ref);
++        (*res)[2 * i] = odata.x;
++        (*res)[2 * i + 1] = odata.y;
++#else
+         idata.u = lons[i];
+         idata.v = lats[i];
+         odata = PJ_FWD(idata, ref);
+         (*res)[2 * i] = odata.u;
+         (*res)[2 * i + 1] = odata.v;
++#endif
+       }
+ #ifdef PROJ_IS_THREADSAFE
+     }
+@@ -1563,11 +1602,19 @@ bool isInvalid (const Polygon& pol) { return (!pol.valid); }
+       case TRANSFORM:
+         for (OMPInt i = 0; i < nEl; ++i) {
+           if (isfinite(lons[i])) {
++#if LIBPROJ_MAJOR_VERSION >= 5
++            idata.lam = lons[i];
++            idata.phi = lats[i];
++            odata = protect_proj_fwd_lp(idata, ref);
++            lons[i] = odata.x;
++            lats[i] = odata.y;
++#else
+             idata.u = lons[i];
+             idata.v = lats[i];
+             odata = PJ_FWD(idata, ref);
+             lons[i] = odata.u;
+             lats[i] = odata.v;
++#endif
+           }
+         }
+       }
+@@ -1588,7 +1635,7 @@ bool isInvalid (const Polygon& pol) { return (!pol.valid); }
+   {
+ 
+     //DATA MUST BE IN RADIANS
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+     LPTYPE idata;
+     XYTYPE odata;
+ #endif
+@@ -1958,17 +2005,25 @@ done:             aliasList->remove_if(isInvalid);
+       case TRANSFORM:
+         if (PolygonList.empty()) break;
+ 
+-#ifdef USE_LIBPROJ4
++#ifdef USE_LIBPROJ
+         for (std::list<Polygon>::iterator p = PolygonList.begin(); p != PolygonList.end(); ++p) {
+           for (std::list<Vertex>::iterator v = p->VertexList.begin(); v != p->VertexList.end(); ++v) {
++#if LIBPROJ_MAJOR_VERSION >= 5
++            idata.lam = v->lon;
++            idata.phi = v->lat;
++            odata = protect_proj_fwd_lp(idata, ref);
++            v->lon = odata.x;
++            v->lat = odata.y;
++#else
+             idata.u = v->lon;
+             idata.v = v->lat;
+             odata = PJ_FWD(idata, ref);
+             v->lon = odata.u;
+             v->lat = odata.v;
++#endif
+           }
+         }
+-#endif   //USE_LIBPROJ4 
++#endif   //USE_LIBPROJ 
+         break;
+       case CLIP_UV:
+         //TO BE DONE (really useful?)
+diff --git a/src/projections.hpp b/src/projections.hpp
+index 5d506d13..e417a6ff 100644
+--- a/src/projections.hpp
++++ b/src/projections.hpp
+@@ -31,7 +31,7 @@ namespace lib {
+   BaseGDL* map_proj_forward_fun( EnvT* e);
+   BaseGDL* map_proj_inverse_fun( EnvT* e);
+ 
+-#if defined(USE_LIBPROJ4) || defined(USE_LIBPROJ4_NEW) 
++#if defined(USE_LIBPROJ)
+ 
+   //dummy functions for compatibility support of GCTP projections 
+   void map_proj_gctp_forinit (EnvT* e);
+@@ -39,56 +39,48 @@ namespace lib {
+ 
+ #define GDL_COMPLEX COMPLEX2
+ 
+-#ifdef USE_LIBPROJ4_NEW
+   extern "C" {
+-    //#include "projects.h"
+-   #define ACCEPT_USE_OF_DEPRECATED_PROJ_API_H 1
++#if LIBPROJ_MAJOR_VERSION >= 5
++#include "proj.h"
++#else
+ #include "proj_api.h"
++#endif
+   }
++#if LIBPROJ_MAJOR_VERSION >= 5
++#define LPTYPE PJ_LP
++#define XYTYPE PJ_XY
++#define PROJTYPE PJ*
++#define PROJDATA PJ_UV
++
++  PJ_XY protect_proj_fwd_lp (PJ_LP idata, PJ *proj);
++  PJ_XY protect_proj_fwd_xy (PJ_XY idata, PJ *proj);
++  PJ_LP protect_proj_inv_xy (XYTYPE idata, PJ *proj);
++  static PJ_XY badProjXY={sqrt(-1),sqrt(-1)};
++  static PJ_LP badProjLP={sqrt(-1),sqrt(-1)};
++
++  static PJ *ref;
++  static PJ *prev_ref;
++
++#define DEG_TO_RAD   .017453292519943296
++#define RAD_TO_DEG    57.295779513082321
++#else
+ #define LPTYPE projLP
+ #define XYTYPE projXY
+-
+ #define PROJTYPE projPJ
+ #define PROJDATA projUV
+-#define PJ_INIT pj_init
+ 
+   PROJDATA protect_proj_fwd (PROJDATA idata, PROJTYPE proj);
+   PROJDATA protect_proj_inv (PROJDATA idata, PROJTYPE proj);
++  static PROJDATA badProj={sqrt(-1),sqrt(-1)};
+ 
+ #define PJ_FWD protect_proj_fwd
+ #define LIB_PJ_FWD pj_fwd
+ #define PJ_INV protect_proj_inv 
+ #define LIB_PJ_INV pj_inv
+-  PROJTYPE map_init(DStructGDL *map=SysVar::Map());
+   static volatile PROJTYPE ref;
+   static volatile PROJTYPE prev_ref;
+-  static PROJDATA badProj={sqrt(-1),sqrt(-1)};
+-#else
+-  extern "C" {
+-    //adding this removes the problem with lam,phi vs. x,y and make no diffs between old an new lib proj.4    
+-#define PROJ_UV_TYPE 1
+-#include "lib_proj.h"
+-  }
+-#define LPTYPE PROJ_LP
+-#define XYTYPE PROJ_XY
+-
+-#define PROJTYPE PROJ*
+-#define PROJDATA PROJ_UV
+-#define PJ_INIT proj_init
+-
+-  PROJDATA protect_proj_fwd (PROJDATA idata, PROJTYPE proj);
+-  PROJDATA protect_proj_inv (PROJDATA idata, PROJTYPE proj);
+-
+-#define PJ_FWD protect_proj_fwd
+-#define LIB_PJ_FWD proj_fwd
+-#define PJ_INV protect_proj_inv
+-#define LIB_PJ_INV proj_inv
+-  PROJTYPE map_init(DStructGDL *map=SysVar::Map());
+-  static PROJTYPE ref;
+-  static PROJTYPE prev_ref;
+-  static PROJDATA badProj={sqrt(-1),sqrt(-1)};
+-  //general reprojecting function
+ #endif
++  PROJTYPE map_init(DStructGDL *map=SysVar::Map());
+ 
+   //general reprojecting functions
+   DDoubleGDL* gdlApplyFullProjection(PROJTYPE ref, DStructGDL* map,
+@@ -102,10 +94,10 @@ namespace lib {
+   DStructGDL *GetMapAsMapStructureKeyword(EnvT *e, bool &externalMap); //not static since KW is at same place for all uses.
+ 
+ #define COMPLEX2 GDL_COMPLEX
+-#else //NOT USE_LIBPROJ4 : define some more or less dummy values:
++#else //NOT USE_LIBPROJ : define some more or less dummy values:
+ #define PROJTYPE void*
+ #define DEG_TO_RAD 0.017453292
+-#endif //USE_LIBPROJ4
++#endif //USE_LIBPROJ
+ 
+ } // namespace
+ 
+diff --git a/testsuite/interactive_tests/test_map.pro b/testsuite/interactive_tests/test_map.pro
+index 92c230ab..bf1352e3 100644
+--- a/testsuite/interactive_tests/test_map.pro
++++ b/testsuite/interactive_tests/test_map.pro
+@@ -32,14 +32,14 @@
+ ;
+ function INTERNAL_GDL_MAP_LIBS
+ ;
+-FORWARD_FUNCTION PROJ4_EXISTS, PROJ4NEW_EXISTS
++FORWARD_FUNCTION PROJ_EXISTS
+ ;
+ status=0
+ ;
+ ;
+-if PROJ4_EXISTS() or PROJ4NEW_EXISTS() then return, 10
++if PROJ_EXISTS() then return, 10
+ 
+-print, 'Unfortunalty, GDL was compiled without LibProj4 or libProj4New support !'
++print, 'Unfortunalty, GDL was compiled without PROJ support !'
+ return,0
+ 
+ end
+@@ -125,7 +125,7 @@ MAP_SET, 40,-105, /satellite, /grid, /cont,limit=[20,-130,70,-70], $
+          sat_p=[2.22, 0, 0], title='Satellite Projection, North America'
+ if DoWeBreak(tictac=tictac, fill=fill) then goto, go_to_end
+ ;
+-print, 'Exemple 6: Should plot World centered on Crozon peninsula using (GDL ONY) eckert1 projection -- Checking proj4 equivalent command used in the background'
++print, 'Exemple 6: Should plot World centered on Crozon peninsula using (GDL ONY) eckert1 projection -- Checking PROJ equivalent command used in the background'
+ map_set,name="eckert1",48.3,-4.5,/iso,e_cont={cont:1,fill:1,color:'33e469'x,hires:1},/hor,e_hor={nvert:200,fill:1,color:'F06A10'x},e_grid={box_axes:1,color:'1260E2'x,glinethick:1,glinestyle:0,latdel:10,londel:15},/check
+ if DoWeBreak(tictac=tictac, fill=fill) then goto, go_to_end
+ ;
