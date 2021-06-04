@@ -4,7 +4,7 @@
 
 Name:           gdl
 Version:        1.0.0
-Release:        0.3.20210123git%{shortcommit}%{?dist}
+Release:        0.4.20210123git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -285,6 +285,9 @@ cat xorg.log
 
 
 %changelog
+* Fri Jun 04 2021 Python Maint <python-maint@redhat.com> - 1.0.0-0.4.20210123git4892c96
+- Rebuilt for Python 3.10
+
 * Sat Mar 13 2021 Orion Poplawski <orion@nwra.com> - 1.0.0-0.3.20210123git4892c96
 - Add patch for PROJ 8 support
 
