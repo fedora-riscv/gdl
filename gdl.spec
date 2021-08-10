@@ -4,7 +4,7 @@
 
 Name:           gdl
 Version:        1.0.0
-Release:        0.5.20210123git%{shortcommit}%{?dist}
+Release:        0.6.20210123git%{shortcommit}%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -285,6 +285,9 @@ cat xorg.log
 
 
 %changelog
+* Tue Aug 10 2021 Orion Poplawski <orion@nwra.com> - 1.0.0-0.6.20210123git4892c96
+- Rebuild for hdf5 1.10.7/netcdf 4.8.0
+
 * Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-0.5.20210123git4892c96
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
