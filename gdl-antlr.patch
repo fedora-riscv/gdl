@@ -1,9 +1,9 @@
-diff -up gdl-287007567ba3998b4b70119025c3def86bdef649/src/CMakeLists.txt.antlr gdl-287007567ba3998b4b70119025c3def86bdef649/src/CMakeLists.txt
---- gdl-287007567ba3998b4b70119025c3def86bdef649/src/CMakeLists.txt.antlr	2019-09-16 03:51:53.000000000 -0600
-+++ gdl-287007567ba3998b4b70119025c3def86bdef649/src/CMakeLists.txt	2019-09-16 21:13:52.240535555 -0600
-@@ -291,9 +291,7 @@ sax.cpp
+diff -up gdl-1.0.0/src/CMakeLists.txt.antlr gdl-1.0.0/src/CMakeLists.txt
+--- gdl-1.0.0/src/CMakeLists.txt.antlr	2021-08-19 20:04:43.096095029 -0600
++++ gdl-1.0.0/src/CMakeLists.txt	2021-08-19 20:05:26.844467193 -0600
+@@ -193,9 +193,7 @@ ${WX_RC}
  )
- endif(USE_EXPAT)
+ endif(HAVE_LIBWXWIDGETS AND WIN32)
  
 -add_subdirectory(antlr)
 -
@@ -12,9 +12,9 @@ diff -up gdl-287007567ba3998b4b70119025c3def86bdef649/src/CMakeLists.txt.antlr g
  link_directories(${LINK_DIRECTORIES})
  
  if(PYTHON_MODULE) #GDL.so
-@@ -308,7 +306,6 @@ else(PYTHON_MODULE) #GDL.so
- 	add_executable(gdl ${SOURCES})
- endif(PYTHON_MODULE)
+@@ -213,7 +211,6 @@ if(USE_OPENMP)
+ 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+ endif(USE_OPENMP)
  
 -add_dependencies(gdl antlr) # be sure that antlr is built before gdl
  target_link_libraries(gdl antlr) # link antlr against gdl

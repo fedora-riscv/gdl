@@ -4,37 +4,28 @@
 
 Name:           gdl
 Version:        1.0.0
-Release:        0.6.20210123git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
 URL:            http://gnudatalanguage.sourceforge.net/
-#Source0:        https://github.com/gnudatalanguage/gdl/archive/v%{version}-rc.3/gdl-%{version}-rc.3.tar.gz
-Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git-%{shortcommit}.tar.gz
+Source0:        https://github.com/gnudatalanguage/gdl/archive/v%{version}/gdl-%{version}.tar.gz
+#Source0:        https://github.com/gnudatalanguage/gdl/archive/%{commit}/gdl-%{version}-git-%{shortcommit}.tar.gz
 Source1:        gdl.csh
 Source2:        gdl.sh
 Source4:        xorg.conf
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr.patch
-# Support for PROJ 8
-# https://github.com/gnudatalanguage/gdl/pull/898
-Patch2:         gdl-proj.patch
 
 # Build fails on armv7hl
 # https://bugzilla.redhat.com/show_bug.cgi?id=1919680
 ExcludeArch:    armv7hl
 
-%if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:  gcc-c++
 BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
 BuildRequires:  java-devel
-%endif
-%if 0%{?rhel} == 6
-BuildRequires:  antlr
-BuildRequires:  java
-%endif
 BuildRequires:  eigen3-static
 BuildRequires:  expat-devel
 BuildRequires:  fftw-devel
@@ -49,7 +40,7 @@ BuildRequires:  libtiff-devel
 BuildRequires:  libtirpc-devel
 BuildRequires:  ncurses-devel
 BuildRequires:  netcdf-devel
-BuildRequires:  plplot-devel
+BuildRequires:  plplot-wxGTK-devel >= 5.11
 BuildRequires:  proj-devel
 BuildRequires:  pslib-devel
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -60,45 +51,29 @@ BuildRequires:  readline-devel
 #BuildRequires:  dSFMT-devel
 Provides:       bundled(dSFMT)
 BuildRequires:  shapelib-devel
-%if 0%{?fedora} || 0%{?rhel} >= 8
 # eccodes not available on these arches
-%ifnarch i686 ppc64 s390x armv7hl aarch64
+%ifnarch i686 s390x armv7hl
 BuildRequires:  eccodes-devel
 %else
 BuildRequires:  grib_api-devel
 %endif
-%else
-# eccodes not available on these arches
-%ifnarch i686 ppc64 s390x armv7hl aarch64
-BuildRequires:  eccodes-devel
-%else
-BuildRequires:  grib_api-static
-%endif
-%endif
 #TODO - Build with mpi support
 #BuildRequires:  mpich2-devel
-# qhull too old on Fedora 24 and EPEL7
-%if 0%{?fedora} || 0%{?rhel} >= 8
 BuildRequires:  qhull-devel
-%endif
 BuildRequires:  udunits2-devel
 BuildRequires:  wxGTK3-devel
 BuildRequires:  cmake3
 # For tests
 # EL8 s390x missing xorg-x11-drv-dummy
-%ifnarch s390x
+%if ! ( 0%{?rhel} >= 8 && "%{_arch}" == "s390x" )
 BuildRequires:  xorg-x11-drv-dummy
 BuildRequires:  metacity
 %endif
 BuildRequires: make
 # Needed to pull in drivers
 Requires:       plplot
-%if 0%{?fedora} || 0%{?rhel} >= 8
 # Widgets use wx
 Recommends:     plplot-wxGTK
-%else
-Requires:       plplot-wxGTK
-%endif
 Requires:       %{name}-common = %{version}-%{release}
 Provides:       %{name}-runtime = %{version}-%{release}
 # Need to match hdf5 compile time version
@@ -137,12 +112,14 @@ Provides:       %{name}-runtime = %{version}-%{release}
 
 
 %prep
-%setup -q -n gdl-%{commit}
+%setup -q -n gdl-%{version}
 rm -rf src/antlr
 # Not yet possible to build with external dSFMT
 #rm -r src/dSFMT
 %patch1 -p1 -b .antlr
-%patch2 -p1 -b .PROJ
+
+# Find grib_api on architectures where needed
+sed -i -e '/find_library(GRIB_LIBRARIES/s/eccodes/eccodes grib_api/' CMakeModules/FindGrib.cmake
 
 pushd src
 for f in *.g
@@ -188,13 +165,8 @@ pushd build-python
 %make_install
 # Install the python module in the right location
 install -d -m 0755 $RPM_BUILD_ROOT/%{python_sitearch}
-%if 0%{?fedora} || 0%{?rhel} >= 8
 %if "%{_lib}" != "lib"
 mv $RPM_BUILD_ROOT%{_prefix}/lib/python*/site-packages/GDL.so \
-  $RPM_BUILD_ROOT%{python_sitearch}/GDL.so
-%endif
-%else
-mv $RPM_BUILD_ROOT%{_prefix}/lib/site-python/GDL.so \
   $RPM_BUILD_ROOT%{python_sitearch}/GDL.so
 %endif
 popd
@@ -205,7 +177,8 @@ install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/%{_sysconfdir}/profile.d
 
 
-%ifnarch s390x
+# EL8 s390x missing xorg-x11-drv-dummy
+%if ! ( 0%{?rhel} >= 8 && "%{_arch}" == "s390x" )
 %check
 cd build
 cp %SOURCE4 .
@@ -223,47 +196,27 @@ export DISPLAY=:99
 
 metacity &
 sleep 2
-# device - Failed on EL7
-# fft_leak - https://github.com/gnudatalanguage/gdl/issues/147
-# file_delete - EL7 only ? https://github.com/gnudatalanguage/gdl/issues/148
-# file_test - https://github.com/gnudatalanguage/gdl/issues/534
-# formats - EL7 only ? https://github.com/gnudatalanguage/gdl/issues/144
-# get_screen_size - Failed on EL7
-# idlneturl - Requires network
-# make_dll - Windows specific
-failing_tests='test_(fft_leak|file_(delete|test)|formats|get_screen_size|idlneturl|make_dll)'
-%ifarch aarch64 %{power64}
-# test_fix fails currently on arm
-# https://sourceforge.net/p/gnudatalanguage/bugs/622/
-# https://bugzilla.redhat.com/show_bug.cgi?id=990749
-failing_tests="$failing_tests|test_(fix|hdf5)"
-%endif
 %ifarch aarch64
-failing_tests="$failing_tests|test_(bug_(3104209|3104326|3147733)|byte_conversion|bytscl|fix|step)"
+failing_tests="test_(byte_conversion|bytscl)"
 %endif
 %ifarch %{arm}
 # These fail on 32-bit: test_formats test_xdr
-failing_tests="$failing_tests|test_(file_lines|fix|formats|hdf5|xdr)"
+failing_tests="test_(file_lines|fix|formats|hdf5)"
 %endif
 %ifarch %{ix86}
-# binfmt - https://github.com/gnudatalanguage/gdl/issues/332
-# These fail on 32-bit: test_formats test_xdr
-failing_tests="$failing_tests|test_(formats|l64|sem|xdr)"
-%endif
-%ifarch ppc64
-failing_tests="$failing_tests|test_(bug_(635|3104209|3147733)|file_lines|save_restore|window_background)"
+# test_l64 https://github.com/gnudatalanguage/gdl/issues/1075
+failing_tests="test_l64"
 %endif
 %ifarch ppc64le
-# ppc64le - test_file_lines https://github.com/gnudatalanguage/gdl/issues/373
-failing_tests="$failing_tests|test_(bug_(3104209|3104326)|byte_conversion|bytscl|container|file_lines|finite|fix|random|rounding)"
+failing_tests="test_(byte_conversion|bytscl|finite)"
 %endif
 %ifarch s390x
-failing_tests="$failing_tests|test_(bug_635|byte_conversion|bytsc|deriv|file_lines|hdf5|image_statistics|save_restore|sort|tic_toc|window_background)"
+failing_tests="test_(bug_635|byte_conversion|bytsc|deriv|file_lines|hdf5|image_statistics|save_restore|sort|tic_toc|window_background)"
 %endif
-make check VERBOSE=1 ARGS="-V -E '$failing_tests'"
-%ifnarch ppc64 s390x
-# test_save_restore hangs on ppc64 s390x
-make check VERBOSE=1 ARGS="-V -R '$failing_tests' --timeout 600" || :
+make test VERBOSE=1 ARGS="-V -E '$failing_tests'"
+%ifnarch s390x
+# test_save_restore hangs on s390x
+make test VERBOSE=1 ARGS="-V -R '$failing_tests' --timeout 600" || :
 %endif
 kill %1 || :
 cat xorg.log
@@ -285,6 +238,10 @@ cat xorg.log
 
 
 %changelog
+* Sun Aug 22 2021 Orion Poplawski <orion@nwra.com> - 1.0.0-1
+- Update to 1.0.0
+- Drop EL7 support due to plplot 5.11 requirement
+
 * Tue Aug 10 2021 Orion Poplawski <orion@nwra.com> - 1.0.0-0.6.20210123git4892c96
 - Rebuild for hdf5 1.10.7/netcdf 4.8.0
 
