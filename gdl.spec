@@ -4,7 +4,7 @@
 
 Name:           gdl
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -17,10 +17,6 @@ Source4:        xorg.conf
 # Build with system antlr library.  Request for upstream change here:
 # https://sourceforge.net/tracker/index.php?func=detail&aid=2685215&group_id=97659&atid=618686
 Patch1:         gdl-antlr.patch
-
-# Build fails on armv7hl
-# https://bugzilla.redhat.com/show_bug.cgi?id=1919680
-ExcludeArch:    armv7hl
 
 BuildRequires:  gcc-c++
 BuildRequires:  antlr-C++
@@ -143,7 +139,16 @@ popd
 #           --with-mpich=%{_libdir}/mpich2 \
 
 %build
+%ifarch ppc64le
+# lto seems to have a problem with latest eigen3
+# https://bugzilla.redhat.com/show_bug.cgi?id=1996330
+%global _lto_cflags %nil
+%endif
 export CXXFLAGS="%optflags -fcommon"
+%ifarch %{arm}
+# Work around https://github.com/gnudatalanguage/gdl/issues/677
+export LDFLAGS="%{build_ldflags} -Wl,--allow-multiple-definition"
+%endif
 mkdir build build-python
 #Build the standalone executable
 pushd build
@@ -196,28 +201,25 @@ export DISPLAY=:99
 
 metacity &
 sleep 2
+# byte_conversion/bytscl - https://github.com/gnudatalanguage/gdl/issues/1079
+# test_l64 - https://github.com/gnudatalanguage/gdl/issues/1075
 %ifarch aarch64
 failing_tests="test_(byte_conversion|bytscl)"
 %endif
 %ifarch %{arm}
-# These fail on 32-bit: test_formats test_xdr
-failing_tests="test_(file_lines|fix|formats|hdf5)"
+failing_tests="test_(byte_conversion|bytscl|l64)"
 %endif
 %ifarch %{ix86}
-# test_l64 https://github.com/gnudatalanguage/gdl/issues/1075
 failing_tests="test_l64"
 %endif
 %ifarch ppc64le
-failing_tests="test_(byte_conversion|bytscl|finite)"
+failing_tests="test_(byte_conversion|bytscl|matrix_multiply)"
 %endif
 %ifarch s390x
-failing_tests="test_(bug_635|byte_conversion|bytsc|deriv|file_lines|hdf5|image_statistics|save_restore|sort|tic_toc|window_background)"
+failing_tests="test_(byte_conversion|bytsc)"
 %endif
 make test VERBOSE=1 ARGS="-V -E '$failing_tests'"
-%ifnarch s390x
-# test_save_restore hangs on s390x
 make test VERBOSE=1 ARGS="-V -R '$failing_tests' --timeout 600" || :
-%endif
 kill %1 || :
 cat xorg.log
 %endif
@@ -238,6 +240,9 @@ cat xorg.log
 
 
 %changelog
+* Thu Aug 26 2021 Orion Poplawski <orion@nwra.com> - 1.0.0-2
+- Re-enable armv7hl; add ppc64le eigen workaround; Cleanup test exclusions
+
 * Sun Aug 22 2021 Orion Poplawski <orion@nwra.com> - 1.0.0-1
 - Update to 1.0.0
 - Drop EL7 support due to plplot 5.11 requirement
