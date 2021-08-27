@@ -213,7 +213,7 @@ failing_tests="test_(byte_conversion|bytscl|l64)"
 failing_tests="test_l64"
 %endif
 %ifarch ppc64le
-failing_tests="test_(byte_conversion|bytscl|matrix_multiply)"
+failing_tests="test_(byte_conversion|bytscl|finite|matrix_multiply)"
 %endif
 %ifarch s390x
 failing_tests="test_(byte_conversion|bytsc)"
