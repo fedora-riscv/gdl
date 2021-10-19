@@ -3,8 +3,8 @@
 %global __cmake_in_source_build 1
 
 Name:           gdl
-Version:        1.0.0
-Release:        2%{?dist}
+Version:        1.0.1
+Release:        1%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -240,6 +240,9 @@ cat xorg.log
 
 
 %changelog
+* Mon Oct 18 2021 Orion Poplawski <orion@nwra.com> - 1.0.1-1
+- Update to 1.0.1
+
 * Thu Aug 26 2021 Orion Poplawski <orion@nwra.com> - 1.0.0-2
 - Re-enable armv7hl; add ppc64le eigen workaround; Cleanup test exclusions
 
