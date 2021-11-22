@@ -4,7 +4,7 @@
 
 Name:           gdl
 Version:        1.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -240,6 +240,9 @@ cat xorg.log
 
 
 %changelog
+* Mon Nov 22 2021 Orion Poplawski <orion@nwra.com> - 1.0.1-2
+- Rebuild for hdf5 1.12.1
+
 * Mon Oct 18 2021 Orion Poplawski <orion@nwra.com> - 1.0.1-1
 - Update to 1.0.1
 
