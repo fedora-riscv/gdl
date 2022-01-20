@@ -4,7 +4,7 @@
 
 Name:           gdl
 Version:        1.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -240,6 +240,9 @@ cat xorg.log
 
 
 %changelog
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
 * Mon Nov 22 2021 Orion Poplawski <orion@nwra.com> - 1.0.1-2
 - Rebuild for hdf5 1.12.1
 
