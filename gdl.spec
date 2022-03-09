@@ -4,7 +4,7 @@
 
 Name:           gdl
 Version:        1.0.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -240,6 +240,9 @@ cat xorg.log
 
 
 %changelog
+* Thu Mar 10 2022 Sandro Mani <manisandro@gmail.com> - 1.0.1-5
+- Rebuild for proj-9.0.0
+
 * Sat Feb 05 2022 Jiri Vanek <jvanek@redhat.com> - 1.0.1-4
 - Rebuilt for java-17-openjdk as system jdk
 
