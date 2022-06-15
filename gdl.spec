@@ -4,7 +4,7 @@
 
 Name:           gdl
 Version:        1.0.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -240,6 +240,9 @@ cat xorg.log
 
 
 %changelog
+* Wed Jun 15 2022 Python Maint <python-maint@redhat.com> - 1.0.1-6
+- Rebuilt for Python 3.11
+
 * Thu Mar 10 2022 Sandro Mani <manisandro@gmail.com> - 1.0.1-5
 - Rebuild for proj-9.0.0
 
