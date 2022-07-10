@@ -2,9 +2,16 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global __cmake_in_source_build 1
 
+# No more Java on i686
+%ifarch %{java_arches}
+%bcond_without java
+%else
+%bcond_with java
+%endif
+
 Name:           gdl
 Version:        1.0.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -21,7 +28,9 @@ Patch1:         gdl-antlr.patch
 BuildRequires:  gcc-c++
 BuildRequires:  antlr-C++
 BuildRequires:  antlr-tool
+%if %{with java}
 BuildRequires:  java-devel
+%endif
 BuildRequires:  eigen3-static
 BuildRequires:  expat-devel
 BuildRequires:  fftw-devel
@@ -240,6 +249,9 @@ cat xorg.log
 
 
 %changelog
+* Sun Jul 10 2022 Orion Poplawski <orion@nwra.com> - 1.0.1-7
+- Drop java for i686 (bz#2104042)
+
 * Wed Jun 15 2022 Python Maint <python-maint@redhat.com> - 1.0.1-6
 - Rebuilt for Python 3.11
 
