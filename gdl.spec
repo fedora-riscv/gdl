@@ -11,7 +11,7 @@
 
 Name:           gdl
 Version:        1.0.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -249,6 +249,9 @@ cat xorg.log
 
 
 %changelog
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.1-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Sun Jul 10 2022 Orion Poplawski <orion@nwra.com> - 1.0.1-7
 - Drop java for i686 (bz#2104042)
 
