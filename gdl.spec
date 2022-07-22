@@ -2,12 +2,11 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global __cmake_in_source_build 1
 
-# No more Java on i686
-%ifarch %{java_arches}
 %bcond_without java
-%else
-%bcond_with java
-%endif
+
+# No more Java on i686
+ExcludeArch: %{ix86}
+
 
 Name:           gdl
 Version:        1.0.1
@@ -249,6 +248,9 @@ cat xorg.log
 
 
 %changelog
+% Thu Jul 21 2022 Orion Poplawski <orion@nwra.com> - 1.0.1-8
+- Drop i686 completely - no antlr support
+
 * Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.1-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
