@@ -10,7 +10,7 @@ ExcludeArch: %{ix86}
 
 Name:           gdl
 Version:        1.0.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        GNU Data Language
 
 License:        GPLv2+
@@ -248,6 +248,9 @@ cat xorg.log
 
 
 %changelog
+* Tue Aug 23 2022 Mamoru TASAKA <mtasaka@fedoraproject.org> - 1.0.1-9
+- Rebuild for gsl-2.7.1
+
 % Thu Jul 21 2022 Orion Poplawski <orion@nwra.com> - 1.0.1-8
 - Drop i686 completely - no antlr support
 
