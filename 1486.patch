@@ -1,0 +1,174 @@
+From 6a3337ff29917a4766f80ffb19e24a55251f1511 Mon Sep 17 00:00:00 2001
+From: GillesDuvert <gilles.duvert@free.fr>
+Date: Fri, 20 Jan 2023 17:47:56 +0100
+Subject: [PATCH 1/2] try to permit distro builders to put drivers in
+ GDL_LIB_DIR but still make normal (non-distro) build as usual and moreover
+ enable relocation of gdl executable ans all its componenets, including
+ drivers, as it is now done for installers on Windows and OSX.
+
+---
+ CMakeLists.txt  |  1 +
+ config.h.cmake  |  1 +
+ src/gdl.cpp     | 24 +++++++++++++++++++-----
+ src/objects.cpp |  2 ++
+ src/objects.hpp |  2 ++
+ 5 files changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b0cecea36..281e12979 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -144,6 +144,7 @@ set(JPEGDIR "" CACHE PATH "GDL: Specify the JPEG directory tree")
+ set(SZIPDIR "" CACHE PATH "GDL: Specify the SZip directory tree")
+ 
+ set(GDL_DATA_DIR "/share/gnudatalanguage" CACHE PATH "GDL: data directory relative to CMAKE_INSTALL_PREFIX")
++set(GDL_LIB_DIR "" CACHE PATH "GDL: library directory relative to CMAKE_INSTALL_PREFIX")
+ 
+ # check for 64-bit OS
+ if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
+diff --git a/config.h.cmake b/config.h.cmake
+index 07c7fa199..4637af869 100644
+--- a/config.h.cmake
++++ b/config.h.cmake
+@@ -3,6 +3,7 @@
+ 
+ #define EXEC_PREFIX "@CMAKE_INSTALL_PREFIX@"
+ #define GDLDATADIR "@CMAKE_INSTALL_PREFIX@@GDL_DATA_DIR@"
++#define GDLLIBDIR "@GDL_LIB_DIR@"
+ #define VERSION "@VERSION@"
+ 
+ #define _CRT_SECURE_NO_WARNINGS
+diff --git a/src/gdl.cpp b/src/gdl.cpp
+index bf9947ae3..445145331 100644
+--- a/src/gdl.cpp
++++ b/src/gdl.cpp
+@@ -250,8 +250,10 @@ int main(int argc, char *argv[])
+ 
+ //The default installation location --- will not always be there.  
+   gdlDataDir = std::string(GDLDATADIR);
++  gdlLibDir = std::string(GDLLIBDIR);
+ #ifdef _WIN32
+   std::replace(gdlDataDir.begin(), gdlDataDir.end(), '/', '\\');
++  std::replace(gdlLibDir.begin(), gdlLibDir.end(), '/', '\\');
+ #endif 
+ 
+ //check where is the executable being run
+@@ -269,16 +271,28 @@ int main(int argc, char *argv[])
+   if( gdlPath == "") gdlPath=GetEnvString("IDL_PATH"); //warning: is a Path, use system separator.
+   if( gdlPath == "") gdlPath = gdlDataDir + lib::PathSeparator() + "lib";
+ 
+-//drivers if local
++//LIBDIR. Can be '' in which case the location of drivers is deduced from the location of
++//the executable (OSX, Windows, unix in user-installed mode).
++  string driversPath = GetEnvPathString("GDL_DRV_DIR");
++  if (driversPath == "") { //NOT enforced by GDL_DRV_DIR
++    driversPath = gdlLibDir; //e.g. Fedora
++    if (driversPath == "") { //NOT enforced by GDLLIBDIR at build : not a distro
++      driversPath = gdlDataDir + lib::PathSeparator() + "drivers"; //deduced from the location of the executable 
++    }
++  }
++  //drivers if local
+   useLocalDrivers=false;
+   bool driversNotFound=false;
+-  string driversPath=gdlDataDir + lib::PathSeparator() + "drivers"; 
+-  //We'll ned to get the current value for PLPLOT_DRV_DIR if any (useful later if something goes wrong below)
+-  static const char* DrvEnvName="PLPLOT_DRV_DIR";
++
++  //The current value for PLPLOT_DRV_DIR.
++  //To find our drivers, the plplot library needs to have PLPLOT_DRV_DIR set to the good path, i.e., driversPath.
++  const char* DrvEnvName = "PLPLOT_DRV_DIR";
++  //In a startup message (below), the value of $PLPLOT_DRV_DIR appears.
++  //It will be the value set inside the program (just below) to find the relevant drivers.
+ 
+ #ifdef INSTALL_LOCAL_DRIVERS
+   useLocalDrivers=true;
+-  //For WIN32 the drivers dlls are copied alongwith the gdl.exe and plplot does not use  PLPLOT_DRV_DIR to find them.
++  //For WIN32 the drivers dlls are copied along with the gdl.exe and plplot does not use PLPLOT_DRV_DIR to find them.
+ #ifndef _WIN32
+   char* oldDriverEnv=getenv(DrvEnvName);
+   // We must declare here (and not later) where our local copy of (customized?) drivers is to be found.
+diff --git a/src/objects.cpp b/src/objects.cpp
+index d31991998..cc8d23088 100644
+--- a/src/objects.cpp
++++ b/src/objects.cpp
+@@ -98,6 +98,8 @@ antlr::ASTFactory DNodeFactory("DNode",DNode::factory);
+ 
+ //this string contains the value of DATADIR
+ std::string gdlDataDir;
++//this string contains the value of LIBDIR
++std::string gdlLibDir;
+ //do we use WxWidgets at all?
+ volatile bool useWxWidgets;
+ //do we use WxWidgets for graphics?
+diff --git a/src/objects.hpp b/src/objects.hpp
+index e65059a11..7cde23877 100644
+--- a/src/objects.hpp
++++ b/src/objects.hpp
+@@ -71,6 +71,8 @@ extern volatile bool sigControlC;
+ 
+ //this string contains the value of DATADIR
+ extern std::string gdlDataDir;
++//this string contains the value of LIBDIR
++extern std::string gdlLibDir;
+ 
+ extern volatile bool iAmANotebook;
+ // tells if wxwidgets is to be used at all...
+
+From 7688f0b931d03d7ff15e552dac3666ebd819cd82 Mon Sep 17 00:00:00 2001
+From: GillesDuvert <gilles.duvert@free.fr>
+Date: Sat, 21 Jan 2023 19:56:56 +0100
+Subject: [PATCH 2/2] enable GDL_LIB_DIR positioning of .so files (drivers),
+ something needed by distributions (Debian, Fedora...)
+
+---
+ CMakeLists.txt                  | 8 +++++++-
+ config.h.cmake                  | 1 +
+ src/plplotdriver/CMakeLists.txt | 4 ++--
+ 3 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 281e12979..5c674e141 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -145,7 +145,13 @@ set(SZIPDIR "" CACHE PATH "GDL: Specify the SZip directory tree")
+ 
+ set(GDL_DATA_DIR "/share/gnudatalanguage" CACHE PATH "GDL: data directory relative to CMAKE_INSTALL_PREFIX")
+ set(GDL_LIB_DIR "" CACHE PATH "GDL: library directory relative to CMAKE_INSTALL_PREFIX")
+-
++#define (for plplotdriver/CMakeLists.txt) the GDL_DRV_DIR where the drivers will be installed.
++#if GDL_LIB_DIR is empty, it will be the default (GDL_DATA_DIR/drivers) otherwise it is GDL_LIB_DIR (not GDL_LIB_DIR/drivers)
++if ( GDL_LIB_DIR STREQUAL "" OR NOT GDL_LIB_DIR)
++ set (GDL_DRV_DIR "${CMAKE_INSTALL_PREFIX}/${GDL_DATA_DIR}/drivers") # CACHE PATH "GDL: where the drivers will be installed.")
++else()
++ set (GDL_DRV_DIR "${GDL_LIB_DIR}" ) # CACHE PATH "GDL: where the drivers will be installed.")
++endif()
+ # check for 64-bit OS
+ if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
+     set(HAVE_64BIT_OS 1)
+diff --git a/config.h.cmake b/config.h.cmake
+index 4637af869..7080df9a6 100644
+--- a/config.h.cmake
++++ b/config.h.cmake
+@@ -4,6 +4,7 @@
+ #define EXEC_PREFIX "@CMAKE_INSTALL_PREFIX@"
+ #define GDLDATADIR "@CMAKE_INSTALL_PREFIX@@GDL_DATA_DIR@"
+ #define GDLLIBDIR "@GDL_LIB_DIR@"
++#define GDL_DRV_DIR "@GDL_DRV_DIR@"
+ #define VERSION "@VERSION@"
+ 
+ #define _CRT_SECURE_NO_WARNINGS
+diff --git a/src/plplotdriver/CMakeLists.txt b/src/plplotdriver/CMakeLists.txt
+index 69e5062b1..a48742c10 100644
+--- a/src/plplotdriver/CMakeLists.txt
++++ b/src/plplotdriver/CMakeLists.txt
+@@ -66,8 +66,8 @@ if(INSTALL_LOCAL_DRIVERS)
+ 
+   foreach(v IN LISTS WHAT)
+   set_target_properties(${v} PROPERTIES   PREFIX ""  SUFFIX ${DYNAMIC_SUFFIX} )
+-  install(TARGETS ${v} DESTINATION ${CMAKE_INSTALL_PREFIX}/${GDL_DATA_DIR}/drivers)
+-  install( FILES ${v}.driver_info DESTINATION ${CMAKE_INSTALL_PREFIX}/${GDL_DATA_DIR}/drivers)
++  install(TARGETS ${v} DESTINATION ${GDL_DRV_DIR})
++  install( FILES ${v}.driver_info DESTINATION ${GDL_DRV_DIR})
+   endforeach()
+ 
+ endif(INSTALL_LOCAL_DRIVERS)
